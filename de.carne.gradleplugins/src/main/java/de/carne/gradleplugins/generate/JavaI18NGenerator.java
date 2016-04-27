@@ -63,7 +63,7 @@ public class JavaI18NGenerator extends JavaGenerator {
 	/**
 	 * Construct {@code JavaI18NGenerator}.
 	 *
-	 * @see Generator#Generator(Date)
+	 * @param generationTimestamp See {@linkplain Generator#Generator(Date)}
 	 */
 	public JavaI18NGenerator(Date generationTimestamp) {
 		super(generationTimestamp);

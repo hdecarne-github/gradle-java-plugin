@@ -14,6 +14,7 @@ def formatBuildDate() {
 
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'signing'
 
 sourceCompatibility = 1.8
 
@@ -35,24 +36,72 @@ jar {
 	manifest {
 		attributes(
 			'X-Version-ProjectId': projectId,
-			'X-Version-ProjectName' : rootProject.name,
+			'X-Version-ProjectName' : project.name,
 			'X-Version-ProjectVersion': version,
 			'X-Version-BuildDate' : formatBuildDate()
 		)
 	}
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-	from sourceSets.main.allSource
-	classifier = 'sources'
+task javadocJar(type: Jar) {
+ 	classifier = 'javadoc'
+	from javadoc
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-	from javadoc.destinationDir
-	classifier = 'javadoc'
+task sourcesJar(type: Jar) {
+	classifier = 'sources'
+	from sourceSets.main.allSource
 }
 
 artifacts {
-	archives sourcesJar
-	archives javadocJar
+	archives javadocJar, sourcesJar
+}
+
+signing {
+	sign configurations.archives
+}
+
+uploadArchives {
+	repositories {
+		mavenDeployer {
+			beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+			repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+				authentication(userName: ossrhUsername, password: ossrhPassword)
+			}
+
+			snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+				authentication(userName: ossrhUsername, password: ossrhPassword)
+			}
+
+			pom.project {
+				name project.name
+				packaging 'jar'
+				description projectDescription
+				url projectUrl
+
+				scm {
+					connection projectScm
+					developerConnection projectScm
+					url projectScmUrl
+				}
+
+				licenses {
+					license {
+						name projectLicense
+						url projectLicenseUrl
+						distribution 'repo'
+					}
+				}
+
+				developers {
+					developer {
+						id 'hdecarne'
+						name 'Holger de Carne'
+						email 'hdecarne@gmail.com'
+					}
+				}
+			}
+		}
+	}
 }

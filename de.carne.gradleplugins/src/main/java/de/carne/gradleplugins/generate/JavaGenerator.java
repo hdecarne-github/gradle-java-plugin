@@ -37,7 +37,7 @@ public abstract class JavaGenerator extends Generator {
 	/**
 	 * Construct {@code JavaGenerator}.
 	 *
-	 * @see Generator#Generator(Date)
+	 * @param generationTimestamp See {@linkplain Generator#Generator(Date)}
 	 */
 	protected JavaGenerator(Date generationTimestamp) {
 		super(generationTimestamp);
