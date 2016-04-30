@@ -19,6 +19,7 @@ package de.carne.gradleplugins.generate;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.Map;
@@ -63,10 +64,13 @@ public class JavaI18NGenerator extends JavaGenerator {
 	/**
 	 * Construct {@code JavaI18NGenerator}.
 	 *
-	 * @param generationTimestamp See {@linkplain Generator#Generator(Date)}
+	 * @param generationTimestamp See
+	 *        {@linkplain Generator#Generator(Date, DateFormat)}
+	 * @param generationTimestampFormat See
+	 *        {@linkplain Generator#Generator(Date, DateFormat)}
 	 */
-	public JavaI18NGenerator(Date generationTimestamp) {
-		super(generationTimestamp);
+	public JavaI18NGenerator(Date generationTimestamp, DateFormat generationTimestampFormat) {
+		super(generationTimestamp, generationTimestampFormat);
 	}
 
 	/*
@@ -82,7 +86,7 @@ public class JavaI18NGenerator extends JavaGenerator {
 		Properties i18nBundle = new Properties();
 
 		i18nBundle.load(in);
-		generateFileComment(out, getGenerationTimestamp(), FILE_TITLE);
+		generateFileComment(out, formatGenerationTimestamp(), FILE_TITLE);
 		write(out, TEMPLATE_I18NCLASS_BEGIN, i18nPackage, i18nClass);
 		for (Map.Entry<Object, Object> entry : i18nBundle.entrySet()) {
 			String i18nKey = entry.getKey().toString();

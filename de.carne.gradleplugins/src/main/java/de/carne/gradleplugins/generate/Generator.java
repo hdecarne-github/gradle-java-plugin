@@ -19,6 +19,7 @@ package de.carne.gradleplugins.generate;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.Map;
@@ -30,14 +31,20 @@ public abstract class Generator {
 
 	private Date generationTimestamp;
 
+	private DateFormat generationTimestampFormat;
+
 	/**
 	 * Construct {@code Generator}.
 	 *
-	 * @param generationTimestamp The generation timestapm to use. If
+	 * @param generationTimestamp The generation timestamp to use. If
 	 *        {@code null}, the current time is used.
+	 * @param generationTimestampFormat The format to use for formating the
+	 *        generation timestamp. If {@code null} the default format is used.
 	 */
-	protected Generator(Date generationTimestamp) {
+	protected Generator(Date generationTimestamp, DateFormat generationTimestampFormat) {
 		this.generationTimestamp = (generationTimestamp != null ? generationTimestamp : new Date());
+		this.generationTimestampFormat = (generationTimestampFormat != null ? generationTimestampFormat
+				: DateFormat.getDateTimeInstance());
 	}
 
 	/**
@@ -47,6 +54,24 @@ public abstract class Generator {
 	 */
 	public Date getGenerationTimestamp() {
 		return this.generationTimestamp;
+	}
+
+	/**
+	 * Get the generation timestamp format.
+	 *
+	 * @return The generation timestamp format.
+	 */
+	public DateFormat getGenerationTimestampFormat() {
+		return this.generationTimestampFormat;
+	}
+
+	/**
+	 * Format the generation timestamp using the set format.
+	 *
+	 * @return The formatted generation timestamp.
+	 */
+	public String formatGenerationTimestamp() {
+		return this.generationTimestampFormat.format(this.generationTimestamp);
 	}
 
 	/**

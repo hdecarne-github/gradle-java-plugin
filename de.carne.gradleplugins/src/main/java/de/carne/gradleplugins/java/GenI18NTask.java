@@ -107,23 +107,27 @@ public class GenI18NTask extends DefaultTask {
 		Map<File, File> genMap = getGenMap();
 		TaskContext ctx = new TaskContext();
 		File genDir = ctx.genDir();
-		JavaI18NGenerator generator = new JavaI18NGenerator(null);
+		JavaI18NGenerator generator = new JavaI18NGenerator(null, null);
 
 		for (Map.Entry<File, File> genMapEntry : genMap.entrySet()) {
 			HashMap<String, String> generatorCtx = new HashMap<>();
 			File dstFile = genMapEntry.getKey();
 			File srcFile = genMapEntry.getValue();
 
-			getProject().getLogger().debug("Processing source file {}", srcFile);
+			if (!dstFile.exists() || dstFile.lastModified() <= srcFile.lastModified()) {
+				getProject().getLogger().debug("Processing source file {}", srcFile);
 
-			generatorCtx.put(JavaI18NGenerator.KEY_I18N_PACKAGE, getPackageFromFile(dstFile));
-			generatorCtx.put(JavaI18NGenerator.KEY_I18N_CLASS, getClassFromFile(dstFile));
-			generatorCtx.put(JavaI18NGenerator.KEY_I18N_KEY_FILTER, ctx.extension().getGenI18NKeyFilter());
-			try (FileReader in = new FileReader(srcFile);
-					FileWriter out = new FileWriter(new File(genDir.toString(), dstFile.toString()))) {
-				generator.generate(generatorCtx, in, out);
-			} catch (IOException e) {
-				throw new TaskExecutionException(this, e);
+				generatorCtx.put(JavaI18NGenerator.KEY_I18N_PACKAGE, getPackageFromFile(dstFile));
+				generatorCtx.put(JavaI18NGenerator.KEY_I18N_CLASS, getClassFromFile(dstFile));
+				generatorCtx.put(JavaI18NGenerator.KEY_I18N_KEY_FILTER, ctx.extension().getGenI18NKeyFilter());
+				try (FileReader in = new FileReader(srcFile);
+						FileWriter out = new FileWriter(new File(genDir.toString(), dstFile.toString()))) {
+					generator.generate(generatorCtx, in, out);
+				} catch (IOException e) {
+					throw new TaskExecutionException(this, e);
+				}
+			} else {
+				getProject().getLogger().debug("Skipping unchanged source file {}", srcFile);
 			}
 		}
 	}

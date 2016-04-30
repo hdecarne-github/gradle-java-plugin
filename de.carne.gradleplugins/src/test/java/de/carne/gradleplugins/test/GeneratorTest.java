@@ -25,6 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -40,12 +41,14 @@ public class GeneratorTest {
 
 	private static final Date TEST_TIMESTAMP = new Date(1461360290992l);
 
+	private static final SimpleDateFormat TEST_TIMESTAMP_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
+
 	/**
 	 * Test {@code JavaI18NGenerator}.
 	 */
 	@Test
 	public void testJavaI18NGenerator() {
-		JavaI18NGenerator i18nGenerator = new JavaI18NGenerator(TEST_TIMESTAMP);
+		JavaI18NGenerator i18nGenerator = new JavaI18NGenerator(TEST_TIMESTAMP, TEST_TIMESTAMP_FORMAT);
 		HashMap<String, String> ctx = new HashMap<>();
 
 		ctx.put(JavaI18NGenerator.KEY_I18N_PACKAGE, "test");

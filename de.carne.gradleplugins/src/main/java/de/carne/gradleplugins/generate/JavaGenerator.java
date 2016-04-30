@@ -18,6 +18,7 @@ package de.carne.gradleplugins.generate;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -37,10 +38,13 @@ public abstract class JavaGenerator extends Generator {
 	/**
 	 * Construct {@code JavaGenerator}.
 	 *
-	 * @param generationTimestamp See {@linkplain Generator#Generator(Date)}
+	 * @param generationTimestamp See
+	 *        {@linkplain Generator#Generator(Date, DateFormat)}
+	 * @param generationTimestampFormat See
+	 *        {@linkplain Generator#Generator(Date, DateFormat)}
 	 */
-	protected JavaGenerator(Date generationTimestamp) {
-		super(generationTimestamp);
+	protected JavaGenerator(Date generationTimestamp, DateFormat generationTimestampFormat) {
+		super(generationTimestamp, generationTimestampFormat);
 	}
 
 	/**
@@ -85,11 +89,11 @@ public abstract class JavaGenerator extends Generator {
 	 * Generate a Java file comment.
 	 *
 	 * @param out The {@code Writer} to write the output to.
-	 * @param timestamp The timestamp to use for comment generation.
+	 * @param timestamp The timestamp string to use for comment generation.
 	 * @param title The title to use for comment generation.
 	 * @throws IOException if an I/O error occurs during generation.
 	 */
-	protected void generateFileComment(Writer out, Date timestamp, String title) throws IOException {
+	protected void generateFileComment(Writer out, String timestamp, String title) throws IOException {
 		write(out, TEMPLATE_FILE_COMMENT, timestamp, title);
 	}
 
