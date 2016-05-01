@@ -16,6 +16,7 @@
  */
 package de.carne.gradleplugins.java;
 
+import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.SourceSet;
 
 /**
@@ -30,7 +31,7 @@ public class JavaToolsExtension {
 
 	private String genI18NSourceSet = SourceSet.MAIN_SOURCE_SET_NAME;
 
-	private String genI18NInclude = "**/*I18N.properties";
+	private String genI18NInclude = "**/I18N.properties";
 
 	private String genI18NKeyFilter = "^STR_.*";
 
@@ -118,6 +119,21 @@ public class JavaToolsExtension {
 	 */
 	public void setGenDir(String genDir) {
 		this.genDir = genDir;
+	}
+
+	/**
+	 * Log extension parameters for debug purposes.
+	 *
+	 * @param logger The logger to use.
+	 */
+	public void log(Logger logger) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("{} extension values:", EXTENSION_NAME);
+			logger.debug(" genI18NSourceSet = '{}'", this.genI18NSourceSet);
+			logger.debug(" genI18NInclude = '{}'", this.genI18NInclude);
+			logger.debug(" genI18NKeyFilter = '{}'", this.genI18NKeyFilter);
+			logger.debug(" genDir = ''{}''", this.genDir);
+		}
 	}
 
 }

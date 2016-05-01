@@ -18,6 +18,7 @@ package de.carne.gradleplugins.java;
 
 import java.util.Set;
 
+import org.gradle.api.Action;
 import org.gradle.api.GradleException;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -35,6 +36,26 @@ public class JavaToolsPlugin implements Plugin<Project> {
 	 */
 	public static final String JAVA_TOOL_PLUGIN_NAME = JavaToolsPlugin.class.getPackage().getName();
 
+	private static class AfterEvaluateAction implements Action<Project> {
+
+		private GenI18NTask task;
+
+		AfterEvaluateAction(GenI18NTask task) {
+			this.task = task;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see org.gradle.api.Action#execute(java.lang.Object)
+		 */
+		@Override
+		public void execute(Project project) {
+			project.getExtensions().getByType(JavaToolsExtension.class).log(project.getLogger());
+			this.task.prepareInputsOutputs();
+		}
+
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.gradle.api.Plugin#apply(java.lang.Object)
@@ -47,8 +68,8 @@ public class JavaToolsPlugin implements Plugin<Project> {
 		GenI18NTask genI18NTask = project.getTasks().create(GenI18NTask.GEN_I18N_TASK_NAME, GenI18NTask.class);
 
 		genI18NTask.setDescription(GenI18NTask.GEN_I18N_TASK_DESCRIPTION);
-		genI18NTask.prepareInputsOutputs();
 		initTaskDependsOn(project, JavaPlugin.COMPILE_JAVA_TASK_NAME, genI18NTask);
+		project.afterEvaluate(new AfterEvaluateAction(genI18NTask));
 	}
 
 	private void checkPrerequisites(Project project) {
