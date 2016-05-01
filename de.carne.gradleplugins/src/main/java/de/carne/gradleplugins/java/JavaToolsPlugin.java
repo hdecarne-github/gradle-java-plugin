@@ -47,6 +47,7 @@ public class JavaToolsPlugin implements Plugin<Project> {
 		GenI18NTask genI18NTask = project.getTasks().create(GenI18NTask.GEN_I18N_TASK_NAME, GenI18NTask.class);
 
 		genI18NTask.setDescription(GenI18NTask.GEN_I18N_TASK_DESCRIPTION);
+		genI18NTask.prepareInputsOutputs();
 		initTaskDependsOn(project, JavaPlugin.COMPILE_JAVA_TASK_NAME, genI18NTask);
 	}
 

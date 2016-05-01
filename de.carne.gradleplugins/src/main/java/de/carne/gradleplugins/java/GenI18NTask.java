@@ -32,6 +32,8 @@ import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.TaskExecutionException;
+import org.gradle.api.tasks.TaskInputs;
+import org.gradle.api.tasks.TaskOutputs;
 import org.gradle.api.tasks.util.PatternSet;
 
 import de.carne.gradleplugins.generate.JavaI18NGenerator;
@@ -98,15 +100,37 @@ public class GenI18NTask extends DefaultTask {
 	}
 
 	/**
+	 * Register inputs and outputs for incremental build support.
+	 */
+	public void prepareInputsOutputs() {
+		TaskContext ctx = new TaskContext();
+		Map<File, File> genMap = determineGenMap(ctx);
+		TaskInputs inputs = getInputs();
+		TaskOutputs outputs = getOutputs();
+
+		inputs.property(JavaToolsExtension.getGenDirProperty(), ctx.genDir());
+		inputs.property(JavaToolsExtension.getGenI18NSourceSetProperty(), ctx.sourceSet());
+		inputs.property(JavaToolsExtension.getGenI18NIncludeProperty(), ctx.extension().getGenI18NInclude());
+		inputs.property(JavaToolsExtension.getGenI18NKeyFilterProperty(), ctx.extension().getGenI18NKeyFilter());
+		outputs.dir(ctx.genDir());
+		for (Map.Entry<File, File> genMapEntry : genMap.entrySet()) {
+			File dstFile = genMapEntry.getKey();
+			File srcFile = genMapEntry.getValue();
+
+			inputs.file(srcFile);
+			outputs.file(dstFile);
+		}
+	}
+
+	/**
 	 * Task entry point.
 	 *
 	 * @throws TaskExecutionException if an error occurs during task execution.
 	 */
 	@TaskAction
 	public void runGenI18NTask() throws TaskExecutionException {
-		Map<File, File> genMap = getGenMap();
 		TaskContext ctx = new TaskContext();
-		File genDir = ctx.genDir();
+		Map<File, File> genMap = determineGenMap(ctx);
 		JavaI18NGenerator generator = new JavaI18NGenerator(null, null);
 
 		for (Map.Entry<File, File> genMapEntry : genMap.entrySet()) {
@@ -120,8 +144,7 @@ public class GenI18NTask extends DefaultTask {
 				generatorCtx.put(JavaI18NGenerator.KEY_I18N_PACKAGE, getPackageFromFile(dstFile));
 				generatorCtx.put(JavaI18NGenerator.KEY_I18N_CLASS, getClassFromFile(dstFile));
 				generatorCtx.put(JavaI18NGenerator.KEY_I18N_KEY_FILTER, ctx.extension().getGenI18NKeyFilter());
-				try (FileReader in = new FileReader(srcFile);
-						FileWriter out = new FileWriter(new File(genDir.toString(), dstFile.toString()))) {
+				try (FileReader in = new FileReader(srcFile); FileWriter out = new FileWriter(dstFile)) {
 					generator.generate(generatorCtx, in, out);
 				} catch (IOException e) {
 					throw new TaskExecutionException(this, e);
@@ -132,9 +155,9 @@ public class GenI18NTask extends DefaultTask {
 		}
 	}
 
-	private Map<File, File> getGenMap() {
+	private Map<File, File> determineGenMap(TaskContext ctx) {
 		HashMap<File, File> genMap = new HashMap<>();
-		TaskContext ctx = new TaskContext();
+		Path genDirPath = ctx.genDir().toPath();
 
 		for (DirectoryTree srcDirTree : ctx.sourceSet().getResources().getSrcDirTrees()) {
 			File srcDir = getProject().file(srcDirTree.getDir());
@@ -143,9 +166,9 @@ public class GenI18NTask extends DefaultTask {
 					.matching(ctx.pattern()).getFiles();
 
 			for (File srcFile : srcFiles) {
-				Path srcFilePath = srcFile.toPath();
-				File dstFile = new File(
-						srcDirPath.relativize(srcFilePath).toString().replaceFirst("\\.properties$", ".java"));
+				Path relSrcFilePath = srcDirPath.relativize(srcFile.toPath());
+				File dstFile = genDirPath.resolve(relSrcFilePath.toString().replaceFirst("\\.properties$", ".java"))
+						.toFile();
 
 				if (!genMap.containsKey(dstFile)) {
 					genMap.put(dstFile, srcFile);

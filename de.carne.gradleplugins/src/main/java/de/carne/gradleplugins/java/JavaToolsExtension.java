@@ -37,6 +37,13 @@ public class JavaToolsExtension {
 	private String genDir = "src/main/java";
 
 	/**
+	 * @return the genI18NSourceSet property name.
+	 */
+	public static String getGenI18NSourceSetProperty() {
+		return "genI18NSourceSet";
+	}
+
+	/**
 	 * @return the genI18NSourceSet
 	 */
 	public String getGenI18NSourceSet() {
@@ -48,6 +55,13 @@ public class JavaToolsExtension {
 	 */
 	public void setGenI18NSourceSet(String genI18NSourceSet) {
 		this.genI18NSourceSet = genI18NSourceSet;
+	}
+
+	/**
+	 * @return the genI18NInclude property name.
+	 */
+	public static String getGenI18NIncludeProperty() {
+		return "genI18NInclude";
 	}
 
 	/**
@@ -65,6 +79,13 @@ public class JavaToolsExtension {
 	}
 
 	/**
+	 * @return the genI18NKeyFilter property name.
+	 */
+	public static String getGenI18NKeyFilterProperty() {
+		return "genI18NKeyFilter";
+	}
+
+	/**
 	 * @return the genI18NKeyFilter
 	 */
 	public String getGenI18NKeyFilter() {
@@ -76,6 +97,13 @@ public class JavaToolsExtension {
 	 */
 	public void setGenI18NKeyFilter(String genI18NKeyFilter) {
 		this.genI18NKeyFilter = genI18NKeyFilter;
+	}
+
+	/**
+	 * @return the genDir property name.
+	 */
+	public static String getGenDirProperty() {
+		return "genDir";
 	}
 
 	/**
