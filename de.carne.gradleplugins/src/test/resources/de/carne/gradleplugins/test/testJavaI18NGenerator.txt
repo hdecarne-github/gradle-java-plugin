@@ -13,6 +13,9 @@ import java.util.ResourceBundle;
  */
 public final class I18N {
 
+	/**
+	 * The BUNDLE represented by this class.
+	 */
 	public static final ResourceBundle BUNDLE = ResourceBundle.getBundle(I18N.class.getName());
 
 	private static String format(String key, Object... arguments) {
@@ -34,6 +37,9 @@ public final class I18N {
 	 * <p>
 	 * A single line message format string containing a Javadoc comment:  &frasl;* {&#64;code int} *&frasl;
 	 * </p>
+	 *
+	 * @param arguments Format arguments.
+	 * @return The formated string.
 	 */
 	public static String formatTEXT_TEST3(Object... arguments) {
 		return format(TEXT_TEST3, arguments);
@@ -52,6 +58,9 @@ public final class I18N {
 	 * <p>
 	 * This is a multi line message format string with two arguments: arg1 {0}<br/>arg2 {1}
 	 * </p>
+	 *
+	 * @param arguments Format arguments.
+	 * @return The formated string.
 	 */
 	public static String formatTEXT_TEST2(Object... arguments) {
 		return format(TEXT_TEST2, arguments);
@@ -70,6 +79,9 @@ public final class I18N {
 	 * <p>
 	 * This is single line message format string with a single argument: {0}
 	 * </p>
+	 *
+	 * @param arguments Format arguments.
+	 * @return The formated string.
 	 */
 	public static String formatTEXT_TEST1(Object... arguments) {
 		return format(TEXT_TEST1, arguments);
