@@ -108,8 +108,8 @@ public class GenI18NTask extends DefaultTask {
 		TaskInputs inputs = getInputs();
 		TaskOutputs outputs = getOutputs();
 
-		inputs.property(JavaToolsExtension.getGenDirProperty(), ctx.genDir());
-		inputs.property(JavaToolsExtension.getGenI18NSourceSetProperty(), ctx.sourceSet());
+		inputs.property(JavaToolsExtension.getGenDirProperty(), ctx.extension().getGenDir());
+		inputs.property(JavaToolsExtension.getGenI18NSourceSetProperty(), ctx.extension().getGenI18NSourceSet());
 		inputs.property(JavaToolsExtension.getGenI18NIncludeProperty(), ctx.extension().getGenI18NInclude());
 		inputs.property(JavaToolsExtension.getGenI18NKeyFilterProperty(), ctx.extension().getGenI18NKeyFilter());
 		outputs.dir(ctx.genDir());
@@ -141,7 +141,7 @@ public class GenI18NTask extends DefaultTask {
 			if (!dstFile.exists() || dstFile.lastModified() <= srcFile.lastModified()) {
 				getProject().getLogger().debug("Processing source file {}", srcFile);
 
-				generatorCtx.put(JavaI18NGenerator.KEY_I18N_PACKAGE, getPackageFromFile(dstFile));
+				generatorCtx.put(JavaI18NGenerator.KEY_I18N_PACKAGE, getPackageFromFile(dstFile, ctx.genDir()));
 				generatorCtx.put(JavaI18NGenerator.KEY_I18N_CLASS, getClassFromFile(dstFile));
 				generatorCtx.put(JavaI18NGenerator.KEY_I18N_KEY_FILTER, ctx.extension().getGenI18NKeyFilter());
 				try (FileReader in = new FileReader(srcFile); FileWriter out = new FileWriter(dstFile)) {
@@ -181,8 +181,10 @@ public class GenI18NTask extends DefaultTask {
 		return genMap;
 	}
 
-	private String getPackageFromFile(File file) {
-		return file.getParent().replaceAll("/|\\\\", ".");
+	private String getPackageFromFile(File file, File genDir) {
+		Path relPackagePath = genDir.toPath().relativize(file.toPath().getParent());
+
+		return relPackagePath.toString().replaceAll("/|\\\\", ".");
 	}
 
 	private String getClassFromFile(File file) {
