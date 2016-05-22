@@ -1,5 +1,5 @@
 ## GradlePlugins
-This packages collects custom Gradle plugins used for the development of [my private projects](https://github.com/hdecarne/).
+This project collects custom Gradle plugins used for the development of [my private projects](https://github.com/hdecarne/).
 
 ### Plugin de.carne.gradleplugins.java
 Use this plugin with your java projects. It requires the java plugin to be applied first.
