@@ -58,7 +58,9 @@ public class GeneratorTest {
 			StringWriter out = new StringWriter();
 
 			i18nGenerator.generate(ctx, in, out);
-			Assert.assertEquals(getStringFromResource("testJavaI18NGenerator.txt"), out.toString());
+
+			Assert.assertEquals(normalizeLF(getStringFromResource("testJavaI18NGenerator.txt")),
+					normalizeLF(out.toString()));
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());
@@ -71,6 +73,10 @@ public class GeneratorTest {
 		byte[] resourceBytes = Files.readAllBytes(resourcePath);
 
 		return new String(resourceBytes, StandardCharsets.UTF_8);
+	}
+
+	private String normalizeLF(String string) {
+		return string.replace("\r\n", "\n");
 	}
 
 }
