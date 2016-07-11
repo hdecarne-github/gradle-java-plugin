@@ -8,7 +8,7 @@
 <listAttribute key="tasks">
 <listEntry value="clean"/>
 <listEntry value="build"/>
-<listEntry value="install"/>
+<listEntry value="uploadArchives"/>
 </listAttribute>
 <stringAttribute key="working_dir" value="${workspace_loc:/gradleplugins}"/>
 </launchConfiguration>
