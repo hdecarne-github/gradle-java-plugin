@@ -1,5 +1,15 @@
 ## GradlePlugins
-This project collects custom Gradle plugins used for the development of [my private projects](https://github.com/hdecarne/).
+This project collects custom Gradle plugins used for the development of [my private projects](https://github.com/hdecarne/). To make the plugins available for the build script the following buildscript dependency has to be defined:
+```Gradle
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'de.carne:gradleplugins:0.2.0'
+	}
+}
+```
 
 ### Plugin de.carne.gradleplugins.java
 Use this plugin with your java projects. It requires the java plugin to be applied first.
@@ -7,6 +17,7 @@ Use this plugin with your java projects. It requires the java plugin to be appli
 apply plugin: 'java'
 apply plugin: 'de.carne.gradleplugins.java'
 ```
+
 #### Task genI18N
 This task runs automatically before the __compileJava__ task, scans the source set for existing resource bundles and generates access classes for them. The following default settings are used by this task.
 ```Gradle
