@@ -59,7 +59,7 @@ public abstract class JavaGenerator extends Generator {
 
 		for (String dataLine : dataLines) {
 			if (buffer.length() > 0) {
-				buffer.append("<br/>");
+				buffer.append("<br>");
 			}
 			for (int dataLineIndex = 0; dataLineIndex < dataLine.length(); dataLineIndex++) {
 				char c = dataLine.charAt(dataLineIndex);

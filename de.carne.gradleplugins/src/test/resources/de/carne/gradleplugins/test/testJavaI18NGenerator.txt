@@ -54,7 +54,7 @@ public final class I18N {
 	/**
 	 * Resource key {@code TEXT_TEST2}
 	 * <p>
-	 * This is a multi line message format string with two arguments: arg1 {0}<br/>arg2 {1}
+	 * This is a multi line message format string with two arguments: arg1 {0}<br>arg2 {1}
 	 * </p>
 	 */
 	public static final String TEXT_TEST2 = "TEXT_TEST2";
@@ -62,7 +62,7 @@ public final class I18N {
 	/**
 	 * Resource string {@code TEXT_TEST2}
 	 * <p>
-	 * This is a multi line message format string with two arguments: arg1 {0}<br/>arg2 {1}
+	 * This is a multi line message format string with two arguments: arg1 {0}<br>arg2 {1}
 	 * </p>
 	 *
 	 * @param arguments Format arguments.
