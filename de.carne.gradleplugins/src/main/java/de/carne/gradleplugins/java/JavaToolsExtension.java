@@ -16,6 +16,7 @@
  */
 package de.carne.gradleplugins.java;
 
+import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.SourceSet;
 
@@ -31,11 +32,13 @@ public class JavaToolsExtension {
 
 	private String genI18NSourceSet = SourceSet.MAIN_SOURCE_SET_NAME;
 
-	private String genI18NInclude = "**/I18N.properties";
+	private String genI18NInclude = "**/*I18N.properties";
 
 	private String genI18NKeyFilter = "^STR_.*";
 
-	private String genDir = "src/main/java";
+	private String genSourceSet = "generated";
+
+	private String genDir = "build/generated/main/java";
 
 	/**
 	 * @return the genI18NSourceSet property name.
@@ -101,6 +104,27 @@ public class JavaToolsExtension {
 	}
 
 	/**
+	 * @return the genSourceSet property name.
+	 */
+	public static String getGenSourceSetProperty() {
+		return "genSourceSet";
+	}
+
+	/**
+	 * @return the genSourceSet
+	 */
+	public String getGenSourceSet() {
+		return this.genSourceSet;
+	}
+
+	/**
+	 * @param genSourceSet the genSourceSet to set
+	 */
+	public void setGenSourceSet(String genSourceSet) {
+		this.genSourceSet = genSourceSet;
+	}
+
+	/**
 	 * @return the genDir property name.
 	 */
 	public static String getGenDirProperty() {
@@ -122,6 +146,16 @@ public class JavaToolsExtension {
 	}
 
 	/**
+	 * Get the project's extension object.
+	 * 
+	 * @param project The project to get the extension object for.
+	 * @return The extension object.
+	 */
+	public static JavaToolsExtension get(Project project) {
+		return project.getExtensions().getByType(JavaToolsExtension.class);
+	}
+
+	/**
 	 * Log extension parameters for debug purposes.
 	 *
 	 * @param logger The logger to use.
@@ -132,6 +166,7 @@ public class JavaToolsExtension {
 			logger.debug(" genI18NSourceSet = '{}'", this.genI18NSourceSet);
 			logger.debug(" genI18NInclude = '{}'", this.genI18NInclude);
 			logger.debug(" genI18NKeyFilter = '{}'", this.genI18NKeyFilter);
+			logger.debug(" genSourceSet = ''{}''", this.genSourceSet);
 			logger.debug(" genDir = ''{}''", this.genDir);
 		}
 	}

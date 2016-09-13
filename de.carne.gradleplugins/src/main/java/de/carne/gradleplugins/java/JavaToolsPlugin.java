@@ -24,7 +24,9 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.plugins.JavaPlugin;
+import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.plugins.UnknownPluginException;
+import org.gradle.api.tasks.SourceSet;
 
 /**
  * JavaToolsPlugin providing various Java related tasks.
@@ -36,39 +38,38 @@ public class JavaToolsPlugin implements Plugin<Project> {
 	 */
 	public static final String JAVA_TOOL_PLUGIN_NAME = JavaToolsPlugin.class.getPackage().getName();
 
-	private static class AfterEvaluateAction implements Action<Project> {
+	private class AfterEvaluateAction implements Action<Project> {
 
-		private GenI18NTask task;
+		private GenI18NTask genI18NTask;
 
-		AfterEvaluateAction(GenI18NTask task) {
-			this.task = task;
+		AfterEvaluateAction(GenI18NTask genI18NTask) {
+			this.genI18NTask = genI18NTask;
 		}
 
-		/*
-		 * (non-Javadoc)
-		 * @see org.gradle.api.Action#execute(java.lang.Object)
-		 */
 		@Override
 		public void execute(Project project) {
-			project.getExtensions().getByType(JavaToolsExtension.class).log(project.getLogger());
-			this.task.prepareInputsOutputs();
+			JavaToolsExtension extension = JavaToolsExtension.get(project);
+
+			extension.log(project.getLogger());
+			this.genI18NTask.prepareAfterEvaluate();
 		}
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.gradle.api.Plugin#apply(java.lang.Object)
-	 */
 	@Override
 	public void apply(Project project) {
 		checkPrerequisites(project);
+
+		// Register extension object
 		project.getExtensions().create(JavaToolsExtension.EXTENSION_NAME, JavaToolsExtension.class);
 
+		// Create and pre-init tasks
 		GenI18NTask genI18NTask = project.getTasks().create(GenI18NTask.GEN_I18N_TASK_NAME, GenI18NTask.class);
 
 		genI18NTask.setDescription(GenI18NTask.GEN_I18N_TASK_DESCRIPTION);
 		initTaskDependsOn(project, JavaPlugin.COMPILE_JAVA_TASK_NAME, genI18NTask);
+
+		// Queue post-init for tasks
 		project.afterEvaluate(new AfterEvaluateAction(genI18NTask));
 	}
 
@@ -89,6 +90,17 @@ public class JavaToolsPlugin implements Plugin<Project> {
 		for (Task task : taskSet) {
 			task.dependsOn(dependencies);
 		}
+	}
+
+	/**
+	 * Lookup a source set.
+	 *
+	 * @param project The project to get the source set for.
+	 * @param name The name of the source set to get.
+	 * @return The found source set.
+	 */
+	public static SourceSet getSourceSet(Project project, String name) {
+		return project.getConvention().getPlugin(JavaPluginConvention.class).getSourceSets().getByName(name);
 	}
 
 }
