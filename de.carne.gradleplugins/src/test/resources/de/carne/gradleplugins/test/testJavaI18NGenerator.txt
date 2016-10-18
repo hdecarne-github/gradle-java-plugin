@@ -34,7 +34,6 @@ public final class I18N {
 	 * Resource key {@code TEXT_TEST3}
 	 * <p>
 	 * A single line message format string containing a Javadoc comment:  &frasl;* {&#64;code int} *&frasl;
-	 * </p>
 	 */
 	public static final String TEXT_TEST3 = "TEXT_TEST3";
 
@@ -42,7 +41,6 @@ public final class I18N {
 	 * Resource string {@code TEXT_TEST3}
 	 * <p>
 	 * A single line message format string containing a Javadoc comment:  &frasl;* {&#64;code int} *&frasl;
-	 * </p>
 	 *
 	 * @param arguments Format arguments.
 	 * @return The formated string.
@@ -55,7 +53,6 @@ public final class I18N {
 	 * Resource key {@code TEXT_TEST2}
 	 * <p>
 	 * This is a multi line message format string with two arguments: arg1 {0}<br>arg2 {1}
-	 * </p>
 	 */
 	public static final String TEXT_TEST2 = "TEXT_TEST2";
 
@@ -63,7 +60,6 @@ public final class I18N {
 	 * Resource string {@code TEXT_TEST2}
 	 * <p>
 	 * This is a multi line message format string with two arguments: arg1 {0}<br>arg2 {1}
-	 * </p>
 	 *
 	 * @param arguments Format arguments.
 	 * @return The formated string.
@@ -76,7 +72,6 @@ public final class I18N {
 	 * Resource key {@code TEXT_TEST1}
 	 * <p>
 	 * This is single line message format string with a single argument: {0}
-	 * </p>
 	 */
 	public static final String TEXT_TEST1 = "TEXT_TEST1";
 
@@ -84,7 +79,6 @@ public final class I18N {
 	 * Resource string {@code TEXT_TEST1}
 	 * <p>
 	 * This is single line message format string with a single argument: {0}
-	 * </p>
 	 *
 	 * @param arguments Format arguments.
 	 * @return The formated string.
