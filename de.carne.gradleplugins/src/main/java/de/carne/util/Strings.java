@@ -58,7 +58,7 @@ public final class Strings {
 	/**
 	 * Split a string containing line separators into multiple strings.
 	 *
-	 * @param s The string to split or {@code null}.
+	 * @param s The string to split (may be {@code null}).
 	 * @return The split lines.
 	 */
 	public static String[] splitLines(String s) {
