@@ -1,6 +1,6 @@
 import java.text.SimpleDateFormat
 
-def formatBuildDate() {
+def getBuild() {
 	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
 	return dateFormat.format(new Date());
@@ -11,6 +11,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
 	mavenLocal()
@@ -32,7 +33,7 @@ jar {
 			'X-Version-ProjectId': projectId,
 			'X-Version-ProjectName' : project.name,
 			'X-Version-ProjectVersion': version,
-			'X-Version-BuildDate' : formatBuildDate()
+			'X-Version-ProjectBuild' : getBuild()
 		)
 	}
 }
