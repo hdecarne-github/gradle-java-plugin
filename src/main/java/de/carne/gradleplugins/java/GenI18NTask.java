@@ -68,7 +68,7 @@ public class GenI18NTask extends DefaultTask {
 			Project project = getProject();
 
 			this.extension = JavaToolsExtension.get(project);
-			this.genDir = project.file(this.extension.getGenDir());
+			this.genDir = new File(project.getBuildDir(), this.extension.getGenDir());
 			this.sourceSet = JavaToolsPlugin.getSourceSet(project, this.extension.getGenI18NSourceSet());
 			this.pattern = new PatternSet();
 			this.pattern.include(this.extension.getGenI18NInclude());
@@ -90,6 +90,15 @@ public class GenI18NTask extends DefaultTask {
 			return this.pattern;
 		}
 
+	}
+
+	/**
+	 * Prepare source dependencies.
+	 */
+	public void prepare() {
+		TaskContext ctx = new TaskContext();
+
+		ctx.sourceSet().getJava().srcDirs(new File(getProject().getBuildDir(), ctx.extension().getGenDir()));
 	}
 
 	/**

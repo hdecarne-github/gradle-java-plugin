@@ -1,1 +1,4 @@
-.metadata/
+.gradle/
+build/
+build-eclipse/
+/bin/

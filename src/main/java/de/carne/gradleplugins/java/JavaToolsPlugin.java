@@ -68,6 +68,7 @@ public class JavaToolsPlugin implements Plugin<Project> {
 
 		genI18NTask.setDescription(GenI18NTask.GEN_I18N_TASK_DESCRIPTION);
 		initTaskDependsOn(project, JavaPlugin.COMPILE_JAVA_TASK_NAME, genI18NTask);
+		genI18NTask.prepare();
 
 		// Queue post-init for tasks
 		project.afterEvaluate(new AfterEvaluateAction(genI18NTask));

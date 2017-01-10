@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>gradleplugins</name>
-	<comment>Project gradleplugins created by Buildship.</comment>
+	<name>de.carne.gradleplugins</name>
+	<comment>Project de.carne.gradleplugins created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>

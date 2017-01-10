@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Holger de Carne and contributors, All Rights Reserved.
+ * Copyright (c) 2016-2017 Holger de Carne and contributors, All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,10 +36,9 @@ public abstract class Generator {
 	/**
 	 * Construct {@code Generator}.
 	 *
-	 * @param generationTimestamp The generation timestamp to use. If
-	 *        {@code null}, the current time is used.
-	 * @param generationTimestampFormat The format to use for formating the
-	 *        generation timestamp. If {@code null} the default format is used.
+	 * @param generationTimestamp The generation timestamp to use. If {@code null}, the current time is used.
+	 * @param generationTimestampFormat The format to use for formating the generation timestamp. If {@code null} the
+	 *        default format is used.
 	 */
 	protected Generator(Date generationTimestamp, DateFormat generationTimestampFormat) {
 		this.generationTimestamp = (generationTimestamp != null ? generationTimestamp : new Date());
@@ -90,8 +89,7 @@ public abstract class Generator {
 	 * @param ctx The context to evaluate.
 	 * @param key The key to retrieve.
 	 * @return The found value.
-	 * @throws IllegalArgumentException if the key is not defined in the
-	 *         context.
+	 * @throws IllegalArgumentException if the key is not defined in the context.
 	 */
 	protected String getContextString(Map<String, String> ctx, String key) {
 		String value = ctx.get(key);
@@ -107,10 +105,8 @@ public abstract class Generator {
 	 *
 	 * @param ctx The context to evaluate.
 	 * @param key The key to retrieve.
-	 * @param defaultValue The default value to return in case the key is not
-	 *        defined in the context.
-	 * @return The found value or the default value in case the key is not
-	 *         defined in the context.
+	 * @param defaultValue The default value to return in case the key is not defined in the context.
+	 * @return The found value or the default value in case the key is not defined in the context.
 	 */
 	protected String getContextString(Map<String, String> ctx, String key, String defaultValue) {
 		return ctx.getOrDefault(key, defaultValue);

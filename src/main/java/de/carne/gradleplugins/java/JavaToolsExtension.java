@@ -38,7 +38,7 @@ public class JavaToolsExtension {
 
 	private String genSourceSet = "generated";
 
-	private String genDir = "build/generated/main/java";
+	private String genDir = "generated/main/java";
 
 	/**
 	 * @return the genI18NSourceSet property name.
@@ -147,7 +147,7 @@ public class JavaToolsExtension {
 
 	/**
 	 * Get the project's extension object.
-	 * 
+	 *
 	 * @param project The project to get the extension object for.
 	 * @return The extension object.
 	 */
