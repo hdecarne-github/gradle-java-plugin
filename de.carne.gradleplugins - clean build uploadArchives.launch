@@ -10,5 +10,6 @@
 <listEntry value="build"/>
 <listEntry value="uploadArchives"/>
 </listAttribute>
-<stringAttribute key="working_dir" value="${workspace_loc:/gradleplugins}"/>
+<booleanAttribute key="use_gradle_distribution_from_import" value="false"/>
+<stringAttribute key="working_dir" value="${workspace_loc:/de.carne.gradleplugins}"/>
 </launchConfiguration>
