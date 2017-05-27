@@ -23,7 +23,7 @@ import java.text.MessageFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 
-import de.carne.util.Strings;
+import de.carne.gradleplugins.util.Strings;
 
 /**
  * {@code Generator} class used for all kinds of Java code generators.
