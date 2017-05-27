@@ -1,14 +1,8 @@
-import java.text.SimpleDateFormat
-
-def getBuild() {
-	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-
-	return dateFormat.format(new Date());
-}
-
 apply plugin: 'java'
+apply plugin: 'jacoco'
 apply plugin: 'maven'
 apply plugin: 'signing'
+apply plugin: 'eclipse'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -16,30 +10,26 @@ targetCompatibility = 1.8
 repositories {
 	mavenLocal()
 	mavenCentral()
+	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' } 
 }
 
 dependencies {
-	compile(
-		gradleApi()
-	)
-	testCompile(
-		'junit:junit:4.12'
-	)
+	compile(gradleApi())
+	testCompile('junit:junit:4.12')
 }
 
-jar {
-	manifest {
-		attributes(
-			'X-Version-ProjectId': projectId,
-			'X-Version-ProjectName' : project.name,
-			'X-Version-ProjectVersion': version,
-			'X-Version-ProjectBuild' : getBuild()
-		)
+jacocoTestReport {
+	reports {
+		xml.enabled true
+		xml.destination "${buildDir}/reports/jacoco/coverage.xml"
+		html.enabled true
+		html.destination "${buildDir}/reports/jacoco"
+		csv.enabled false
 	}
 }
 
 task javadocJar(type: Jar) {
- 	classifier = 'javadoc'
+	classifier = 'javadoc'
 	from javadoc
 }
 
@@ -53,7 +43,9 @@ artifacts {
 }
 
 signing {
-	sign configurations.archives
+	if (project.hasProperty('signing.keyId')) {
+		sign configurations.archives
+	}
 }
 
 uploadArchives {
@@ -62,12 +54,14 @@ uploadArchives {
 			beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
 			repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-				authentication(userName: ossrhUsername, password: ossrhPassword)
+				authentication(userName: project.ext.properties.ossrhUsername, password: project.ext.properties.ossrhPassword)
 			}
 
 			snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-				authentication(userName: ossrhUsername, password: ossrhPassword)
+				authentication(userName: project.ext.properties.ossrhUsername, password: project.ext.properties.ossrhPassword)
 			}
+			
+			pom.artifactId = project.name
 
 			pom.project {
 				name project.name
@@ -96,6 +90,21 @@ uploadArchives {
 						email 'hdecarne@gmail.com'
 					}
 				}
+			}
+		}
+	}
+}
+
+import org.gradle.plugins.ide.eclipse.model.AccessRule
+
+eclipse {
+	classpath {
+		defaultOutputDir = file('eclipse-build')
+		file {
+			whenMerged {
+				def jre = entries.find { it.path.contains 'org.eclipse.jdt.launching.JRE_CONTAINER' }
+				
+				jre.accessRules.add(new AccessRule('0', 'javafx/**'))
 			}
 		}
 	}
