@@ -85,9 +85,9 @@ uploadArchives {
 
 				developers {
 					developer {
-						id 'hdecarne'
-						name 'Holger de Carne'
-						email 'hdecarne@gmail.com'
+						id developerId
+						name developerName
+						email developerEmail
 					}
 				}
 			}
