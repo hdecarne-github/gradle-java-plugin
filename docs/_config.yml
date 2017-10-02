@@ -1,0 +1,8 @@
+title: GradlePlugins
+description: Collection of the Gradle plugins used by my private projects
+google_analytics: 
+show_downloads: false
+theme: jekyll-theme-hacker
+
+gems:
+  - jekyll-mentions
