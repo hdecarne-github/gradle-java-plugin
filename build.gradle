@@ -145,7 +145,7 @@ pluginBundle {
 	website = projectUrl
 	vcsUrl = projectScmUrl
 	description = projectDescription
-	tags = ['greetings', 'salutations']
+	tags = ['java']
 	plugins {
 		javatoolsPlugin {
 			id = "de.carne.java-tools"
