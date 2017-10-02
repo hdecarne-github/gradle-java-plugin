@@ -24,9 +24,11 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
@@ -46,6 +48,8 @@ import de.carne.util.Strings;
  * GenerateI18NTask - Create/update I18N helper classes.
  */
 public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
+
+	private static final ResourceBundle TEMPLATES = ResourceBundle.getBundle(GenerateI18NTask.class.getName());
 
 	/**
 	 * The task name.
@@ -73,8 +77,8 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 	public void afterEvaluate(Project project) {
 		GenerateI18N generateI18N = project.getExtensions().getByType(JavaToolsExtension.class).generateI18N;
 
-		getInputs().files(generateI18N.bundles);
-		processBundleFiles(generateI18N.bundles, (srcDir, bundleFile) -> {
+		getInputs().files(generateI18N.getBundles());
+		processBundleFiles(generateI18N.getBundles(), (srcDir, bundleFile) -> {
 			File javaFile = getJavaFile(bundleFile);
 
 			getOutputs().file(getAbsoluteFile(srcDir, javaFile));
@@ -83,19 +87,16 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 
 	/**
 	 * Execute {@linkplain GenerateI18NTask}.
-	 *
-	 * @throws TaskExecutionException if task execution fails.
 	 */
 	@TaskAction
-	public void executeGenerateI18N() throws TaskExecutionException {
+	public void executeGenerateI18N() {
 		Project project = getProject();
 		GenerateI18N generateI18N = project.getExtensions().getByType(JavaToolsExtension.class).generateI18N;
 
-		generateI18N.validateTaskConfig(this);
-		processBundleFiles(generateI18N.bundles, (srcDir, bundleFile) -> {
+		processBundleFiles(generateI18N.getBundles(), (srcDir, bundleFile) -> {
 			try {
-				generateJavaFile(srcDir, bundleFile, Check.notNull(generateI18N.genDir),
-						Check.notNull(generateI18N.keyFilter));
+				generateJavaFile(srcDir, bundleFile, Check.notNull(generateI18N.getGenDir()),
+						Check.notNull(generateI18N.getKeyFilter()));
 			} catch (IOException e) {
 				throw new TaskExecutionException(this, e);
 			}
@@ -161,71 +162,24 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 	}
 
 	private void generateJavaHeader(PrintWriter javaWriter, File bundleFile, File javaFile) {
-		javaWriter.println("/*");
-		javaWriter.println(" * I18N resource access (automatically generated - do not edit)");
-		javaWriter.println(" */");
+		javaWriter.print(TEMPLATES.getString("FILE_HEADER"));
 
 		String javaPackage = Strings.safe(javaFile.getParent()).replace('/', '.');
 		String javaClass = javaFile.getName().replaceAll("\\..*", "");
 
 		if (Strings.notEmpty(javaPackage)) {
-			javaWriter.println("package " + javaPackage + ";");
-			javaWriter.println();
+			javaWriter.print(MessageFormat.format(TEMPLATES.getString("PACKAGE_STATEMENT"), javaPackage));
 		}
-		javaWriter.println("import java.text.MessageFormat;");
-		javaWriter.println("import java.util.ResourceBundle;");
-		javaWriter.println();
-		javaWriter.println("/**");
-		javaWriter.println(" * Resource bundle: " + bundleFile);
-		javaWriter.println(" */");
-		javaWriter.println("public final class " + javaClass + " {");
-		javaWriter.println();
-		javaWriter.println("\t/**");
-		javaWriter.println("\t * The {@linkplain ResourceBundle} wrapped by this class.");
-		javaWriter.println("\t */");
-		javaWriter.println("\tpublic static final ResourceBundle BUNDLE = ResourceBundle.getBundle(" + javaClass
-				+ ".class.getName());");
-		javaWriter.println();
-		javaWriter.println("\t/**");
-		javaWriter.println("\t * Format a resource string.");
-		javaWriter.println("\t * @param key The resource key.");
-		javaWriter.println("\t * @param arguments Format arguments.");
-		javaWriter.println("\t * @return The formatted string.");
-		javaWriter.println("\t */");
-		javaWriter.println("\tpublic static String format(String key, Object... arguments) {");
-		javaWriter.println("\t\tString pattern = BUNDLE.getString(key);");
-		javaWriter.println();
-		javaWriter.println("\t\treturn (arguments.length > 0 ? MessageFormat.format(pattern, arguments) : pattern);");
-		javaWriter.println("\t}");
-		javaWriter.println();
+		javaWriter.print(MessageFormat.format(TEMPLATES.getString("CLASS_START"), bundleFile, javaClass));
 	}
 
 	private void generateJavaBody(PrintWriter javaWriter, String bundleKey, String bundleString) {
-		String javadocBundleString = JavaOutput.encodeJavadoc(bundleString);
-
-		javaWriter.println("\t/**");
-		javaWriter.println("\t * Resource key {@code " + bundleKey + "}");
-		javaWriter.println("\t * <p>");
-		javaWriter.println("\t * " + javadocBundleString);
-		javaWriter.println("\t */");
-		javaWriter.println("\tpublic static final String " + bundleKey + " = \"" + bundleKey + "\";");
-		javaWriter.println();
-		javaWriter.println("\t/**");
-		javaWriter.println("\t * Resource string {@code " + bundleKey + "}");
-		javaWriter.println("\t * <p>");
-		javaWriter.println("\t * " + javadocBundleString);
-		javaWriter.println("\t *");
-		javaWriter.println("\t * @param arguments Format arguments.");
-		javaWriter.println("\t * @return The formatted string.");
-		javaWriter.println("\t */");
-		javaWriter.println("\tpublic static String format" + bundleKey + "(Object... arguments) {");
-		javaWriter.println("\t\treturn format(" + bundleKey + ", arguments);");
-		javaWriter.println("\t}");
-		javaWriter.println();
+		javaWriter.print(MessageFormat.format(TEMPLATES.getString("CLASS_BODY"), bundleKey,
+				JavaOutput.encodeJavadoc(bundleString)));
 	}
 
 	private void generateJavaFooter(PrintWriter javaWriter) {
-		javaWriter.println("}");
+		javaWriter.print(MessageFormat.format(TEMPLATES.getString("CLASS_END"), new Object[0]));
 	}
 
 }
