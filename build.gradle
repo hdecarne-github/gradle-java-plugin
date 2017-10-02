@@ -5,6 +5,7 @@ plugins {
     id "org.sonarqube" version "2.5"
 	id "maven-publish"
     id "com.jfrog.artifactory" version "4.5.2"
+    id "com.jfrog.bintray" version "1.7.3"
 	id "com.gradle.plugin-publish" version "0.9.8"
 	id "eclipse"
 }
@@ -139,6 +140,24 @@ artifactory {
 		maven = true
 	}
 	clientConfig.setIncludeEnvVars(false)
+}
+	
+bintray {
+	user = project.resolveProperty("bintrayUser", "BINTRAY_USER")
+	key = project.resolveProperty("bintrayKey", "BINTRAY_KEY")
+	publications = [ "Bintray" ]
+	pkg {
+		repo = "maven"
+		name = project.name
+		licenses = [ projectLicenseId ]
+		vcsUrl = projectScmUrl
+		version {
+			gpg {
+				sign = true
+				passphrase = project.resolveProperty("bintrayGpgPassphrase", "BINTRAY_GPG_PASSPHRASE")
+            }
+		}
+	}
 }
 
 pluginBundle {
