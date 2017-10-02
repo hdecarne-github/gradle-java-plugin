@@ -38,7 +38,6 @@ import org.gradle.api.file.ConfigurableFileTree;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.TaskExecutionException;
 
-import de.carne.check.Check;
 import de.carne.gradle.plugin.ext.GenerateI18N;
 import de.carne.gradle.plugin.ext.JavaToolsExtension;
 import de.carne.gradle.plugin.util.JavaOutput;
@@ -77,6 +76,7 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 	public void afterEvaluate(Project project) {
 		GenerateI18N generateI18N = project.getExtensions().getByType(JavaToolsExtension.class).getGenerateI18N();
 
+		setEnabled(generateI18N.isEnabled());
 		getInputs().files(generateI18N.getBundles());
 		processBundleFiles(generateI18N.getBundles(), (srcDir, bundleFile) -> {
 			File javaFile = getJavaFile(bundleFile);
@@ -92,11 +92,11 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 	public void executeGenerateI18N() {
 		Project project = getProject();
 		GenerateI18N generateI18N = project.getExtensions().getByType(JavaToolsExtension.class).getGenerateI18N();
+		Pattern keyFilter = Pattern.compile(generateI18N.getKeyFilter());
 
 		processBundleFiles(generateI18N.getBundles(), (srcDir, bundleFile) -> {
 			try {
-				generateJavaFile(srcDir, bundleFile, Check.notNull(generateI18N.getGenDir()),
-						Check.notNull(generateI18N.getKeyFilter()));
+				generateJavaFile(srcDir, bundleFile, generateI18N.getGenDir(), keyFilter);
 			} catch (IOException e) {
 				throw new TaskExecutionException(this, e);
 			}

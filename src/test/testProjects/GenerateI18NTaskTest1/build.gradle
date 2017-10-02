@@ -6,6 +6,10 @@ plugins {
 javatools {
 	generateI18N {
 		enabled = true
-		bundles.include("**/*I18N.properties")
+		keyFilter = "^I18N_.*"
+		genDir = file("src/main/java")
+		bundles = fileTree("src/main/resources") {
+			include("**/*I18N.properties")
+		}
 	}
 }

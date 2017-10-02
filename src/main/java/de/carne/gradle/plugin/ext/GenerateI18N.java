@@ -17,9 +17,7 @@
 package de.carne.gradle.plugin.ext;
 
 import java.io.File;
-import java.util.regex.Pattern;
 
-import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.file.ConfigurableFileTree;
 
@@ -41,9 +39,9 @@ public class GenerateI18N {
 	private final Project project;
 
 	private boolean enabledParam = false;
-	private Pattern keyFilterParam = Pattern.compile("^I18N_.*");
+	private String keyFilterParam = "^I18N_.*";
 	private File genDirParam;
-	private final ConfigurableFileTree bundlesParam;
+	private ConfigurableFileTree bundlesParam;
 
 	/**
 	 * Construct {@linkplain GenerateI18N}.
@@ -98,7 +96,7 @@ public class GenerateI18N {
 	}
 
 	/**
-	 * Get the {@linkplain Pattern} identifying the resource bundle keys to be processed during generation.
+	 * Get the pattern string identifying the resource bundle keys to be processed during generation.
 	 * <p>
 	 * build.gradle:
 	 *
@@ -108,14 +106,14 @@ public class GenerateI18N {
 	 * }
 	 * </pre>
 	 *
-	 * @return The {@linkplain Pattern} identifying the resource bundle keys to be processed during generation.
+	 * @return The pattern string identifying the resource bundle keys to be processed during generation.
 	 */
-	public Pattern getKeyFilter() {
+	public String getKeyFilter() {
 		return this.keyFilterParam;
 	}
 
 	/**
-	 * Set the {@linkplain Pattern} identifying the resource bundle keys to be processed during generation.
+	 * Set the pattern string identifying the resource bundle keys to be processed during generation.
 	 * <p>
 	 * build.gradle:
 	 *
@@ -125,9 +123,9 @@ public class GenerateI18N {
 	 * }
 	 * </pre>
 	 *
-	 * @param keyFilter The {@linkplain Pattern} identifying the resource bundle keys to be processed during generation.
+	 * @param keyFilter The pattern string identifying the resource bundle keys to be processed during generation.
 	 */
-	public void setKeyFilter(Pattern keyFilter) {
+	public void setKeyFilter(String keyFilter) {
 		this.keyFilterParam = keyFilter;
 	}
 
@@ -138,7 +136,7 @@ public class GenerateI18N {
 	 *
 	 * <pre>
 	 * generateI18N {
-	 *  genDir = file(...) // default: ./src/main/java
+	 *  genDir = file(...) // default: file("src/main/java")
 	 * }
 	 * </pre>
 	 *
@@ -155,7 +153,7 @@ public class GenerateI18N {
 	 *
 	 * <pre>
 	 * generateI18N {
-	 *  genDir = file(...) // default: ./src/main/java
+	 *  genDir = file(...) // default: file(/src/main/java)
 	 * }
 	 * </pre>
 	 *
@@ -172,7 +170,7 @@ public class GenerateI18N {
 	 *
 	 * <pre>
 	 * generateI18N {
-	 *  bundles = fileTree(...) // default: src/main/resources/&#42;&#42;/&#42;I18N.properties
+	 *  bundles = fileTree(...) // default: fileTree("src/main/resources").include("&#42;&#42;/&#42;I18N.properties")
 	 * }
 	 * </pre>
 	 *
@@ -183,12 +181,20 @@ public class GenerateI18N {
 	}
 
 	/**
-	 * Execute {@linkplain #bundlesParam} configuration action.
+	 * Set the resource bundles to process.
+	 * <p>
+	 * build.gradle:
 	 *
-	 * @param configuration The configuration action.
+	 * <pre>
+	 * generateI18N {
+	 *  bundles = fileTree(...) // default: fileTree("src/main/resources").include("&#42;&#42;/&#42;I18N.properties")
+	 * }
+	 * </pre>
+	 *
+	 * @param bundles The resource bundles to process.
 	 */
-	public void bundles(Action<? super ConfigurableFileTree> configuration) {
-		configuration.execute(this.bundlesParam);
+	public void setBundles(ConfigurableFileTree bundles) {
+		this.bundlesParam = bundles;
 	}
 
 }
