@@ -1,111 +1,170 @@
-apply plugin: 'java'
-apply plugin: 'jacoco'
-apply plugin: 'maven'
-apply plugin: 'signing'
-apply plugin: 'eclipse'
+// Plugins
+plugins {
+    id "java-gradle-plugin"
+    id "org.sonarqube" version "2.5"
+    id "com.jfrog.artifactory" version "4.5.2"
+    id "com.jfrog.bintray" version "1.7.3"
+}
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+// Build helpers
+def snapshotBuild = project.version.endsWith("-SNAPSHOT")
+
+def resolveProperty(propertyName, envName) {
+	def resolved = (project.findProperty(propertyName) ?: System.getenv(envName));
+	
+	if(resolved == null) {
+		throw new GradleException("Missing property/environment variable: '${propertyName}'/'${envName}")
+	} 
+	return resolved; 
+}
+
+// Project
+apply plugin: 'java-gradle-plugin'
+apply plugin: "jacoco"
+apply plugin: "org.sonarqube"
+apply plugin: "maven-publish"
+apply plugin: "com.jfrog.artifactory"
+apply plugin: "com.jfrog.bintray"
+apply plugin: "eclipse"
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
-	mavenLocal()
-	mavenCentral()
-	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' } 
+	jcenter()
+	if(snapshotBuild) {
+		mavenLocal()
+		maven { url "https://oss.jfrog.org/libs-snapshot/" }
+	}
 }
 
 dependencies {
-	compile(gradleApi())
-	testCompile('junit:junit:4.12')
+	compile("de.carne.common:java-default:4-SNAPSHOT")
+	testCompile("junit:junit:4.12")
+}
+
+gradlePlugin {
+	plugins {
+		javaToolsPlugin {
+			id = "de.carne.java-tools"
+			implementationClass = "de.carne.gradle.plugin.JavaToolsPlugin"
+		}
+	}
+}
+
+task prepareTestProjects(type: Copy) {
+	from("src/test/testProjects")
+	into "${buildDir}/testProjects"
+	filter {
+		line -> line.replace("TEST_PLUGIN_VERSION", "${project.version}")
+	}
+}
+test.dependsOn prepareTestProjects
+
+test {
+	systemProperty "de.carne.gradle.plugin.test", "${buildDir}/testProjects"
+}
+
+jacoco {
+	toolVersion = "0.7.9"
 }
 
 jacocoTestReport {
 	reports {
-		xml.enabled true
-		xml.destination file("${buildDir}/reports/jacoco/coverage.xml")
+		xml.enabled false
 		html.enabled true
-		html.destination file("${buildDir}/reports/jacoco")
+		html.destination file("${buildDir}/reports/jacocoHtml")
 		csv.enabled false
 	}
 }
 
+task sourceJar(type: Jar) {
+	from sourceSets.main.allJava
+	classifier "sources"
+}
+
 task javadocJar(type: Jar) {
-	classifier = 'javadoc'
 	from javadoc
+	classifier = "javadoc"
 }
 
-task sourcesJar(type: Jar) {
-	classifier = 'sources'
-	from sourceSets.main.allSource
-}
-
-artifacts {
-	archives javadocJar, sourcesJar
-}
-
-signing {
-	if (project.hasProperty('signing.keyId')) {
-		sign configurations.archives
-	}
-}
-
-uploadArchives {
-	repositories {
-		mavenDeployer {
-			beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-			repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-				authentication(userName: project.ext.properties.ossrhUsername, password: project.ext.properties.ossrhPassword)
-			}
-
-			snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-				authentication(userName: project.ext.properties.ossrhUsername, password: project.ext.properties.ossrhPassword)
-			}
-			
-			pom.artifactId = project.name
-
-			pom.project {
-				name project.name
-				packaging 'jar'
-				description projectDescription
-				url projectUrl
-
-				scm {
-					connection projectScm
-					developerConnection projectScm
-					url projectScmUrl
-				}
-
-				licenses {
-					license {
-						name projectLicense
-						url projectLicenseUrl
-						distribution 'repo'
-					}
-				}
-
-				developers {
-					developer {
-						id developerId
-						name developerName
-						email developerEmail
-					}
+publishing {
+	publications {
+		Bintray(MavenPublication) {
+			from components.java
+			artifact sourceJar
+			artifact javadocJar
+			pom.withXml {
+				asNode().children().last() + {
+					resolveStrategy = Closure.DELEGATE_FIRST
+					name project.name
+					description projectDescription
+					url projectUrl
+					licenses {
+						license {
+							name projectLicense
+				            url projectLicenseUrl
+				            distribution "repo"
+				        }
+				    }
+				    developers {
+				        developer {
+				            id project.resolveProperty("developerId", "DEVELOPER_ID")
+				            name project.resolveProperty("developerName", "DEVELOPER_NAME")
+				            email project.resolveProperty("developerEmail", "DEVELOPER_EMAIL")
+				        }
+				    }
+				    scm {
+						url projectScmUrl
+				    }
 				}
 			}
 		}
 	}
 }
 
-import org.gradle.plugins.ide.eclipse.model.AccessRule
+artifactory {
+	contextUrl = "https://oss.jfrog.org/artifactory"
+	publish {
+		repository {
+			repoKey = (snapshotBuild ? "oss-snapshot-local" : "oss-release-local")
+			username = project.resolveProperty("artifactory_user", "ARTIFACTORY_USER")
+			password = project.resolveProperty("artifactory_password", "ARTIFACTORY_PASSWORD")
+			maven = true
+		}
+		defaults {
+			publications("Bintray")
+		}
+	}
+	resolve {
+		repoKey = (snapshotBuild ? "libs-snapshot" : "libs-release")
+		username = project.resolveProperty("artifactory_user", "ARTIFACTORY_USER")
+		password = project.resolveProperty("artifactory_password", "ARTIFACTORY_PASSWORD")
+		maven = true
+	}
+	clientConfig.setIncludeEnvVars(false)
+}
+
+bintray {
+	user = project.resolveProperty("bintrayUser", "BINTRAY_USER")
+	key = project.resolveProperty("bintrayKey", "BINTRAY_KEY")
+	publications = [ "Bintray" ]
+	pkg {
+		repo = "maven"
+		name = project.name
+		licenses = [ projectLicenseId ]
+		vcsUrl = projectScmUrl
+		version {
+			gpg {
+				sign = true
+				passphrase = project.resolveProperty("bintrayGpgPassphrase", "BINTRAY_GPG_PASSPHRASE")
+            }
+		}
+	}
+}
 
 eclipse {
 	classpath {
-		defaultOutputDir = file('eclipse-build')
-		file {
-			whenMerged {
-				def jre = entries.find { it.path.contains 'org.eclipse.jdt.launching.JRE_CONTAINER' }
-				
-				jre.accessRules.add(new AccessRule('0', 'javafx/**'))
-			}
-		}
+		defaultOutputDir = file("eclipse-build")
 	}
 }
