@@ -104,7 +104,7 @@ public class GenerateI18N {
 	 *
 	 * <pre>
 	 * generateI18N {
-	 *  keyFilter = "..." // default: "^I18N_.&ast;"
+	 *  keyFilter = "..." // default: "^I18N_.&#42;"
 	 * }
 	 * </pre>
 	 *
@@ -121,7 +121,7 @@ public class GenerateI18N {
 	 *
 	 * <pre>
 	 * generateI18N {
-	 *  keyFilter = "..." // default: "^I18N_.&ast;"
+	 *  keyFilter = "..." // default: "^I18N_.&#42;"
 	 * }
 	 * </pre>
 	 *
@@ -172,7 +172,7 @@ public class GenerateI18N {
 	 *
 	 * <pre>
 	 * generateI18N {
-	 *  bundles = <file tree> // default: src/main/resources/&ast;&ast;/&ast;I18N.properties
+	 *  bundles = fileTree(...) // default: src/main/resources/&#42;&#42;/&#42;I18N.properties
 	 * }
 	 * </pre>
 	 *

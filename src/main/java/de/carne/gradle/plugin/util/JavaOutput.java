@@ -51,6 +51,7 @@ public final class JavaOutput {
 				encoded.append("&frasl;");
 				break;
 			case '@':
+			case '*':
 				encoded.append("&#" + Integer.toString(code) + ";");
 				break;
 			default:
