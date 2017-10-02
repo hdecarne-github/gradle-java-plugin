@@ -75,7 +75,7 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 
 	@Override
 	public void afterEvaluate(Project project) {
-		GenerateI18N generateI18N = project.getExtensions().getByType(JavaToolsExtension.class).generateI18N;
+		GenerateI18N generateI18N = project.getExtensions().getByType(JavaToolsExtension.class).getGenerateI18N();
 
 		getInputs().files(generateI18N.getBundles());
 		processBundleFiles(generateI18N.getBundles(), (srcDir, bundleFile) -> {
@@ -91,7 +91,7 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 	@TaskAction
 	public void executeGenerateI18N() {
 		Project project = getProject();
-		GenerateI18N generateI18N = project.getExtensions().getByType(JavaToolsExtension.class).generateI18N;
+		GenerateI18N generateI18N = project.getExtensions().getByType(JavaToolsExtension.class).getGenerateI18N();
 
 		processBundleFiles(generateI18N.getBundles(), (srcDir, bundleFile) -> {
 			try {
@@ -157,7 +157,7 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 					generateJavaBody(javaWriter, bundleKey, bundleString);
 				}
 			}
-			generateJavaFooter(javaWriter);
+			generateJavaFooter(javaWriter, bundleFile, javaFile);
 		}
 	}
 
@@ -178,8 +178,8 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 				JavaOutput.encodeJavadoc(bundleString)));
 	}
 
-	private void generateJavaFooter(PrintWriter javaWriter) {
-		javaWriter.print(MessageFormat.format(TEMPLATES.getString("CLASS_END"), new Object[0]));
+	private void generateJavaFooter(PrintWriter javaWriter, File bundleFile, File javaFile) {
+		javaWriter.print(MessageFormat.format(TEMPLATES.getString("CLASS_END"), bundleFile, javaFile));
 	}
 
 }

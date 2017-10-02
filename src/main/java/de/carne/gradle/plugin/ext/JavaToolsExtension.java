@@ -46,18 +46,7 @@ public class JavaToolsExtension {
 
 	private final Project project;
 
-	/**
-	 * build.gradle:
-	 *
-	 * <pre>
-	 * javatools {
-	 *  generateI18N {
-	 *   ...
-	 *  }
-	 * }
-	 * </pre>
-	 */
-	public final GenerateI18N generateI18N;
+	private final GenerateI18N generateI18NConfig;
 
 	/**
 	 * Construct {@linkplain JavaToolsExtension}.
@@ -66,7 +55,24 @@ public class JavaToolsExtension {
 	 */
 	public JavaToolsExtension(Project project) {
 		this.project = project;
-		this.generateI18N = new GenerateI18N(this.project);
+		this.generateI18NConfig = new GenerateI18N(this.project);
+	}
+
+	/**
+	 * Get the I18N helper class generation config. build.gradle:
+	 *
+	 * <pre>
+	 * javatools {
+	 *  generateI18N {
+	 *   ...
+	 *  }
+	 * }
+	 * </pre>
+	 * 
+	 * @return The I18N helper class generation config.
+	 */
+	public GenerateI18N getGenerateI18N() {
+		return this.generateI18NConfig;
 	}
 
 	/**
@@ -75,7 +81,7 @@ public class JavaToolsExtension {
 	 * @param configuration The configuration action.
 	 */
 	public void generateI18N(Action<? super GenerateI18N> configuration) {
-		configuration.execute(this.generateI18N);
+		configuration.execute(this.generateI18NConfig);
 	}
 
 }
