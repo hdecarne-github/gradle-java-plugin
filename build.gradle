@@ -52,19 +52,6 @@ gradlePlugin {
 	}
 }
 
-task prepareTestProjects(type: Copy) {
-	from("src/test/testProjects")
-	into "${buildDir}/testProjects"
-	filter {
-		line -> line.replace("TEST_PLUGIN_VERSION", "${project.version}")
-	}
-}
-test.dependsOn prepareTestProjects
-
-test {
-	systemProperty "de.carne.gradle.plugin.test", "${buildDir}/testProjects"
-}
-
 jacoco {
 	toolVersion = "0.7.9"
 }
@@ -76,6 +63,20 @@ jacocoTestReport {
 		html.destination file("${buildDir}/reports/jacocoHtml")
 		csv.enabled false
 	}
+}
+
+task prepareTestProjects(type: Copy) {
+	from("src/test/testProjects")
+	into "${buildDir}/testProjects"
+	filter {
+		line -> line.replace("TEST_PLUGIN_VERSION", project.version)
+					.replace("BUILD_DIR", "${project.buildDir}")
+	}
+}
+test.dependsOn prepareTestProjects
+
+test {
+	systemProperty "de.carne.gradle.plugin.test", "${buildDir}/testProjects"
 }
 
 task sourceJar(type: Jar) {

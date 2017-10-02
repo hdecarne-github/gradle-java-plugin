@@ -29,7 +29,7 @@ import de.carne.gradle.plugin.task.GenerateI18NTask;
  */
 public class GenerateI18NTaskTest {
 
-	private static File TEST_PROJECT_DIR = new File(
+	private static File TEST_BASE_DIR = new File(
 			System.getProperty(GenerateI18NTaskTest.class.getPackage().getName(), "build/testProjects"))
 					.getAbsoluteFile();
 
@@ -38,8 +38,8 @@ public class GenerateI18NTaskTest {
 	 */
 	@Test
 	public void testProjectGenerateI18NTaskTest1() {
-		File testProjectDir = new File(TEST_PROJECT_DIR, "GenerateI18NTaskTest1");
-		GradleRunner gradleRunner = GradleRunner.create().withProjectDir(testProjectDir).withTestKitDir(testProjectDir)
+		File testProjectDir = new File(TEST_BASE_DIR, "GenerateI18NTaskTest1");
+		GradleRunner gradleRunner = GradleRunner.create().withProjectDir(testProjectDir).withTestKitDir(TEST_BASE_DIR)
 				.withPluginClasspath();
 		BuildResult cleanAssembleResult = gradleRunner.withArguments("-s", "clean", "assemble").build();
 
