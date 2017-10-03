@@ -68,7 +68,7 @@ public class JavaToolsExtension {
 	 *  }
 	 * }
 	 * </pre>
-	 * 
+	 *
 	 * @return The I18N helper class generation config.
 	 */
 	public GenerateI18N getGenerateI18N() {
@@ -81,6 +81,7 @@ public class JavaToolsExtension {
 	 * @param configuration The configuration action.
 	 */
 	public void generateI18N(Action<? super GenerateI18N> configuration) {
+		this.generateI18NConfig.setEnabled(false);
 		configuration.execute(this.generateI18NConfig);
 	}
 
