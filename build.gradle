@@ -2,12 +2,12 @@
 plugins {
     id "java-gradle-plugin"
 	id "jacoco"
-    id "org.sonarqube" version "2.5"
 	id "maven-publish"
+	id "eclipse"
+    id "org.sonarqube" version "2.5"
     id "com.jfrog.artifactory" version "4.5.2"
     id "com.jfrog.bintray" version "1.7.3"
 	id "com.gradle.plugin-publish" version "0.9.8"
-	id "eclipse"
 }
 
 // Build helpers
@@ -28,6 +28,7 @@ targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
 	jcenter()
+	maven { url "https://oss.jfrog.org/libs-releases/" }
 	if(snapshotBuild) {
 		mavenLocal()
 		maven { url "https://oss.jfrog.org/libs-snapshot/" }
