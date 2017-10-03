@@ -158,7 +158,7 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 					generateJavaBody(javaWriter, bundleKey, bundleString);
 				}
 			}
-			generateJavaFooter(javaWriter, bundleFile, javaFile);
+			generateJavaFooter(javaWriter);
 		}
 	}
 
@@ -182,8 +182,8 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 				encodedBundleString));
 	}
 
-	private void generateJavaFooter(PrintWriter javaWriter, File bundleFile, File javaFile) {
-		javaWriter.print(MessageFormat.format(TEMPLATES.getString("CLASS_END"), bundleFile, javaFile));
+	private void generateJavaFooter(PrintWriter javaWriter) {
+		javaWriter.print(MessageFormat.format(TEMPLATES.getString("CLASS_END"), (Object) new Object[0]));
 	}
 
 }
