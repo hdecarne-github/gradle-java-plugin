@@ -78,6 +78,7 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 
 		setEnabled(generateI18N.isEnabled());
 		getInputs().files(generateI18N.getBundles());
+		getOutputs().dir(generateI18N.getBundles().getDir());
 		processBundleFiles(generateI18N.getBundles(), (srcDir, bundleFile) -> {
 			File javaFile = getJavaFile(bundleFile);
 
