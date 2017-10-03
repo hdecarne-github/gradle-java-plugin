@@ -26,15 +26,41 @@ public final class JavaOutput {
 	}
 
 	/**
-	 * Encode string data for Javadoc output.
+	 * Mangle a resource bundle key to standard Java function name.
 	 *
-	 * @param string The {@linkplain String} to encode.
+	 * @param bundleKey The name to mangle.
+	 * @return The mangled name.
+	 */
+	public static String mangleBundleKey(String bundleKey) {
+		StringBuilder mangled = new StringBuilder();
+		int bundleKeyLength = bundleKey.length();
+		boolean nextUpperCase = false;
+
+		for (int chIndex = 0; chIndex < bundleKeyLength; chIndex++) {
+			char ch = bundleKey.charAt(chIndex);
+
+			if (ch == '_') {
+				nextUpperCase = true;
+			} else if (nextUpperCase) {
+				nextUpperCase = false;
+				mangled.append(Character.toUpperCase(ch));
+			} else {
+				mangled.append(Character.toLowerCase(ch));
+			}
+		}
+		return mangled.toString();
+	}
+
+	/**
+	 * Encode a resource bundle string for Javadoc output.
+	 *
+	 * @param bundleString The {@linkplain String} to encode.
 	 * @return The encoded string data.
 	 */
-	public static String encodeJavadoc(String string) {
+	public static String encodeBundleString(String bundleString) {
 		StringBuilder encoded = new StringBuilder();
 
-		string.chars().forEachOrdered(code -> {
+		bundleString.chars().forEachOrdered(code -> {
 			switch (code) {
 			case '\r':
 				break;

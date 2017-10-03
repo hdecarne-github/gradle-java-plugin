@@ -174,8 +174,11 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 	}
 
 	private void generateJavaBody(PrintWriter javaWriter, String bundleKey, String bundleString) {
-		javaWriter.print(MessageFormat.format(TEMPLATES.getString("CLASS_BODY"), bundleKey,
-				JavaOutput.encodeJavadoc(bundleString)));
+		String mangledBundleKey = JavaOutput.mangleBundleKey(bundleKey);
+		String encodedBundleString = JavaOutput.encodeBundleString(bundleString);
+
+		javaWriter.print(MessageFormat.format(TEMPLATES.getString("CLASS_BODY"), bundleKey, mangledBundleKey,
+				encodedBundleString));
 	}
 
 	private void generateJavaFooter(PrintWriter javaWriter, File bundleFile, File javaFile) {
