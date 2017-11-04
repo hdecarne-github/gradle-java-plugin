@@ -165,7 +165,7 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 	private void generateJavaHeader(PrintWriter javaWriter, File bundleFile, File javaFile) {
 		javaWriter.print(TEMPLATES.getString("FILE_HEADER"));
 
-		String javaPackage = Strings.safe(javaFile.getParent()).replace('/', '.');
+		String javaPackage = Strings.safe(javaFile.getParent()).replace('/', '.').replace('\\', '.');
 		String javaClass = javaFile.getName().replaceAll("\\..*", "");
 
 		if (Strings.notEmpty(javaPackage)) {
