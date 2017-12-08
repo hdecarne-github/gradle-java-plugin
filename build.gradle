@@ -176,7 +176,6 @@ pluginBundle {
 
 eclipse {
 	classpath {
-		defaultOutputDir = file("eclipse-build")
 		downloadSources = true
 		downloadJavadoc = true
 	}
