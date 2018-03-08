@@ -13,3 +13,8 @@ javatools {
 		}
 	}
 }
+
+println javatools.platform.isLinux
+println javatools.platform.isMacos
+println javatools.platform.isWindows
+println javatools.platform.swtToolkit

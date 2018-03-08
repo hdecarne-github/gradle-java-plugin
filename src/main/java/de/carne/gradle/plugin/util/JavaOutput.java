@@ -26,10 +26,10 @@ public final class JavaOutput {
 	}
 
 	/**
-	 * Mangle a resource bundle key to standard Java function name.
+	 * Mangles a resource bundle key to standard Java function name.
 	 *
-	 * @param bundleKey The name to mangle.
-	 * @return The mangled name.
+	 * @param bundleKey the name to mangle.
+	 * @return the mangled name.
 	 */
 	public static String mangleBundleKey(String bundleKey) {
 		StringBuilder mangled = new StringBuilder();
@@ -52,10 +52,10 @@ public final class JavaOutput {
 	}
 
 	/**
-	 * Encode a resource bundle string for Javadoc output.
+	 * Encodes a resource bundle string for Javadoc output.
 	 *
-	 * @param bundleString The {@linkplain String} to encode.
-	 * @return The encoded string data.
+	 * @param bundleString the {@linkplain String} to encode.
+	 * @return the encoded string data.
 	 */
 	public static String encodeBundleString(String bundleString) {
 		StringBuilder encoded = new StringBuilder();

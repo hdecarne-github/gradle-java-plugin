@@ -29,7 +29,7 @@ import de.carne.gradle.plugin.task.GenerateI18NTask;
 import de.carne.util.Late;
 
 /**
- * JavaToolsPlugin providing java related functions and tasks.
+ * JavaToolsPlugin providing java related build functions and tasks.
  */
 public class JavaToolsPlugin implements Plugin<Project> {
 

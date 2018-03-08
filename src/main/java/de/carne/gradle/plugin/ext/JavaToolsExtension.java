@@ -20,14 +20,14 @@ import org.gradle.api.Action;
 import org.gradle.api.Project;
 
 /**
- * Extension object for {@linkplain de.carne.gradle.plugin.JavaToolsPlugin} configuration.
+ * Root extension object for the {@linkplain de.carne.gradle.plugin.JavaToolsPlugin}.
  */
 public class JavaToolsExtension {
 
 	private static final String JAVA_TOOLS_EXTENSION_NAME = "javatools";
 
 	/**
-	 * Create the {@linkplain JavaToolsExtension}.
+	 * Creates a new {@linkplain JavaToolsExtension} object.
 	 * <p>
 	 * build.gradle:
 	 *
@@ -37,8 +37,8 @@ public class JavaToolsExtension {
 	 * }
 	 * </pre>
 	 *
-	 * @param project The {@linkplain Project} to create the extions for.
-	 * @return The created {@linkplain JavaToolsExtension} object.
+	 * @param project the {@linkplain Project} to create the extension object for.
+	 * @return the created {@linkplain JavaToolsExtension} object.
 	 */
 	public static JavaToolsExtension create(Project project) {
 		return project.getExtensions().create(JAVA_TOOLS_EXTENSION_NAME, JavaToolsExtension.class, project);
@@ -46,12 +46,13 @@ public class JavaToolsExtension {
 
 	private final Project project;
 
+	private final PlatformInfo platformInfo = new PlatformInfo();
 	private final GenerateI18N generateI18NConfig;
 
 	/**
-	 * Construct {@linkplain JavaToolsExtension}.
+	 * Constructs {@linkplain JavaToolsExtension}.
 	 *
-	 * @param project The owning {@linkplain Project}.
+	 * @param project the owning {@linkplain Project}.
 	 */
 	public JavaToolsExtension(Project project) {
 		this.project = project;
@@ -59,7 +60,27 @@ public class JavaToolsExtension {
 	}
 
 	/**
-	 * Get the I18N helper class generation config. build.gradle:
+	 * Gets the Platform Info object.
+	 * <p>
+	 * build.gradle:
+	 *
+	 * <pre>
+	 * test {
+	 *  enabled = javatools.platform.swtToolkit.equals("cocoa-macos-x86_64")
+	 *  ...
+	 * }
+	 * </pre>
+	 *
+	 * @return the Platform Info object.
+	 */
+	public PlatformInfo getPlatform() {
+		return this.platformInfo;
+	}
+
+	/**
+	 * Gets the generateI18N configuration object.
+	 * <p>
+	 * build.gradle:
 	 *
 	 * <pre>
 	 * javatools {
@@ -69,16 +90,16 @@ public class JavaToolsExtension {
 	 * }
 	 * </pre>
 	 *
-	 * @return The I18N helper class generation config.
+	 * @return the generateI18N configuration object.
 	 */
 	public GenerateI18N getGenerateI18N() {
 		return this.generateI18NConfig;
 	}
 
 	/**
-	 * Execute {@linkplain #generateI18N} configuration action.
+	 * Executes a {@linkplain #generateI18N} configuration action.
 	 *
-	 * @param configuration The configuration action.
+	 * @param configuration the configuration action to execute.
 	 */
 	public void generateI18N(Action<? super GenerateI18N> configuration) {
 		this.generateI18NConfig.setEnabled(false);

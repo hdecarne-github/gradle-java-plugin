@@ -58,10 +58,10 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 	private static final String GENERATE_I18N_TASK_DESCRIPTION = "Create/update I18N helper classes.";
 
 	/**
-	 * Create the {@linkplain GenerateI18NTask}.
+	 * Creates the {@linkplain GenerateI18NTask}.
 	 *
-	 * @param project The {@linkplain Project} to create the task for.
-	 * @return The created {@linkplain GenerateI18NTask} object.
+	 * @param project the {@linkplain Project} to create the task for.
+	 * @return the created {@linkplain GenerateI18NTask} object.
 	 */
 	public static GenerateI18NTask create(Project project) {
 		return project.getTasks().create(GENERATE_I18N_TASK_NAME, GenerateI18NTask.class);
@@ -87,7 +87,7 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 	}
 
 	/**
-	 * Execute {@linkplain GenerateI18NTask}.
+	 * Executes {@linkplain GenerateI18NTask}.
 	 */
 	@TaskAction
 	public void executeGenerateI18N() {

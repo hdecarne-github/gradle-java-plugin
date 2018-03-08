@@ -44,9 +44,9 @@ public class GenerateI18N {
 	private ConfigurableFileTree bundlesParam;
 
 	/**
-	 * Construct {@linkplain GenerateI18N}.
+	 * Constructs {@linkplain GenerateI18N}.
 	 *
-	 * @param project The owning {@linkplain Project}.
+	 * @param project the owning {@linkplain Project}.
 	 */
 	public GenerateI18N(Project project) {
 		this.project = project;
@@ -62,7 +62,7 @@ public class GenerateI18N {
 	}
 
 	/**
-	 * Check whether the generation of I18N helper classes is enabled.
+	 * Checks whether the generation of I18N helper classes is enabled.
 	 * <p>
 	 * build.gradle:
 	 *
@@ -79,7 +79,7 @@ public class GenerateI18N {
 	}
 
 	/**
-	 * Enable/disable the generation of I18N helper classes.
+	 * Enables/disables the generation of I18N helper classes.
 	 * <p>
 	 * build.gradle:
 	 *
@@ -89,14 +89,14 @@ public class GenerateI18N {
 	 * }
 	 * </pre>
 	 *
-	 * @param enabled Whether to enable or disable the generation of I18N helper classes.
+	 * @param enabled whether to enable or disable the generation of I18N helper classes.
 	 */
 	public void setEnabled(boolean enabled) {
 		this.enabledParam = enabled;
 	}
 
 	/**
-	 * Get the pattern string identifying the resource bundle keys to be processed during generation.
+	 * Gets the pattern string identifying the resource bundle keys to be processed during generation.
 	 * <p>
 	 * build.gradle:
 	 *
@@ -106,14 +106,14 @@ public class GenerateI18N {
 	 * }
 	 * </pre>
 	 *
-	 * @return The pattern string identifying the resource bundle keys to be processed during generation.
+	 * @return the pattern string identifying the resource bundle keys to be processed during generation.
 	 */
 	public String getKeyFilter() {
 		return this.keyFilterParam;
 	}
 
 	/**
-	 * Set the pattern string identifying the resource bundle keys to be processed during generation.
+	 * Sets the pattern string identifying the resource bundle keys to be processed during generation.
 	 * <p>
 	 * build.gradle:
 	 *
@@ -123,14 +123,14 @@ public class GenerateI18N {
 	 * }
 	 * </pre>
 	 *
-	 * @param keyFilter The pattern string identifying the resource bundle keys to be processed during generation.
+	 * @param keyFilter the pattern string identifying the resource bundle keys to be processed during generation.
 	 */
 	public void setKeyFilter(String keyFilter) {
 		this.keyFilterParam = keyFilter;
 	}
 
 	/**
-	 * Get the target folder for the generated I18N helper classes.
+	 * Gets the target folder for the generated I18N helper classes.
 	 * <p>
 	 * build.gradle:
 	 *
@@ -140,14 +140,14 @@ public class GenerateI18N {
 	 * }
 	 * </pre>
 	 *
-	 * @return The target folder for the generated I18N helper classes.
+	 * @return the target folder for the generated I18N helper classes.
 	 */
 	public File getGenDir() {
 		return this.genDirParam;
 	}
 
 	/**
-	 * Set the target folder for the generated I18N helper classes.
+	 * Sets the target folder for the generated I18N helper classes.
 	 * <p>
 	 * build.gradle:
 	 *
@@ -157,14 +157,14 @@ public class GenerateI18N {
 	 * }
 	 * </pre>
 	 *
-	 * @param genDir The target folder for the generated I18N helper classes.
+	 * @param genDir the target folder for the generated I18N helper classes.
 	 */
 	public void setGenDir(File genDir) {
 		this.genDirParam = genDir;
 	}
 
 	/**
-	 * Get the resource bundles to process.
+	 * Gets the resource bundles to process.
 	 * <p>
 	 * build.gradle:
 	 *
@@ -174,14 +174,14 @@ public class GenerateI18N {
 	 * }
 	 * </pre>
 	 *
-	 * @return The resource bundles to process.
+	 * @return the resource bundles to process.
 	 */
 	public ConfigurableFileTree getBundles() {
 		return this.bundlesParam;
 	}
 
 	/**
-	 * Set the resource bundles to process.
+	 * Sets the resource bundles to process.
 	 * <p>
 	 * build.gradle:
 	 *
@@ -191,7 +191,7 @@ public class GenerateI18N {
 	 * }
 	 * </pre>
 	 *
-	 * @param bundles The resource bundles to process.
+	 * @param bundles the resource bundles to process.
 	 */
 	public void setBundles(ConfigurableFileTree bundles) {
 		this.bundlesParam = bundles;

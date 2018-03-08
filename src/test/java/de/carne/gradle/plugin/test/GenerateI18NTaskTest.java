@@ -20,24 +20,21 @@ import java.io.File;
 
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import de.carne.gradle.plugin.task.GenerateI18NTask;
 
 /**
- * Test {@linkplain GenerateI18NTask}.
+ * Test {@linkplain GenerateI18NTask} class.
  */
-public class GenerateI18NTaskTest {
+class GenerateI18NTaskTest {
 
 	private static File TEST_BASE_DIR = new File(
 			System.getProperty(GenerateI18NTaskTest.class.getPackage().getName(), "build/testProjects"))
 					.getAbsoluteFile();
 
-	/**
-	 * Test building project GenerateI18NTaskTest1.
-	 */
 	@Test
-	public void testProjectGenerateI18NTaskTest1() {
+	void testProjectGenerateI18NTaskTest1() {
 		File testProjectDir = new File(TEST_BASE_DIR, "GenerateI18NTaskTest1");
 		GradleRunner gradleRunner = GradleRunner.create().withProjectDir(testProjectDir).withTestKitDir(TEST_BASE_DIR)
 				.withPluginClasspath();

@@ -24,17 +24,17 @@ import org.gradle.api.Project;
 public interface JavaToolsTask {
 
 	/**
-	 * Perform the necessary apply actions.
+	 * Performs the necessary apply actions.
 	 *
-	 * @param project The {@linkplain Project} running the task.
+	 * @param project the {@linkplain Project} running the task.
 	 * @see org.gradle.api.Plugin#apply(Object)
 	 */
 	void apply(Project project);
 
 	/**
-	 * Perform the necessary afterEvalute actions.
+	 * Performs the necessary afterEvalute actions.
 	 *
-	 * @param project The {@linkplain Project} running the task.
+	 * @param project the {@linkplain Project} running the task.
 	 * @see Project#afterEvaluate(org.gradle.api.Action)
 	 */
 	void afterEvaluate(Project project);
