@@ -1,12 +1,12 @@
 // Plugins
 plugins {
-    id "java-gradle-plugin"
+	id "java-gradle-plugin"
 	id "jacoco"
 	id "maven-publish"
 	id "eclipse"
-    id "org.sonarqube" version "2.6.2"
-    id "com.jfrog.artifactory" version "4.6.2"
-    id "com.jfrog.bintray" version "1.8.0"
+	id "org.sonarqube" version "2.6.2"
+	id "com.jfrog.artifactory" version "4.6.2"
+	id "com.jfrog.bintray" version "1.8.0"
 	id "com.gradle.plugin-publish" version "0.9.10"
 }
 
@@ -43,7 +43,7 @@ dependencies {
 }
 
 test {
-    useJUnitPlatform()
+	useJUnitPlatform()
 }
 
 gradlePlugin {
@@ -107,20 +107,20 @@ publishing {
 					licenses {
 						license {
 							name projectLicense
-				            url projectLicenseUrl
-				            distribution "repo"
-				        }
-				    }
-				    developers {
-				        developer {
-				            id project.resolveProperty("developerId", "DEVELOPER_ID")
-				            name project.resolveProperty("developerName", "DEVELOPER_NAME")
-				            email project.resolveProperty("developerEmail", "DEVELOPER_EMAIL")
-				        }
-				    }
-				    scm {
+							url projectLicenseUrl
+							distribution "repo"
+						}
+					}
+					developers {
+						developer {
+							id project.resolveProperty("developerId", "DEVELOPER_ID")
+							name project.resolveProperty("developerName", "DEVELOPER_NAME")
+							email project.resolveProperty("developerEmail", "DEVELOPER_EMAIL")
+						}
+					}
+					scm {
 						url projectScmUrl
-				    }
+					}
 				}
 			}
 		}
@@ -162,7 +162,7 @@ bintray {
 			gpg {
 				sign = true
 				passphrase = project.resolveProperty("bintrayGpgPassphrase", "BINTRAY_GPG_PASSPHRASE")
-            }
+			}
 		}
 	}
 }
