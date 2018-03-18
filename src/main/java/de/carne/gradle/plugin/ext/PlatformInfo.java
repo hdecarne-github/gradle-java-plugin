@@ -79,7 +79,7 @@ public class PlatformInfo {
 		}
 		if ("x86".equals(Platform.SYSTEM_OS_ARCH) || "x86_32".equals(Platform.SYSTEM_OS_ARCH)) {
 			toolkit.append("-x86");
-		} else if ("x86_64".equals(Platform.SYSTEM_OS_ARCH)) {
+		} else if ("x86_64".equals(Platform.SYSTEM_OS_ARCH) || "amd64".equals(Platform.SYSTEM_OS_ARCH)) {
 			toolkit.append("-x86_64");
 		} else {
 			// Do not fail in case of unknown toolkit
