@@ -83,7 +83,7 @@ public class PlatformInfo {
 			toolkit.append("-x86_64");
 		} else {
 			// Do not fail in case of unknown toolkit
-			toolkit.append("uknown");
+			toolkit.append("unknown");
 		}
 		return toolkit.toString();
 	}
