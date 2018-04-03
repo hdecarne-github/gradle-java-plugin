@@ -17,7 +17,8 @@ plugins {
 Check the badge above to determine the latest version of the plugin.
 
 #### Task generateI18N
-This task runs automatically before the __compileJava__ task, scans the source set for existing resource bundles and generates access classes for them. The following default settings are used by this task.
+This task runs automatically before the __compileJava__ task, scans the source set for existing resource
+bundles and generates access classes for them. The following default settings are used by this task.
 ```Gradle
 javatools {
 	generateI18N {
@@ -32,7 +33,7 @@ javatools {
  * __enabled__: Set this to false to disable the task.
  * __keyFilter__: Java regular expression pattern identifying the resource keys to be evaluated by the task. Only resource keys matching this pattern are accessible via the generated class.
  * __genDir__: The target directory for the generated files.
-* __bundles__: The file tree object defining the resource bundles to be evaluated by the task.
+ * __bundles__: The file tree object defining the resource bundles to be evaluated by the task.
 
 The __generateI18N__ task scans the source set for any resource bundle matching the defined file pattern. For every found resource bundle it creates a Java class with same name as the resource bundle which can be used to access and format the resource strings. For example the resource bundle file:
 ```INI
