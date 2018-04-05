@@ -17,4 +17,4 @@
 @NonNullByDefault
 package de.carne.gradle.plugin.task;
 
-import de.carne.check.NonNullByDefault;
+import de.carne.boot.check.NonNullByDefault;

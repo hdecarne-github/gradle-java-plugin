@@ -17,4 +17,4 @@
 @NonNullByDefault
 package de.carne.gradle.plugin.ext;
 
-import de.carne.check.NonNullByDefault;
+import de.carne.boot.check.NonNullByDefault;
