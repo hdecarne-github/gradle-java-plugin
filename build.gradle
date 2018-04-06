@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-	compile("de.carne.common:java-default:8.4.0-SNAPSHOT")
+	compile("de.carne.common:java-default:8.4.0")
 	testImplementation("org.junit.jupiter:junit-jupiter-api:5.1.0")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.1.0")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.0.3")
