@@ -17,6 +17,7 @@
 package de.carne.gradle.plugin.test;
 
 import java.io.File;
+import java.nio.file.Paths;
 
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
@@ -32,12 +33,15 @@ class GenerateI18NTaskTest {
 	private static File TEST_BASE_DIR = new File(
 			System.getProperty(GenerateI18NTaskTest.class.getPackage().getName(), "build/testProjects"))
 					.getAbsoluteFile();
+	private static final String JACOCO_AGENT_PATH = Paths.get(
+			"build/tmp/expandedArchives/org.jacoco.agent-0.8.1.jar_8059ed6e1ab8b88aac5d9097fad847bb/jacocoagent.jar")
+			.toString();
 
 	@Test
 	void testProjectGenerateI18NTaskTest1() {
 		File testProjectDir = new File(TEST_BASE_DIR, "GenerateI18NTaskTest1");
 		GradleRunner gradleRunner = GradleRunner.create().withProjectDir(testProjectDir).withTestKitDir(TEST_BASE_DIR)
-				.withPluginClasspath();
+				.withPluginClasspath().withArguments("-Dorg.gradle.jvmargs=" + JACOCO_AGENT_PATH);
 		BuildResult cleanAssembleResult = gradleRunner.withArguments("-s", "clean", "assemble").build();
 
 		System.out.println(cleanAssembleResult.getOutput());
