@@ -77,7 +77,7 @@ task prepareTestProjects(type: Copy) {
 	into "${buildDir}/testProjects"
 	filter {
 		line -> line.replace("TEST_PLUGIN_VERSION", project.version)
-					.replace("BUILD_DIR", "${project.buildDir}")
+					.replace("BUILD_DIR", "${project.buildDir}".replace('\\','/'))
 	}
 }
 test.dependsOn prepareTestProjects
