@@ -1,6 +1,6 @@
 ### Gradle Java-Tools plugin
 [![Download](https://api.bintray.com/packages/hdecarne/maven/java-gradle-plugins/images/download.svg)](https://bintray.com/hdecarne/maven/java-gradle-plugins/_latestVersion)
-[![Build Status](https://travis-ci.org/hdecarne/java-gradle-plugins.svg?branch=master)](https://travis-ci.org/hdecarne/java-gradle-plugins)
+[![Build Status](https://travis-ci.com/hdecarne/java-gradle-plugins.svg?branch=master)](https://travis-ci.com/hdecarne/java-gradle-plugins)
 [![Quality Gate](https://sonarcloud.io/api/badges/gate?key=de.carne.common:java-gradle-plugins)](https://sonarcloud.io/dashboard/index/de.carne.common:java-gradle-plugins)  
 
 This project collects custom Gradle plugins used for the development of [my private projects](https://github.com/hdecarne/).
