@@ -167,11 +167,12 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 
 		String javaPackage = Strings.safe(javaFile.getParent()).replace('/', '.').replace('\\', '.');
 		String javaClass = javaFile.getName().replaceAll("\\..*", "");
+		String normalizedBundleFile = bundleFile.toString().replace('\\', '/');
 
 		if (Strings.notEmpty(javaPackage)) {
 			javaWriter.print(MessageFormat.format(TEMPLATES.getString("PACKAGE_STATEMENT"), javaPackage));
 		}
-		javaWriter.print(MessageFormat.format(TEMPLATES.getString("CLASS_START"), bundleFile, javaClass));
+		javaWriter.print(MessageFormat.format(TEMPLATES.getString("CLASS_START"), normalizedBundleFile, javaClass));
 	}
 
 	private void generateJavaBody(PrintWriter javaWriter, String bundleKey, String bundleString) {
