@@ -27,13 +27,12 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
-	mavenLocal()
-	jcenter()
-	maven { url "https://oss.jfrog.org/libs-releases/" }
 	if(snapshotBuild) {
 		mavenLocal()
 		maven { url "https://oss.jfrog.org/libs-snapshot/" }
 	}
+	jcenter()
+	maven { url "https://oss.jfrog.org/libs-release/" }
 }
 
 dependencies {
