@@ -5,9 +5,9 @@ plugins {
 	id "maven-publish"
 	id "eclipse"
 	id "org.sonarqube" version "2.6.2"
-	id "com.jfrog.artifactory" version "4.7.3"
-	id "com.jfrog.bintray" version "1.8.0"
-	id "com.gradle.plugin-publish" version "0.9.10"
+	id "com.jfrog.artifactory" version "4.7.5"
+	id "com.jfrog.bintray" version "1.8.4"
+	id "com.gradle.plugin-publish" version "0.10.0"
 }
 
 // Build helpers
