@@ -11,6 +11,8 @@ javatools {
 		bundles = fileTree("src/main/resources") {
 			include("**/*I18N.properties")
 		}
+		lineSeparator = "\n"
+		encoding = "UTF-8"
 	}
 }
 

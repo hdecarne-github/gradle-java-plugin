@@ -18,9 +18,7 @@ package de.carne.gradle.plugin.task;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,6 +39,7 @@ import org.gradle.api.tasks.TaskExecutionException;
 import de.carne.gradle.plugin.ext.GenerateI18N;
 import de.carne.gradle.plugin.ext.JavaToolsExtension;
 import de.carne.gradle.plugin.util.JavaOutput;
+import de.carne.gradle.plugin.util.OutputWriter;
 import de.carne.util.Strings;
 
 /**
@@ -97,7 +96,8 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 
 		processBundleFiles(generateI18N.getBundles(), (srcDir, bundleFile) -> {
 			try {
-				generateJavaFile(srcDir, bundleFile, generateI18N.getGenDir(), keyFilter);
+				generateJavaFile(srcDir, bundleFile, generateI18N.getGenDir(), keyFilter,
+						generateI18N.getLineSeparator(), generateI18N.getEncoding());
 			} catch (IOException e) {
 				throw new TaskExecutionException(this, e);
 			}
@@ -135,14 +135,15 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 		return new File(bundleFileParent, javaFileName);
 	}
 
-	private void generateJavaFile(File srcDir, File bundleFile, File genDir, Pattern keyFilter) throws IOException {
+	private void generateJavaFile(File srcDir, File bundleFile, File genDir, Pattern keyFilter, String lineSeparator,
+			String encoding) throws IOException {
 		File absoluteBundleFile = getAbsoluteFile(srcDir, bundleFile);
 		File javaFile = getJavaFile(bundleFile);
 		File absoluteJavaFile = getAbsoluteFile(genDir, javaFile);
 
 		Files.createDirectories(absoluteJavaFile.toPath().getParent());
 		try (Reader bundleReader = new FileReader(absoluteBundleFile);
-				PrintWriter javaWriter = new PrintWriter(new FileWriter(absoluteJavaFile, false))) {
+				OutputWriter javaWriter = new OutputWriter(absoluteJavaFile, false, lineSeparator, encoding)) {
 			Properties bundle = new Properties();
 
 			bundle.load(bundleReader);
@@ -162,29 +163,29 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 		}
 	}
 
-	private void generateJavaHeader(PrintWriter javaWriter, File bundleFile, File javaFile) {
-		javaWriter.print(TEMPLATES.getString("FILE_HEADER"));
+	private void generateJavaHeader(OutputWriter javaWriter, File bundleFile, File javaFile) throws IOException {
+		javaWriter.write(TEMPLATES.getString("FILE_HEADER"));
 
 		String javaPackage = Strings.safe(javaFile.getParent()).replace('/', '.').replace('\\', '.');
 		String javaClass = javaFile.getName().replaceAll("\\..*", "");
 		String normalizedBundleFile = bundleFile.toString().replace('\\', '/');
 
 		if (Strings.notEmpty(javaPackage)) {
-			javaWriter.print(MessageFormat.format(TEMPLATES.getString("PACKAGE_STATEMENT"), javaPackage));
+			javaWriter.write(MessageFormat.format(TEMPLATES.getString("PACKAGE_STATEMENT"), javaPackage));
 		}
-		javaWriter.print(MessageFormat.format(TEMPLATES.getString("CLASS_START"), normalizedBundleFile, javaClass));
+		javaWriter.write(MessageFormat.format(TEMPLATES.getString("CLASS_START"), normalizedBundleFile, javaClass));
 	}
 
-	private void generateJavaBody(PrintWriter javaWriter, String bundleKey, String bundleString) {
+	private void generateJavaBody(OutputWriter javaWriter, String bundleKey, String bundleString) throws IOException {
 		String mangledBundleKey = JavaOutput.mangleBundleKey(bundleKey);
 		String encodedBundleString = JavaOutput.encodeBundleString(bundleString);
 
-		javaWriter.print(MessageFormat.format(TEMPLATES.getString("CLASS_BODY"), bundleKey, mangledBundleKey,
+		javaWriter.write(MessageFormat.format(TEMPLATES.getString("CLASS_BODY"), bundleKey, mangledBundleKey,
 				encodedBundleString));
 	}
 
-	private void generateJavaFooter(PrintWriter javaWriter) {
-		javaWriter.print(MessageFormat.format(TEMPLATES.getString("CLASS_END"), (Object) new Object[0]));
+	private void generateJavaFooter(OutputWriter javaWriter) throws IOException {
+		javaWriter.write(MessageFormat.format(TEMPLATES.getString("CLASS_END"), (Object) new Object[0]));
 	}
 
 }

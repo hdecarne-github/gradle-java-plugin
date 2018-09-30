@@ -42,6 +42,8 @@ public class GenerateI18N {
 	private String keyFilterParam = "^I18N_.*";
 	private File genDirParam;
 	private ConfigurableFileTree bundlesParam;
+	private String lineSeparator = System.getProperty("line.separator");
+	private String encoding = System.getProperty("file.encoding", "UTF-8");
 
 	/**
 	 * Constructs {@linkplain GenerateI18N}.
@@ -195,6 +197,74 @@ public class GenerateI18N {
 	 */
 	public void setBundles(ConfigurableFileTree bundles) {
 		this.bundlesParam = bundles;
+	}
+
+	/**
+	 * Gets the line separator to use during generation.
+	 * <p>
+	 * build.gradle:
+	 *
+	 * <pre>
+	 * generateI18N {
+	 *  lineSeparator = "\n" // default: System.getProperty("line.separator")
+	 * }
+	 * </pre>
+	 *
+	 * @return the line separator to use during generation.
+	 */
+	public String getLineSeparator() {
+		return this.lineSeparator;
+	}
+
+	/**
+	 * Sets the line separator to use during generation.
+	 * <p>
+	 * build.gradle:
+	 *
+	 * <pre>
+	 * generateI18N {
+	 *  lineSeparator = "\n" // default: System.getProperty("line.separator")
+	 * }
+	 * </pre>
+	 *
+	 * @param lineSeparator the line separator to use during generation.
+	 */
+	public void setLineSeparator(String lineSeparator) {
+		this.lineSeparator = lineSeparator;
+	}
+
+	/**
+	 * Gets the encoding to use during generation.
+	 * <p>
+	 * build.gradle:
+	 *
+	 * <pre>
+	 * generateI18N {
+	 *  encoding = "ISO-8859-1" // default: System.getProperty("file.encoding","UTF-8")
+	 * }
+	 * </pre>
+	 *
+	 * @return the encoding to use during generation.
+	 */
+	public String getEncoding() {
+		return this.encoding;
+	}
+
+	/**
+	 * Sets the encoding to use during generation.
+	 * <p>
+	 * build.gradle:
+	 *
+	 * <pre>
+	 * generateI18N {
+	 *  encoding = "ISO-8859-1" // default: System.getProperty("file.encoding","UTF-8")
+	 * }
+	 * </pre>
+	 *
+	 * @param encoding the encoding to use during generation.
+	 */
+	public void setEncoding(String encoding) {
+		this.encoding = encoding;
 	}
 
 }
