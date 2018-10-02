@@ -37,13 +37,24 @@ public class OutputWriter extends Writer {
 	 *
 	 * @param file the {@linkplain File} to write to.
 	 * @param append whether to append the output to the file.
-	 * @param lineSeparator the line separator to use.
 	 * @param encoding the encoding to use.
+	 * @param lineSeparator the line separator to use.
 	 * @throws IOException if an I/O error occurs.
 	 */
-	public OutputWriter(File file, boolean append, String lineSeparator, String encoding) throws IOException {
-		this.out = new BufferedWriter(
-				new OutputStreamWriter(new FileOutputStream(file, append), Charset.forName(encoding)));
+	@SuppressWarnings("resource")
+	public OutputWriter(File file, boolean append, String encoding, String lineSeparator) throws IOException {
+		this(new OutputStreamWriter(new FileOutputStream(file, append), Charset.forName(encoding)), lineSeparator);
+	}
+
+	/**
+	 * Constructs {@linkplain OutputWriter}.
+	 *
+	 * @param out the {@linkplain Writer} to write to.
+	 * @param lineSeparator the line separator to use.
+	 * @throws IOException if an I/O error occurs.
+	 */
+	public OutputWriter(Writer out, String lineSeparator) throws IOException {
+		this.out = (out instanceof BufferedWriter ? (BufferedWriter) out : new BufferedWriter(out));
 		this.lineSeparator = lineSeparator.toCharArray();
 	}
 
@@ -54,7 +65,7 @@ public class OutputWriter extends Writer {
 		int nextOffLimit = off + len;
 
 		while (nextOff < nextOffLimit) {
-			if (nextOff + 1 < nextOffLimit && cbuf[nextOff] == '\r' && cbuf[nextOff] == '\n') {
+			if (nextOff + 1 < nextOffLimit && cbuf[nextOff] == '\r' && cbuf[nextOff + 1] == '\n') {
 				writeln(cbuf, lastOff, nextOff - lastOff);
 				nextOff += 2;
 				lastOff = nextOff;
@@ -66,7 +77,7 @@ public class OutputWriter extends Writer {
 				nextOff++;
 			}
 		}
-		writeln(cbuf, lastOff, nextOff - lastOff);
+		this.out.write(cbuf, lastOff, nextOff - lastOff);
 	}
 
 	private void writeln(char[] cbuf, int off, int len) throws IOException {
