@@ -96,8 +96,8 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 
 		processBundleFiles(generateI18N.getBundles(), (srcDir, bundleFile) -> {
 			try {
-				generateJavaFile(srcDir, bundleFile, generateI18N.getGenDir(), keyFilter,
-						generateI18N.getLineSeparator(), generateI18N.getEncoding());
+				generateJavaFile(srcDir, bundleFile, generateI18N.getGenDir(), keyFilter, generateI18N.getEncoding(),
+						generateI18N.getLineSeparator());
 			} catch (IOException e) {
 				throw new TaskExecutionException(this, e);
 			}
@@ -135,15 +135,15 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 		return new File(bundleFileParent, javaFileName);
 	}
 
-	private void generateJavaFile(File srcDir, File bundleFile, File genDir, Pattern keyFilter, String lineSeparator,
-			String encoding) throws IOException {
+	private void generateJavaFile(File srcDir, File bundleFile, File genDir, Pattern keyFilter, String encoding,
+			String lineSeparator) throws IOException {
 		File absoluteBundleFile = getAbsoluteFile(srcDir, bundleFile);
 		File javaFile = getJavaFile(bundleFile);
 		File absoluteJavaFile = getAbsoluteFile(genDir, javaFile);
 
 		Files.createDirectories(absoluteJavaFile.toPath().getParent());
 		try (Reader bundleReader = new FileReader(absoluteBundleFile);
-				OutputWriter javaWriter = new OutputWriter(absoluteJavaFile, false, lineSeparator, encoding)) {
+				OutputWriter javaWriter = new OutputWriter(absoluteJavaFile, false, encoding, lineSeparator)) {
 			Properties bundle = new Properties();
 
 			bundle.load(bundleReader);
