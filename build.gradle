@@ -17,7 +17,7 @@ def resolveProperty(propertyName, envName) {
 	def resolved = (project.findProperty(propertyName) ?: System.getenv(envName));
 
 	if(resolved == null) {
-		throw new GradleException("Missing property/environment variable: '${propertyName}'/'${envName}")
+		throw new GradleException("Missing property/environment variable: '${propertyName}'/'${envName}'")
 	}
 	return resolved; 
 }
@@ -36,9 +36,13 @@ repositories {
 }
 
 dependencies {
-	compile("de.carne.common:java-default:8.6.0")
-	testImplementation("org.junit.jupiter:junit-jupiter-api:5.2.0")
-	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.2.0")
+	compile(group: "org.eclipse.jdt", name: "org.eclipse.jdt.annotation", version: "2.2.100")
+	configurations.runtime.exclude(group: "org.eclipse.jdt", module: "org.eclipse.jdt.annotation")
+
+	compile(group: "de.carne.common", name: "java-default", version: "8.7.0-SNAPSHOT")
+
+	implementation(group: "org.junit.jupiter", name: "junit-jupiter-api", version: "5.3.1")
+	testRuntimeOnly(group: "org.junit.jupiter", name: "junit-jupiter-engine", version: "5.3.1")
 }
 
 test {
@@ -76,7 +80,7 @@ task prepareTestProjects(type: Copy) {
 	into "${buildDir}/testProjects"
 	filter {
 		line -> line.replace("TEST_PLUGIN_VERSION", project.version)
-					.replace("BUILD_DIR", "${project.buildDir}".replace('\\','/'))
+					.replace("BUILD_DIR", "${project.buildDir}".replace("\\","/"))
 	}
 }
 test.dependsOn prepareTestProjects
@@ -171,11 +175,11 @@ pluginBundle {
 	website = projectUrl
 	vcsUrl = projectScmUrl
 	description = projectDescription
-	tags = ['java']
+	tags = ["java"]
 	plugins {
 		javatoolsPlugin {
 			id = "de.carne.java-tools"
-			displayName = 'Gradle Java-Tools plugin'
+			displayName = "Gradle Java-Tools plugin"
 		}
 	}
 }

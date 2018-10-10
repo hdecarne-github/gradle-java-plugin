@@ -16,6 +16,7 @@
  */
 package de.carne.gradle.plugin;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.gradle.api.GradleException;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -23,7 +24,6 @@ import org.gradle.api.Task;
 import org.gradle.api.plugins.UnknownPluginException;
 import org.gradle.api.tasks.compile.JavaCompile;
 
-import de.carne.boot.check.Nullable;
 import de.carne.gradle.plugin.ext.JavaToolsExtension;
 import de.carne.gradle.plugin.task.GenerateI18NTask;
 import de.carne.util.Late;
