@@ -42,7 +42,9 @@ public class GenerateI18N {
 	private String keyFilterParam = "^I18N_.*";
 	private File genDirParam;
 	private ConfigurableFileTree bundlesParam;
-	private String lineSeparator = System.getProperty("line.separator");
+	@SuppressWarnings("null")
+	private String lineSeparator = System.getProperty("line.separator", "\n");
+	@SuppressWarnings("null")
 	private String encoding = System.getProperty("file.encoding", "UTF-8");
 
 	/**

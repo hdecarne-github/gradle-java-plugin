@@ -23,6 +23,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.Objects;
+
+import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * Utility class used to write output using a specific line separator and encoding.
@@ -59,7 +62,9 @@ public class OutputWriter extends Writer {
 	}
 
 	@Override
-	public void write(char[] cbuf, int off, int len) throws IOException {
+	public void write(char @Nullable [] cbuf, int off, int len) throws IOException {
+		Objects.requireNonNull(cbuf);
+
 		int lastOff = off;
 		int nextOff = off;
 		int nextOffLimit = off + len;
