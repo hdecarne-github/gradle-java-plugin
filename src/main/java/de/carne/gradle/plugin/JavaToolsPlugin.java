@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2018 Holger de Carne and contributors, All Rights Reserved.
+ * Copyright (c) 2018-2019 Holger de Carne and contributors, All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ import org.gradle.api.plugins.UnknownPluginException;
 import org.gradle.api.tasks.compile.JavaCompile;
 
 import de.carne.gradle.plugin.ext.JavaToolsExtension;
+import de.carne.gradle.plugin.task.CheckDependencyVersionsTask;
 import de.carne.gradle.plugin.task.GenerateI18NTask;
 import de.carne.util.Late;
 
@@ -39,6 +40,7 @@ public class JavaToolsPlugin implements Plugin<Project> {
 	public static final String JAVA_TOOLS_PLUGIN_NAME = JavaToolsPlugin.class.getPackage().getName() + "java-tools";
 
 	private final Late<GenerateI18NTask> generateI18NTaskHolder = new Late<>();
+	private final Late<CheckDependencyVersionsTask> checkDependencyVersionsTaskHolder = new Late<>();
 
 	@Override
 	public void apply(@Nullable Project project) {
@@ -48,9 +50,9 @@ public class JavaToolsPlugin implements Plugin<Project> {
 			// Create extension object
 			JavaToolsExtension.create(project);
 			// Create task objects
-			this.generateI18NTaskHolder.set(GenerateI18NTask.create(project));
-			this.generateI18NTaskHolder.get().apply(project);
+			this.generateI18NTaskHolder.set(GenerateI18NTask.create(project)).apply(project);
 			setTasksDependsOn(project, JavaCompile.class, this.generateI18NTaskHolder.get());
+			this.checkDependencyVersionsTaskHolder.set(CheckDependencyVersionsTask.create(project)).apply(project);
 			// Finish setup after evaluate
 			project.afterEvaluate(this::afterEvaluate);
 		}
@@ -58,6 +60,7 @@ public class JavaToolsPlugin implements Plugin<Project> {
 
 	private void afterEvaluate(Project project) {
 		this.generateI18NTaskHolder.get().afterEvaluate(project);
+		this.checkDependencyVersionsTaskHolder.get().afterEvaluate(project);
 	}
 
 	private void checkPrerequisites(Project project) {
