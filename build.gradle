@@ -39,10 +39,8 @@ dependencies {
 	compile(group: "org.eclipse.jdt", name: "org.eclipse.jdt.annotation", version: "2.2.100")
 	configurations.runtime.exclude(group: "org.eclipse.jdt", module: "org.eclipse.jdt.annotation")
 
-	compile(group: "de.carne.common", name: "java-default", version: "8.7.0-SNAPSHOT")
-
-	implementation(group: "org.junit.jupiter", name: "junit-jupiter-api", version: "5.4.0-M1")
-	testRuntimeOnly(group: "org.junit.jupiter", name: "junit-jupiter-engine", version: "5.4.0-M1")
+	compile(group: "de.carne.common", name: "java-default", version: "8.7.0")
+	testImplementation(group: "de.carne.common", name: "java-test", version: "1.0.0")
 }
 
 test {
