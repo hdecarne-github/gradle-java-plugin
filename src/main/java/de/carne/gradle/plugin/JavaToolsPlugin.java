@@ -47,13 +47,10 @@ public class JavaToolsPlugin implements Plugin<Project> {
 	@Override
 	public void apply(@Nullable Project project) {
 		if (project != null) {
-			// Check prerequisites
-			checkPrerequisites(project);
 			// Create extension object
 			JavaToolsExtension.create(project);
 			// Create task objects
 			this.generateI18NTaskHolder.set(GenerateI18NTask.create(project)).apply(project);
-			setTasksDependsOn(project, JavaCompile.class, this.generateI18NTaskHolder.get());
 			this.checkDependencyVersionsTaskHolder.set(CheckDependencyVersionsTask.create(project)).apply(project);
 			// Finish setup after evaluate
 			project.afterEvaluate(this::afterEvaluate);
@@ -62,6 +59,10 @@ public class JavaToolsPlugin implements Plugin<Project> {
 
 	private void afterEvaluate(@Nullable Project project) {
 		Objects.requireNonNull(project);
+
+		// Check prerequisites
+		checkPrerequisites(project);
+		setTasksDependsOn(project, JavaCompile.class, this.generateI18NTaskHolder.get());
 
 		this.generateI18NTaskHolder.get().afterEvaluate(project);
 		this.checkDependencyVersionsTaskHolder.get().afterEvaluate(project);
