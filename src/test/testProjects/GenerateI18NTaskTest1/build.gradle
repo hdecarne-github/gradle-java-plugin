@@ -3,11 +3,20 @@ plugins {
 	id "de.carne.java-tools" version "TEST_PLUGIN_VERSION"
 }
 
+sourceSets {
+	main {
+		resources {
+			srcDir "${project.buildDir}/generated/main/java"
+		}
+	}
+}
+
+
 javatools {
 	generateI18N {
 		enabled = true
 		keyFilter = "^I18N_.*"
-		genDir = file("src/main/java")
+		genDir = file("${project.buildDir}/generated/main/java")
 		bundles = fileTree("src/main/resources") {
 			include("**/*I18N.properties")
 		}
@@ -16,7 +25,7 @@ javatools {
 	}
 }
 
-println javatools.platform.isLinux
-println javatools.platform.isMacos
-println javatools.platform.isWindows
-println javatools.platform.swtToolkit
+println "javatools.platform.isLinux: " + javatools.platform.isLinux
+println "javatools.platform.isMacos: " + javatools.platform.isMacos
+println "javatools.platform.isWindows: " + javatools.platform.isWindows
+println "javatools.platform.swtToolkit: " + javatools.platform.swtToolkit

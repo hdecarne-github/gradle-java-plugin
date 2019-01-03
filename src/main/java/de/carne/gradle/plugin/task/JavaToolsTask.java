@@ -37,6 +37,8 @@ public interface JavaToolsTask {
 	 * @param project the {@linkplain Project} running the task.
 	 * @see Project#afterEvaluate(org.gradle.api.Action)
 	 */
-	void afterEvaluate(Project project);
+	default void afterEvaluate(Project project) {
+		// Do nothing by default
+	}
 
 }

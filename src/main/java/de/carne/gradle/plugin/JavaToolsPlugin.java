@@ -16,6 +16,8 @@
  */
 package de.carne.gradle.plugin;
 
+import java.util.Objects;
+
 import org.eclipse.jdt.annotation.Nullable;
 import org.gradle.api.GradleException;
 import org.gradle.api.Plugin;
@@ -58,7 +60,9 @@ public class JavaToolsPlugin implements Plugin<Project> {
 		}
 	}
 
-	private void afterEvaluate(Project project) {
+	private void afterEvaluate(@Nullable Project project) {
+		Objects.requireNonNull(project);
+
 		this.generateI18NTaskHolder.get().afterEvaluate(project);
 		this.checkDependencyVersionsTaskHolder.get().afterEvaluate(project);
 	}
@@ -67,7 +71,8 @@ public class JavaToolsPlugin implements Plugin<Project> {
 		try {
 			project.getPlugins().getPlugin("java");
 		} catch (UnknownPluginException e) {
-			String message = "Unable to apply plugin " + JAVA_TOOLS_PLUGIN_NAME + "; please apply java plugin first";
+			String message = "Unable to apply plugin " + JAVA_TOOLS_PLUGIN_NAME
+					+ "; please apply java or java-library plugin first";
 
 			project.getLogger().error(message);
 			throw new GradleException(message, e);

@@ -49,11 +49,8 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 
 	private static final ResourceBundle TEMPLATES = ResourceBundle.getBundle(GenerateI18NTask.class.getName());
 
-	/**
-	 * The task name.
-	 */
-	public static final String GENERATE_I18N_TASK_NAME = "generateI18N";
-
+	private static final String GENERATE_I18N_TASK_GROUP = "build";
+	private static final String GENERATE_I18N_TASK_NAME = "generateI18N";
 	private static final String GENERATE_I18N_TASK_DESCRIPTION = "Create/update I18N helper classes.";
 
 	/**
@@ -68,6 +65,7 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 
 	@Override
 	public void apply(Project project) {
+		setGroup(GENERATE_I18N_TASK_GROUP);
 		setDescription(GENERATE_I18N_TASK_DESCRIPTION);
 	}
 
@@ -79,9 +77,10 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 		getInputs().files(generateI18N.getBundles());
 		getOutputs().dir(generateI18N.getGenDir());
 		processBundleFiles(generateI18N.getBundles(), (srcDir, bundleFile) -> {
-			File javaFile = getJavaFile(bundleFile);
+			File javaFile = getAbsoluteFile(generateI18N.getGenDir(), getJavaFile(bundleFile));
 
-			getOutputs().file(getAbsoluteFile(generateI18N.getGenDir(), javaFile));
+			project.getLogger().info("{} output file {}", GENERATE_I18N_TASK_NAME, javaFile);
+			getOutputs().file(javaFile);
 		});
 	}
 
@@ -121,7 +120,7 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 		Path baseDirPath = baseDir.toPath();
 		Path filePath = file.toPath();
 
-		return baseDirPath.resolve(filePath).toFile();
+		return baseDirPath.resolve(filePath).toAbsolutePath().toFile();
 	}
 
 	private File getJavaFile(File bundleFile) {

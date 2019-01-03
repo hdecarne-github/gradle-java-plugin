@@ -17,11 +17,14 @@
 package de.carne.gradle.plugin.test;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.gradle.testkit.runner.BuildResult;
+import org.gradle.testkit.runner.BuildTask;
 import org.gradle.testkit.runner.GradleRunner;
+import org.gradle.testkit.runner.TaskOutcome;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import de.carne.gradle.plugin.task.GenerateI18NTask;
@@ -38,26 +41,37 @@ class GenerateI18NTaskTest {
 	@Test
 	void testProjectGenerateI18NTaskTest1() {
 		File testProjectDir = new File(TEST_BASE_DIR, "GenerateI18NTaskTest1");
-		List<String> arguments1 = new ArrayList<>();
+		List<String> cleanAssembleArguments = Arrays.asList("-s", "-i", "clean", "assemble");
 
-		arguments1.add("-s");
-		arguments1.add("clean");
-		arguments1.add("assemble");
-
-		GradleRunner gradleRunner = GradleRunner.create().withProjectDir(testProjectDir).withTestKitDir(TEST_BASE_DIR)
-				.withPluginClasspath();
-		BuildResult cleanAssembleResult = gradleRunner.withArguments(arguments1).build();
+		BuildResult cleanAssembleResult = GradleRunner.create().withProjectDir(testProjectDir)
+				.withTestKitDir(TEST_BASE_DIR).withPluginClasspath().withArguments(cleanAssembleArguments).build();
 
 		System.out.println(cleanAssembleResult.getOutput());
 
-		List<String> arguments2 = new ArrayList<>();
+		assertTaskOutcome(cleanAssembleResult, ":generateI18N", TaskOutcome.SUCCESS);
+		assertTaskOutcome(cleanAssembleResult, ":assemble", TaskOutcome.SUCCESS);
 
-		arguments2.add("-s");
-		arguments2.add("assemble");
+		List<String> assembleArguments = Arrays.asList("-s", "-i", "assemble");
 
-		BuildResult assembleResult = gradleRunner.withArguments(arguments2).build();
+		BuildResult assembleResult = GradleRunner.create().withProjectDir(testProjectDir).withTestKitDir(TEST_BASE_DIR)
+				.withPluginClasspath().withArguments(assembleArguments).build();
 
 		System.out.println(assembleResult.getOutput());
+
+		assertTaskOutcome(assembleResult, ":generateI18N", TaskOutcome.UP_TO_DATE);
+		assertTaskOutcome(assembleResult, ":assemble", TaskOutcome.UP_TO_DATE);
+	}
+
+	private void assertTaskOutcome(BuildResult buildResult, String taskPath, TaskOutcome taskOutcome) {
+		boolean status = false;
+
+		for (BuildTask task : buildResult.getTasks()) {
+			if (taskPath.equals(task.getPath())) {
+				Assertions.assertEquals(taskOutcome, task.getOutcome());
+				status = true;
+			}
+		}
+		Assertions.assertTrue(status, "No TaskOutcome for task " + taskPath);
 	}
 
 }
