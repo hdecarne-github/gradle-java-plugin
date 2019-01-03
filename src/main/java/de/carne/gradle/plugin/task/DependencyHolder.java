@@ -20,19 +20,11 @@ import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.ExternalDependency;
 
-@SuppressWarnings("squid:S2160")
 class DependencyHolder extends DependencyKey {
-
-	private final Project project;
-	private final Configuration configuration;
-	private final ExternalDependency dependency;
 
 	DependencyHolder(Project project, Configuration configuration, ExternalDependency dependency) {
 		super(project.getName(), configuration.getName(), dependency.getGroup(), dependency.getName(),
 				dependency.getVersion());
-		this.project = project;
-		this.configuration = configuration;
-		this.dependency = dependency;
 	}
 
 }
