@@ -33,7 +33,7 @@ import org.gradle.api.artifacts.component.ModuleComponentIdentifier;
 import org.gradle.api.tasks.TaskAction;
 
 /**
- *
+ * CheckDependencyVersionsTask - Check for dependency version updates.
  */
 public class CheckDependencyVersionsTask extends DefaultTask implements JavaToolsTask {
 
@@ -113,8 +113,11 @@ public class CheckDependencyVersionsTask extends DefaultTask implements JavaTool
 	private void filterComponentenSelection(DependencyMap dependencyMap, ComponentSelection componentSelection) {
 		ArtifactVersionId candidateArtifactVersionId = getCandidateArtifactVersionId(componentSelection.getCandidate());
 
-		if (candidateArtifactVersionId.isSnapshot() && dependencyMap.keySet().stream()
-				.map(DependencyKey::getArtifactVersionId).noneMatch(ArtifactVersionId::isSnapshot)) {
+		if (candidateArtifactVersionId.isSnapshot()
+				&& dependencyMap.keySet().stream().map(DependencyKey::getArtifactVersionId)
+						.filter(dependencyArtifactVersionId -> dependencyArtifactVersionId.getArtifactId()
+								.equals(candidateArtifactVersionId.getArtifactId()))
+						.noneMatch(ArtifactVersionId::isSnapshot)) {
 			componentSelection.reject("Ignoring SNAPSHOT candidate " + candidateArtifactVersionId);
 		}
 	}
