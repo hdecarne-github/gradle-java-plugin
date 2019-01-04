@@ -110,18 +110,6 @@ public class CheckDependencyVersionsTask extends DefaultTask implements JavaTool
 		evalDependencyVersions(dependencyMap, resolvedArtifactsMap, report);
 	}
 
-	private void filterComponentenSelection(DependencyMap dependencyMap, ComponentSelection componentSelection) {
-		ArtifactVersionId candidateArtifactVersionId = getCandidateArtifactVersionId(componentSelection.getCandidate());
-
-		if (candidateArtifactVersionId.isSnapshot()
-				&& dependencyMap.keySet().stream().map(DependencyKey::getArtifactVersionId)
-						.filter(dependencyArtifactVersionId -> dependencyArtifactVersionId.getArtifactId()
-								.equals(candidateArtifactVersionId.getArtifactId()))
-						.noneMatch(ArtifactVersionId::isSnapshot)) {
-			componentSelection.reject("Ignoring SNAPSHOT candidate " + candidateArtifactVersionId);
-		}
-	}
-
 	private void evalDependencyVersions(DependencyMap dependencyMap,
 			Map<ArtifactId, ResolvedArtifact> resolvedArtifactsMap, CheckDependencyVersionsReport report) {
 		for (Map.Entry<DependencyKey, DependencyHolder> dependencyMapEntry : dependencyMap.entrySet()) {
@@ -138,6 +126,15 @@ public class CheckDependencyVersionsTask extends DefaultTask implements JavaTool
 							resolvedArtifactVersionId);
 				}
 			}
+		}
+	}
+
+	private void filterComponentenSelection(DependencyMap dependencyMap, ComponentSelection componentSelection) {
+		ArtifactVersionId candidateArtifactVersionId = getCandidateArtifactVersionId(componentSelection.getCandidate());
+
+		if (dependencyMap.keySet().stream().map(DependencyKey::getArtifactVersionId).noneMatch(
+				dependencyArtifactVersionId -> dependencyArtifactVersionId.isCandidate(candidateArtifactVersionId))) {
+			componentSelection.reject("Ignoring candidate " + candidateArtifactVersionId);
 		}
 	}
 

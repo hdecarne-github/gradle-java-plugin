@@ -38,6 +38,15 @@ class ArtifactVersionId implements Comparable<ArtifactVersionId> {
 		return this.version.endsWith("-SNAPSHOT");
 	}
 
+	public boolean isQualified() {
+		return this.version.contains("-");
+	}
+
+	public boolean isCandidate(ArtifactVersionId artifactVersionId) {
+		return this.artifactId.equals(artifactVersionId.artifactId) && (!artifactVersionId.isSnapshot() || isSnapshot())
+				&& (!artifactVersionId.isQualified() || isQualified());
+	}
+
 	@Override
 	public int compareTo(ArtifactVersionId o) {
 		int comparison = 0;
