@@ -27,10 +27,11 @@ after_success:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./gradlew --stacktrace artifactoryPublish sonarqube; fi
 
 notifications:
-  email:
-    recipients:
-      - hdecarne@gmail.com
-      
+  email: false 
+  slack:
+    secure: "XezKdGaC9mZceqG8rySbHROBocwfQYAe3hY/JKU3D7oTiUXu7FDDyERMEtahcKzavvLtcx6xEtKQXfrMeoiv2pjZgN9lhxkKS6zD+RBpsPMtzjAOKtKkOlHqKOSnoCAIRGmMM8JhRS/ZLl+UXx33mjF91mXWyjBBAj/Q8KEqHPqf+Rq2/hx6+7rAv99KwO5BQoOIQfhbtVJHhPcAaNFkaiE5bqU/VX6NpOS7XleEbTedmmRH2E/vHBom7C56x3faKyEfW27ObmKIgYrw1SVFXPtwdUpA6GrcewNpnNXldiMPkfa0wwmABPy2ha61JCCSEa9gmQ5OR/wTVkCWMItOCdq5UDswqszSMt5d2XCNHt7th68V5wBaiLMVYJXP3KmaVl1rUf44Tzlw79ChJV6LhtseWZs/rQEhNquComdyX2PBPW5hql5ZXwoGxP5Iv3XvWfm5rhoLM0zFDQ966JoL3hj+EnjBWZNMLFyzFSMP7b13t7VQsc358RvCYPWYJ5tWVa0S42BFupVPIQqcCRwYYo7PDGHS9lf1N6u8QX7Hx+kBJKcSNXP4f/0SpWyFEvdohnzCfMtjDydo1cdb4teSCvzKPCQxgGFhBAAN7VNbw8oz2nyPkby6dybBCLt3xwF+NhJvaIwaNCBnBjRWrUMMP/o2ZKK8+o1djdJlxygHH7E="
+    on_success: change
+
 # See https://docs.travis-ci.com/user/languages/java/#caching
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
