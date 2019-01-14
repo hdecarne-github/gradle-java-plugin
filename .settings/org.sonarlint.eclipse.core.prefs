@@ -1,8 +1,0 @@
-autoEnabled=true
-eclipse.preferences.version=1
-extraProperties=
-fileExclusions=
-idePrefixKey=
-projectKey=de.carne.common\:java-gradle-plugins
-serverId=SonarCloud/hdecarne-github
-sqPrefixKey=
