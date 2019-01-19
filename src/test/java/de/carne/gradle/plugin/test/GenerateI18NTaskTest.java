@@ -34,6 +34,7 @@ import de.carne.gradle.plugin.task.GenerateI18NTask;
  */
 class GenerateI18NTaskTest {
 
+	@SuppressWarnings("null")
 	private static File TEST_BASE_DIR = new File(
 			System.getProperty(GenerateI18NTaskTest.class.getPackage().getName(), "build/testProjects"))
 					.getAbsoluteFile();

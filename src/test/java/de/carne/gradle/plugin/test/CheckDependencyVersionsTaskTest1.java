@@ -34,6 +34,7 @@ import de.carne.gradle.plugin.task.CheckDependencyVersionsTask;
  */
 class CheckDependencyVersionsTaskTest1 {
 
+	@SuppressWarnings("null")
 	private static File TEST_BASE_DIR = new File(
 			System.getProperty(CheckDependencyVersionsTaskTest1.class.getPackage().getName(), "build/testProjects"))
 					.getAbsoluteFile();

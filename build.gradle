@@ -36,11 +36,10 @@ repositories {
 }
 
 dependencies {
-	compile(group: "org.eclipse.jdt", name: "org.eclipse.jdt.annotation", version: "2.2.100")
-	configurations.runtime.exclude(group: "org.eclipse.jdt", module: "org.eclipse.jdt.annotation")
-
-	compile(group: "de.carne.common", name: "java-default", version: "8.7.0")
-	testImplementation(group: "de.carne.common", name: "java-test", version: "1.0.0")
+	compileOnly(group: "org.eclipse.jdt", name: "org.eclipse.jdt.annotation", version: project.annotationVersion)
+	testCompileOnly(group: "org.eclipse.jdt", name: "org.eclipse.jdt.annotation", version: project.annotationVersion)
+	implementation(group: "de.carne.common", name: "java-default", version: project.javaDefaultVersion)
+	testImplementation(group: "de.carne.common", name: "java-test", version: project.javaTestVersion)
 }
 
 test {
