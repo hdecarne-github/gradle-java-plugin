@@ -76,12 +76,12 @@ public final class JavaOutput {
 			case '/':
 				encoded.append("&frasl;");
 				break;
-			case '@':
-			case '*':
-				encoded.append("&#" + Integer.toString(code) + ";");
-				break;
 			default:
-				encoded.append((char) code);
+				if (code == '@' || code == '*' || !Character.isJavaIdentifierPart(code)) {
+					encoded.append("&#" + Integer.toString(code) + ";");
+				} else {
+					encoded.append((char) code);
+				}
 			}
 		});
 		return encoded.toString();
