@@ -25,6 +25,7 @@ import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
@@ -153,7 +154,7 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 			generateJavaHeader(javaWriter, bundleFile, javaFile);
 			for (String bundleKey : bundleKeys) {
 				if (keyFilter.matcher(bundleKey).matches()) {
-					String bundleString = bundle.getProperty(bundleKey);
+					String bundleString = Objects.requireNonNull(bundle.getProperty(bundleKey));
 
 					generateJavaBody(javaWriter, bundleKey, bundleString);
 				}

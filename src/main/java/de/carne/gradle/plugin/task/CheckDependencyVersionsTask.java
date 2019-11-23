@@ -18,6 +18,7 @@ package de.carne.gradle.plugin.task;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -75,11 +76,12 @@ public class CheckDependencyVersionsTask extends DefaultTask implements JavaTool
 		Project project = getProject();
 
 		executeCheckDependencyVersions(DependencyMap.fromBuildscript(project),
-				project.getBuildscript().getConfigurations()
-						.findByName(CHECK_BUILDSCRIPT_DEPENDENCY_VERSIONS_CONFIGURATION_NAME),
+				Objects.requireNonNull(project.getBuildscript().getConfigurations()
+						.findByName(CHECK_BUILDSCRIPT_DEPENDENCY_VERSIONS_CONFIGURATION_NAME)),
 				new CheckDependencyVersionsReport(project, CHECK_BUILDSCRIPT_DEPENDENCY_VERSIONS_REPORT_TITLE));
 		executeCheckDependencyVersions(DependencyMap.fromProject(project),
-				project.getConfigurations().findByName(CHECK_PROJECT_DEPENDENCY_VERSIONS_CONFIGURATION_NAME),
+				Objects.requireNonNull(
+						project.getConfigurations().findByName(CHECK_PROJECT_DEPENDENCY_VERSIONS_CONFIGURATION_NAME)),
 				new CheckDependencyVersionsReport(project, CHECK_PROJECT_DEPENDENCY_VERSIONS_REPORT_TITLE));
 	}
 

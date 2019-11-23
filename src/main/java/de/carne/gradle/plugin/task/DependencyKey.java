@@ -21,6 +21,8 @@ import java.util.Objects;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import de.carne.util.Strings;
+
 class DependencyKey implements Comparable<DependencyKey> {
 
 	private final String projectName;
@@ -30,12 +32,12 @@ class DependencyKey implements Comparable<DependencyKey> {
 	private final String dependencyVersion;
 
 	DependencyKey(String projectName, String configurationName, String dependencyGroup, String dependencyName,
-			String dependencyVersion) {
+			@Nullable String dependencyVersion) {
 		this.projectName = projectName;
 		this.configurationName = configurationName;
 		this.dependencyGroup = dependencyGroup;
 		this.dependencyName = dependencyName;
-		this.dependencyVersion = dependencyVersion;
+		this.dependencyVersion = Strings.safe(dependencyVersion);
 	}
 
 	public String getProject() {
