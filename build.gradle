@@ -186,7 +186,7 @@ eclipse {
 		downloadSources = true
 		downloadJavadoc = true
 		file {
-			whenMerged {
+			whenMerged { classpath ->
 				def eeaPath = project.findProperty("eclipse.eeaPath");
 				 
 				entries.forEach {
@@ -198,6 +198,11 @@ eclipse {
 						if(eeaPath != null) {
 							it.entryAttributes.put("annotationpath", eeaPath)
 						}
+					} else if(it.path.contains("/generated-gradle-jars/")) {
+						if(eeaPath != null) {
+							it.entryAttributes.put("annotationpath", eeaPath)
+						}
+						it.sourcePath = classpath.fileReference(gradle.getGradleHomeDir().absolutePath + '/src');
 					}
 				}
 			}
