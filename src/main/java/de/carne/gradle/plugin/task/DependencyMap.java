@@ -16,6 +16,7 @@
  */
 package de.carne.gradle.plugin.task;
 
+import java.util.Objects;
 import java.util.TreeMap;
 
 import org.gradle.api.Project;
@@ -50,11 +51,12 @@ class DependencyMap extends TreeMap<DependencyKey, DependencyHolder> {
 	}
 
 	private void addConfigurations(Project project, ConfigurationContainer configurations) {
-		configurations.forEach(configuration -> addConfiguration(project, configuration));
+		configurations.forEach(configuration -> addConfiguration(project, Objects.requireNonNull(configuration)));
 	}
 
 	private void addConfiguration(Project project, Configuration configuration) {
-		configuration.getDependencies().forEach(dependency -> addDependency(project, configuration, dependency));
+		configuration.getDependencies()
+				.forEach(dependency -> addDependency(project, configuration, Objects.requireNonNull(dependency)));
 	}
 
 	private void addDependency(Project project, Configuration configuration, Dependency dependency) {

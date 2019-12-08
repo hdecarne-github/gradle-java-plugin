@@ -107,7 +107,8 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 	private void processBundleFiles(ConfigurableFileTree fileTree, BiConsumer<File, File> consumer) {
 		File srcDir = fileTree.getDir();
 
-		fileTree.forEach(bundleFile -> consumer.accept(srcDir, getRelativeFile(srcDir, bundleFile)));
+		fileTree.forEach(
+				bundleFile -> consumer.accept(srcDir, getRelativeFile(srcDir, Objects.requireNonNull(bundleFile))));
 	}
 
 	private File getRelativeFile(File baseDir, File file) {
