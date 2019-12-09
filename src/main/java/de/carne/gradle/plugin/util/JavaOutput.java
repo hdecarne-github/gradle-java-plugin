@@ -73,14 +73,29 @@ public final class JavaOutput {
 			case '>':
 				encoded.append("&gt;");
 				break;
+			case '&':
+				encoded.append("&amp;");
+				break;
+			case '"':
+				encoded.append("&quot;");
+				break;
+			case '\'':
+				encoded.append("&apos;");
+				break;
 			case '/':
 				encoded.append("&frasl;");
 				break;
+			case '@':
+				encoded.append("&commat;");
+				break;
+			case '*':
+				encoded.append("&ast;");
+				break;
 			default:
-				if (code == '@' || code == '*' || !Character.isJavaIdentifierPart(code)) {
-					encoded.append("&#" + Integer.toString(code) + ";");
-				} else {
+				if (32 <= code && code <= 126) {
 					encoded.append((char) code);
+				} else {
+					encoded.append("&#").append(code).append(';');
 				}
 			}
 		});
