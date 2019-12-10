@@ -16,6 +16,9 @@
  */
 package de.carne.gradle.plugin.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Utility class providing Java code generation related functions.
  */
@@ -51,6 +54,21 @@ public final class JavaOutput {
 		return mangled.toString();
 	}
 
+	private static final Map<Character, String> ENCODE_BUNDLE_STRING_MAP = new HashMap<>();
+
+	static {
+		ENCODE_BUNDLE_STRING_MAP.put('\r', "");
+		ENCODE_BUNDLE_STRING_MAP.put('\n', "<br>");
+		ENCODE_BUNDLE_STRING_MAP.put('<', "&lt;");
+		ENCODE_BUNDLE_STRING_MAP.put('>', "&gt;");
+		ENCODE_BUNDLE_STRING_MAP.put('&', "&amp;");
+		ENCODE_BUNDLE_STRING_MAP.put('"', "&quot;");
+		ENCODE_BUNDLE_STRING_MAP.put('\'', "&apos;");
+		ENCODE_BUNDLE_STRING_MAP.put('/', "&frasl;");
+		ENCODE_BUNDLE_STRING_MAP.put('@', "&commat;");
+		ENCODE_BUNDLE_STRING_MAP.put('*', "&ast;");
+	}
+
 	/**
 	 * Encodes a resource bundle string for Javadoc output.
 	 *
@@ -61,42 +79,14 @@ public final class JavaOutput {
 		StringBuilder encoded = new StringBuilder();
 
 		bundleString.chars().forEachOrdered(code -> {
-			switch (code) {
-			case '\r':
-				break;
-			case '\n':
-				encoded.append("<br>");
-				break;
-			case '<':
-				encoded.append("&lt;");
-				break;
-			case '>':
-				encoded.append("&gt;");
-				break;
-			case '&':
-				encoded.append("&amp;");
-				break;
-			case '"':
-				encoded.append("&quot;");
-				break;
-			case '\'':
-				encoded.append("&apos;");
-				break;
-			case '/':
-				encoded.append("&frasl;");
-				break;
-			case '@':
-				encoded.append("&commat;");
-				break;
-			case '*':
-				encoded.append("&ast;");
-				break;
-			default:
-				if (32 <= code && code <= 126) {
-					encoded.append((char) code);
-				} else {
-					encoded.append("&#").append(code).append(';');
-				}
+			String mappedCode = ENCODE_BUNDLE_STRING_MAP.get(Character.valueOf((char) code));
+
+			if (mappedCode != null) {
+				encoded.append(mappedCode);
+			} else if (32 <= code && code <= 126) {
+				encoded.append((char) code);
+			} else {
+				encoded.append("&#").append(code).append(';');
 			}
 		});
 		return encoded.toString();
