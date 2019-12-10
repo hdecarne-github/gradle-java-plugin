@@ -34,7 +34,7 @@ class JavaOutputTest {
 	@Test
 	void testEncodeBundleString() {
 		Assertions.assertEquals(
-				"It is ok to have special chars like &frasl;&ast; &commat;&#228;&#246;&#252; &ast;&frasl;<br>in a bundle string.",
+				"It is ok to have special chars like &frasl;&#42; &commat;&#228;&#246;&#252; &#42;&frasl;<br>in a bundle string.",
 				JavaOutput.encodeBundleString("It is ok to have special chars like /* @äöü */\r\nin a bundle string."));
 	}
 
