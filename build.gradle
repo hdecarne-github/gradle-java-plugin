@@ -176,7 +176,7 @@ bintray {
 			}
 			mavenCentralSync {
 				user = project.resolveProperty("ossrhUsername", "OSSRH_USERNAME")
-				password = project.resolveProperty("ossrhPassword", "OSSR_PASSWORD")
+				password = project.resolveProperty("ossrhPassword", "OSSRH_PASSWORD")
 			}
 		}
 	}
