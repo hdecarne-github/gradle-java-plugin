@@ -161,6 +161,9 @@ bintray {
 	user = project.resolveProperty("bintrayUser", "BINTRAY_USER")
 	key = project.resolveProperty("bintrayKey", "BINTRAY_KEY")
 	publications = [ "Bintray" ]
+	dryRun = (project.findProperty("bintray.dryRun") ?: false);
+	publish = (project.findProperty("bintray.publish") ?: !snapshotBuild);
+	override = (project.findProperty("bintray.override") ?: false);
 	pkg {
 		repo = "maven"
 		name = project.name
@@ -170,6 +173,10 @@ bintray {
 			gpg {
 				sign = true
 				passphrase = project.resolveProperty("bintrayGpgPassphrase", "BINTRAY_GPG_PASSPHRASE")
+			}
+			mavenCentralSync {
+				user = project.resolveProperty("ossrhUsername", "OSSRH_USERNAME")
+				password = project.resolveProperty("ossrhPassword", "OSSR_PASSWORD")
 			}
 		}
 	}
