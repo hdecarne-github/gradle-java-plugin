@@ -1,0 +1,20 @@
+plugins {
+	id "java"
+	id "de.carne.java-tools" version "TEST_PLUGIN_VERSION"
+}
+
+javatools {
+	githubRelease {
+		enabled = true
+		releaseName = "v${project.version}"
+		releaseNotes = file("./RELEASE-v${project.version}.md")
+		releaseAssets = fileTree("build/libs") {
+			include("*")
+		}
+		overwrite = true
+		githubToken = project.findProperty('githubToken')
+		ignoreDirty = true
+	}
+}
+
+draftGitHubRelease.dependsOn(assemble)

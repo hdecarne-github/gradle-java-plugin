@@ -28,6 +28,7 @@ import org.gradle.api.tasks.compile.JavaCompile;
 
 import de.carne.gradle.plugin.ext.JavaToolsExtension;
 import de.carne.gradle.plugin.task.CheckDependencyVersionsTask;
+import de.carne.gradle.plugin.task.DraftGitHubReleaseTask;
 import de.carne.gradle.plugin.task.GenerateI18NTask;
 import de.carne.util.Late;
 
@@ -43,6 +44,7 @@ public class JavaToolsPlugin implements Plugin<Project> {
 
 	private final Late<GenerateI18NTask> generateI18NTaskHolder = new Late<>();
 	private final Late<CheckDependencyVersionsTask> checkDependencyVersionsTaskHolder = new Late<>();
+	private final Late<DraftGitHubReleaseTask> draftGitHubReleaseTaskHolder = new Late<>();
 
 	@Override
 	public void apply(@Nullable Project project) {
@@ -52,6 +54,7 @@ public class JavaToolsPlugin implements Plugin<Project> {
 			// Create task objects
 			this.generateI18NTaskHolder.set(GenerateI18NTask.create(project)).apply(project);
 			this.checkDependencyVersionsTaskHolder.set(CheckDependencyVersionsTask.create(project)).apply(project);
+			this.draftGitHubReleaseTaskHolder.set(DraftGitHubReleaseTask.create(project)).apply(project);
 			// Finish setup after evaluate
 			project.afterEvaluate(this::afterEvaluate);
 		}
@@ -62,10 +65,13 @@ public class JavaToolsPlugin implements Plugin<Project> {
 
 		// Check prerequisites
 		checkPrerequisites(project);
+
+		// Set standard dependencies
 		setTasksDependsOn(project, JavaCompile.class, this.generateI18NTaskHolder.get());
 
 		this.generateI18NTaskHolder.get().afterEvaluate(project);
 		this.checkDependencyVersionsTaskHolder.get().afterEvaluate(project);
+		this.draftGitHubReleaseTaskHolder.get().afterEvaluate(project);
 	}
 
 	private void checkPrerequisites(Project project) {

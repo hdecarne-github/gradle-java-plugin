@@ -34,6 +34,12 @@ dependencies {
 	compileOnly(group: "org.eclipse.jdt", name: "org.eclipse.jdt.annotation", version: project.annotationVersion)
 	testCompileOnly(group: "org.eclipse.jdt", name: "org.eclipse.jdt.annotation", version: project.annotationVersion)
 	implementation(group: "de.carne.common", name: "java-default", version: project.javaDefaultVersion)
+	implementation(group: "javax.ws.rs", name: "javax.ws.rs-api", version: project.javaxWsRsVersion)
+	implementation(group: "org.glassfish.jersey.core", name: "jersey-client", version: project.glassfishJerseyVersion)
+	implementation(group: "org.glassfish.jersey.ext", name: "jersey-proxy-client", version: project.glassfishJerseyVersion)
+	implementation(group: "org.glassfish.jersey.media", name: "jersey-media-json-jackson", version: project.glassfishJerseyVersion)
+	implementation(group: "org.eclipse.jgit", name: "org.eclipse.jgit", version: project.jgitVersion)
+	runtime(group: "org.glassfish.jersey.inject", name: "jersey-hk2", version: project.glassfishJerseyVersion)
 	testImplementation(group: "de.carne.common", name: "java-test", version: project.javaTestVersion)
 }
 

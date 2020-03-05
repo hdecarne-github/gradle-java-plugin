@@ -61,6 +61,7 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 	 * @return the created {@linkplain GenerateI18NTask} object.
 	 */
 	public static GenerateI18NTask create(Project project) {
+		project.getLogger().info("Creating task " + GENERATE_I18N_TASK_NAME);
 		return project.getTasks().create(GENERATE_I18N_TASK_NAME, GenerateI18NTask.class);
 	}
 

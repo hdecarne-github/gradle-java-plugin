@@ -11,7 +11,6 @@ sourceSets {
 	}
 }
 
-
 javatools {
 	generateI18N {
 		enabled = true
@@ -24,8 +23,3 @@ javatools {
 		encoding = "UTF-8"
 	}
 }
-
-println "javatools.platform.isLinux: " + javatools.platform.isLinux
-println "javatools.platform.isMacos: " + javatools.platform.isMacos
-println "javatools.platform.isWindows: " + javatools.platform.isWindows
-println "javatools.platform.swtToolkit: " + javatools.platform.swtToolkit

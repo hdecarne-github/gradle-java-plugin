@@ -55,6 +55,7 @@ public class CheckDependencyVersionsTask extends DefaultTask implements JavaTool
 	 * @return the created {@linkplain CheckDependencyVersionsTask} object.
 	 */
 	public static CheckDependencyVersionsTask create(Project project) {
+		project.getLogger().info("Creating task " + CHECK_DEPENDENCY_VERSIONS_TASK_NAME);
 		return project.getTasks().create(CHECK_DEPENDENCY_VERSIONS_TASK_NAME, CheckDependencyVersionsTask.class);
 	}
 

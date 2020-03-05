@@ -18,20 +18,26 @@ package de.carne.gradle.plugin.test;
 
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.TaskOutcome;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import de.carne.gradle.plugin.task.CheckDependencyVersionsTask;
+import de.carne.gradle.plugin.task.DraftGitHubReleaseTask;
 
 /**
- * Test {@linkplain CheckDependencyVersionsTask} class.
+ * Test {@linkplain DraftGitHubReleaseTask} class.
  */
-class CheckDependencyVersionsTaskTest1 extends TestProjectRunner {
+class DraftGitHubReleaseTaskTest1 extends TestProjectRunner {
 
 	@Test
-	void testProjectCheckDependencyVersionsTask() {
-		BuildResult checkDependencyVersionsResult = run("-s", "-i", "checkDependencyVersions");
+	void testDraftGitHubReleaseTask() {
+		String githubToken = System.getenv("GITHUB_TOKEN");
 
-		assertTaskOutcome(checkDependencyVersionsResult, ":checkDependencyVersions", TaskOutcome.SUCCESS);
+		Assertions.assertNotNull(githubToken, "GITHUB_TOKEN not set");
+
+		BuildResult draftGitHubReleaseResult = run("-s", "-i", "-PgithubToken=" + githubToken, "clean",
+				"draftGitHubRelease");
+
+		assertTaskOutcome(draftGitHubReleaseResult, ":draftGitHubRelease", TaskOutcome.SUCCESS);
 	}
 
 }

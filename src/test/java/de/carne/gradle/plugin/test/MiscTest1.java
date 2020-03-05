@@ -17,21 +17,22 @@
 package de.carne.gradle.plugin.test;
 
 import org.gradle.testkit.runner.BuildResult;
-import org.gradle.testkit.runner.TaskOutcome;
 import org.junit.jupiter.api.Test;
 
-import de.carne.gradle.plugin.task.CheckDependencyVersionsTask;
+import de.carne.boot.platform.Platform;
 
 /**
- * Test {@linkplain CheckDependencyVersionsTask} class.
+ * Test miscellaneous plugin functions.
  */
-class CheckDependencyVersionsTaskTest1 extends TestProjectRunner {
+class MiscTest1 extends TestProjectRunner {
 
 	@Test
-	void testProjectCheckDependencyVersionsTask() {
-		BuildResult checkDependencyVersionsResult = run("-s", "-i", "checkDependencyVersions");
+	void testMiscellaneous() {
+		BuildResult cleanAssembleResult = run("-s", "-i", "clean", "assemble");
 
-		assertTaskOutcome(checkDependencyVersionsResult, ":checkDependencyVersions", TaskOutcome.SUCCESS);
+		assertOutputLine(cleanAssembleResult, "javatools.platform.isLinux: " + Boolean.toString(Platform.IS_LINUX));
+		assertOutputLine(cleanAssembleResult, "javatools.platform.isMacos: " + Boolean.toString(Platform.IS_MACOS));
+		assertOutputLine(cleanAssembleResult, "javatools.platform.isWindows: " + Boolean.toString(Platform.IS_WINDOWS));
 	}
 
 }

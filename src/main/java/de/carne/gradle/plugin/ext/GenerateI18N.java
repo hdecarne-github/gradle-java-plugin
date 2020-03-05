@@ -38,7 +38,7 @@ public class GenerateI18N {
 
 	private final Project project;
 
-	private boolean enabledParam = true;
+	private boolean enabledParam = false;
 	private String keyFilterParam = "^I18N_.*";
 	private File genDirParam;
 	private ConfigurableFileTree bundlesParam;
