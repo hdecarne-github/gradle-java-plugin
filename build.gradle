@@ -39,7 +39,7 @@ dependencies {
 	implementation(group: "org.glassfish.jersey.ext", name: "jersey-proxy-client", version: project.glassfishJerseyVersion)
 	implementation(group: "org.glassfish.jersey.media", name: "jersey-media-json-jackson", version: project.glassfishJerseyVersion)
 	implementation(group: "org.eclipse.jgit", name: "org.eclipse.jgit", version: project.jgitVersion)
-	runtime(group: "org.glassfish.jersey.inject", name: "jersey-hk2", version: project.glassfishJerseyVersion)
+	runtimeOnly(group: "org.glassfish.jersey.inject", name: "jersey-hk2", version: project.glassfishJerseyVersion)
 	testImplementation(group: "de.carne.common", name: "java-test", version: project.javaTestVersion)
 }
 
