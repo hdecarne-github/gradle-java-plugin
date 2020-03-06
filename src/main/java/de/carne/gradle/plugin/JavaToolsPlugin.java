@@ -63,18 +63,25 @@ public class JavaToolsPlugin implements Plugin<Project> {
 	private void afterEvaluate(@Nullable Project project) {
 		Objects.requireNonNull(project);
 
+		JavaToolsExtension javaTools = project.getExtensions().getByType(JavaToolsExtension.class);
+
 		// Check prerequisites
-		checkPrerequisites(project);
+		if (javaTools.getGenerateI18N().isEnabled()) {
+			checkJavaApplied(project);
+		}
 
 		// Set standard dependencies
-		setTasksDependsOn(project, JavaCompile.class, this.generateI18NTaskHolder.get());
+		if (javaTools.getGenerateI18N().isEnabled()) {
+			setTasksDependsOn(project, JavaCompile.class, this.generateI18NTaskHolder.get());
+		}
 
+		// Finalize tasks
 		this.generateI18NTaskHolder.get().afterEvaluate(project);
 		this.checkDependencyVersionsTaskHolder.get().afterEvaluate(project);
 		this.draftGitHubReleaseTaskHolder.get().afterEvaluate(project);
 	}
 
-	private void checkPrerequisites(Project project) {
+	private void checkJavaApplied(Project project) {
 		try {
 			project.getPlugins().getPlugin("java");
 		} catch (UnknownPluginException e) {
