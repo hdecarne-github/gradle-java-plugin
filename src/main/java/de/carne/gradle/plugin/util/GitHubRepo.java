@@ -33,6 +33,8 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
+import javax.ws.rs.client.ClientResponseContext;
+import javax.ws.rs.client.ClientResponseFilter;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
@@ -46,9 +48,12 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
 import org.glassfish.jersey.jackson.JacksonFeature;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import de.carne.boot.Exceptions;
 import de.carne.boot.logging.Log;
 import de.carne.gradle.plugin.util.GitHubApi.ReleaseAssetInfo;
+import de.carne.gradle.plugin.util.GitHubApi.ResponseStatus;
 import de.carne.util.Late;
 
 /**
@@ -58,7 +63,8 @@ public class GitHubRepo implements AutoCloseable {
 
 	private static final Log LOG = new Log();
 
-	private static final Pattern GITHUB_REMOTE_URL_PATTERN = Pattern.compile("https://github.com/(.+)/(.+).git");
+	private static final Pattern GITHUB_REMOTE_URL_PATTERN = Pattern
+			.compile("https://github.com/([a-zA-Z_0-9\\-]+)/([a-zA-Z_0-9\\-]+).git");
 
 	private static final String GITHUB_API_BASE_URI = "https://api.github.com";
 
@@ -296,7 +302,7 @@ public class GitHubRepo implements AutoCloseable {
 		if (!this.clientHolder.getOptional().isPresent()) {
 			try {
 				ClientBuilder clientBuilder = ClientBuilder.newBuilder().register(JacksonFeature.class)
-						.register(ApiVersionV3.class).register(ApiAuthorization.class);
+						.register(ApiVersionV3.class).register(ApiAuthorization.class).register(ApiStatus.class);
 				Client client = this.clientHolder.set(clientBuilder.build());
 
 				client.property(ApiAuthorization.class.getName(), "token " + this.token);
@@ -326,6 +332,24 @@ public class GitHubRepo implements AutoCloseable {
 		public void filter(ClientRequestContext requestContext) throws IOException {
 			requestContext.getHeaders().add("Authorization",
 					requestContext.getClient().getConfiguration().getProperty(ApiAuthorization.class.getName()));
+		}
+
+	}
+
+	private static class ApiStatus implements ClientResponseFilter {
+
+		@Override
+		public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext)
+				throws IOException {
+			if (Response.Status.Family.CLIENT_ERROR == responseContext.getStatusInfo().getFamily()
+					&& MediaType.APPLICATION_JSON_TYPE.equals(responseContext.getMediaType())
+					&& responseContext.hasEntity()) {
+				ResponseStatus responseStatus = new ObjectMapper().readValue(responseContext.getEntityStream(),
+						ResponseStatus.class);
+
+				throw new IOException("Api call to " + responseContext.getLocation() + "failed with message '"
+						+ responseStatus.message + "' (" + responseStatus.documentationUrl + ")");
+			}
 		}
 
 	}

@@ -93,6 +93,19 @@ public interface GitHubApi {
 			CreateOrEditReleaseRequest request);
 
 	/**
+	 * See <a href= "https://developer.github.com/v3/">https://developer.github.com/v3/</a>
+	 */
+	@SuppressWarnings("javadoc")
+	public static class ResponseStatus {
+		@Nullable
+		@JsonProperty("message")
+		public String message;
+		@Nullable
+		@JsonProperty("documentation_url")
+		public String documentationUrl;
+	}
+
+	/**
 	 * See
 	 * <a href= "https://developer.github.com/v3/repos/releases/">https://developer.github.com/v3/repos/releases/</a>
 	 */
