@@ -56,6 +56,8 @@ class GitHubRepoTest {
 				Assertions.assertEquals(releaseInfo1.id, releaseInfo2.id);
 				Assertions.assertNotNull(releaseInfo1.id);
 				Assertions.assertNotNull(releaseInfo1.uploadUrl);
+				Assertions.assertTrue(releaseInfo1.draft);
+				Assertions.assertTrue(releaseInfo1.prerelease);
 
 				GitHubApi.ReleaseAssetInfo assetInfo = githubRepo.uploadReleaseAsset(
 						Objects.requireNonNull(releaseInfo1.uploadUrl), TEST_ASSET_FILE, TEST_ASSET_NAME,
