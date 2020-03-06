@@ -74,18 +74,22 @@ public class DraftGitHubReleaseTask extends DefaultTask implements JavaToolsTask
 		Project project = getProject();
 		File repoDir = getRepoDir(project.getProjectDir());
 		GitHubRelease githubRelease = project.getExtensions().getByType(JavaToolsExtension.class).getGithubRelease();
+		String releaseName = githubRelease.getReleaseName();
 
-		getLogger().info("Drafting release {} for repo '{}'...", githubRelease.getReleaseName(), repoDir);
+		getLogger().info("Drafting release {} for repo '{}'...", releaseName, repoDir);
 
 		try (GitHubRepo repo = new GitHubRepo(repoDir, githubRelease.getGithubToken())) {
 			checkDirty(repo, githubRelease);
 			checkOverwrite(repo, githubRelease);
 
 			String releaseNotes = readReleaseNotes(githubRelease);
+
 			GitHubApi.ReleaseInfo draft = repo.draftRelease(githubRelease.getReleaseName(), releaseNotes);
 			ConfigurableFileTree releaseAssets = githubRelease.getReleaseAssets();
 
 			for (File releaseAsset : releaseAssets.getFiles()) {
+				getLogger().info("Uploading release asset '{}'...", releaseAsset);
+
 				repo.uploadReleaseAsset(Objects.requireNonNull(draft.uploadUrl), releaseAsset);
 			}
 		} catch (IOException e) {
