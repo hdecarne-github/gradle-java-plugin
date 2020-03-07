@@ -51,7 +51,7 @@ abstract class TestProjectRunner {
 
 		BuildResult result = runner().withArguments(Arrays.asList(arguments)).build();
 
-		LOG.info(result.getOutput());
+		LOG.info("{0}", result.getOutput());
 
 		return result;
 	}
