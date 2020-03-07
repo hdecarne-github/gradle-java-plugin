@@ -76,7 +76,7 @@ public class DraftGitHubReleaseTask extends DefaultTask implements JavaToolsTask
 		GitHubRelease githubRelease = project.getExtensions().getByType(JavaToolsExtension.class).getGithubRelease();
 		String releaseName = githubRelease.getReleaseName();
 
-		getLogger().info("Drafting release {} for repo '{}'...", releaseName, repoDir);
+		getLogger().lifecycle("Drafting release {} for repo '{}'...", releaseName, repoDir);
 
 		try (GitHubRepo repo = new GitHubRepo(repoDir, githubRelease.getGithubToken())) {
 			checkDirty(repo, githubRelease);
@@ -88,7 +88,7 @@ public class DraftGitHubReleaseTask extends DefaultTask implements JavaToolsTask
 			ConfigurableFileTree releaseAssets = githubRelease.getReleaseAssets();
 
 			for (File releaseAsset : releaseAssets.getFiles()) {
-				getLogger().info("Uploading release asset '{}'...", releaseAsset);
+				getLogger().lifecycle("Uploading release asset '{}'...", releaseAsset);
 
 				repo.uploadReleaseAsset(Objects.requireNonNull(draft.uploadUrl), releaseAsset);
 			}
