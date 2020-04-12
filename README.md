@@ -8,7 +8,7 @@ This project collects custom Gradle plugins used for the development of [my priv
 #### Plugin de.carne.java-tools
 See [plugins.gradle.org](https://plugins.gradle.org/plugin/de.carne.java-tools) for how enable the plugin in your build script.
 
-The fastest way is the Gralde plugin mechanism:
+The fastest way is the Gradle plugin mechanism:
 ```Gradle
 plugins {
 	id 'de.carne.java-tools' version 'latest.version'

@@ -1,7 +1,7 @@
 ### Gradle Java-Tools plugin
 [![Download](https://api.bintray.com/packages/hdecarne/maven/java-gradle-plugins/images/download.svg)](https://bintray.com/hdecarne/maven/java-gradle-plugins/_latestVersion)
 [![Build Status](https://travis-ci.org/hdecarne/java-gradle-plugins.svg?branch=master)](https://travis-ci.org/hdecarne/java-gradle-plugins)
-[![Quality Gate](https://sonarcloud.io/api/badges/gate?key=de.carne.common:java-gradle-plugins)](https://sonarcloud.io/dashboard/index/de.carne.common:java-gradle-plugins)  
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=de.carne.common%3Ajava-gradle-plugins&metric=coverage)](https://sonarcloud.io/dashboard?id=de.carne.common%3Ajava-gradle-plugins)  
 
 This project collects custom Gradle plugins used for the development of [my private projects](https://github.com/hdecarne/).
 
@@ -29,9 +29,9 @@ javatools {
 		}
 }
 ```
- * __enabled__: Set this to false to disable the task.
- * __keyFilter__: Java regular expression pattern identifying the resource keys to be evaluated by the task. Only resource keys matching this pattern are accessible via the generated class.
- * __genDir__: The target directory for the generated files.
+* __enabled__: Set this to false to disable the task.
+* __keyFilter__: Java regular expression pattern identifying the resource keys to be evaluated by the task. Only resource keys matching this pattern are accessible via the generated class.
+* __genDir__: The target directory for the generated files.
 * __bundles__: The file tree object defining the resource bundles to be evaluated by the task.
 
 The __generateI18N__ task scans the source set for any resource bundle matching the defined file pattern. For every found resource bundle it creates a Java class with same name as the resource bundle which can be used to access and format the resource strings. For example the resource bundle file:
