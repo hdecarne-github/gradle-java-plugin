@@ -41,7 +41,7 @@ import de.carne.gradle.plugin.ext.GenerateI18N;
 import de.carne.gradle.plugin.ext.JavaToolsExtension;
 import de.carne.gradle.plugin.util.JavaOutput;
 import de.carne.gradle.plugin.util.OutputWriter;
-import de.carne.util.Strings;
+import de.carne.gradle.plugin.util.Strings;
 
 /**
  * GenerateI18NTask - Create/update I18N helper classes.

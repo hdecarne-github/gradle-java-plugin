@@ -21,7 +21,7 @@ import java.util.Objects;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import de.carne.util.Strings;
+import de.carne.gradle.plugin.util.Strings;
 
 class DependencyKey implements Comparable<DependencyKey> {
 

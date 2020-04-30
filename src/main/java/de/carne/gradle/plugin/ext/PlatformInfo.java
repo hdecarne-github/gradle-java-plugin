@@ -16,7 +16,7 @@
  */
 package de.carne.gradle.plugin.ext;
 
-import de.carne.boot.platform.Platform;
+import de.carne.gradle.plugin.util.Platform;
 
 /**
  * Configuration object providing build platform related informations.

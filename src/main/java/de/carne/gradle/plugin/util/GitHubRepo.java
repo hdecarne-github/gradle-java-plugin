@@ -45,29 +45,27 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Repository;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
 import org.glassfish.jersey.jackson.JacksonFeature;
+import org.gradle.api.logging.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.carne.boot.Exceptions;
-import de.carne.boot.logging.Log;
 import de.carne.gradle.plugin.util.GitHubApi.ReleaseAssetInfo;
 import de.carne.gradle.plugin.util.GitHubApi.ResponseStatus;
-import de.carne.util.Late;
 
 /**
  * GitHub Repository client.
  */
 public class GitHubRepo implements AutoCloseable {
 
-	private static final Log LOG = new Log();
-
 	private static final Pattern GITHUB_REMOTE_URL_PATTERN = Pattern
 			.compile("https://github.com/([a-zA-Z_0-9\\-]+)/([a-zA-Z_0-9\\-]+).git");
 
 	private static final String GITHUB_API_BASE_URI = "https://api.github.com";
 
+	private final Logger logger;
 	private final File dir;
 	private final String owner;
 	private final String repo;
@@ -80,43 +78,46 @@ public class GitHubRepo implements AutoCloseable {
 	/**
 	 * Constructs a new {@linkplain GitHubRepo} instance.
 	 *
+	 * @param logger the {@linkplain Logger} to use.
 	 * @param dir the local GitHub repository directory.
 	 * @param token the GitHub access token.
 	 * @throws IOException if an I/O error occurs while accessing the repository.
 	 */
-	public GitHubRepo(String dir, String token) throws IOException {
-		this(new File(dir), token);
+	public GitHubRepo(Logger logger, String dir, String token) throws IOException {
+		this(logger, new File(dir), token);
 	}
 
 	/**
 	 * Constructs a new {@linkplain GitHubRepo} instance.
 	 *
+	 * @param logger the {@linkplain Logger} to use.
 	 * @param dir the local GitHub repository directory.
 	 * @param token the GitHub access token.
 	 * @throws IOException if an I/O error occurs while accessing the repository.
 	 */
-	public GitHubRepo(File dir, String token) throws IOException {
+	public GitHubRepo(Logger logger, File dir, String token) throws IOException {
+		this.logger = logger;
 		this.dir = dir.getAbsoluteFile();
 
-		LOG.info("Accessing GitHub repository at ''{0}''...", this.dir);
+		this.logger.info("Accessing GitHub repository at '{}'...", this.dir);
 
-		try (Git git = Objects.requireNonNull(Git.open(dir))) {
-			String remoteUrl = git.getRepository().getConfig().getString("remote", "origin", "url");
+		try (Git git = Git.open(dir); Repository repository = git.getRepository()) {
+			String remoteUrl = repository.getConfig().getString("remote", "origin", "url");
 
-			LOG.debug("  Remote URL: {0}", remoteUrl);
+			this.logger.debug("  Remote URL: {}", remoteUrl);
 
 			Matcher remoteUrlMatcher = GITHUB_REMOTE_URL_PATTERN.matcher(remoteUrl);
 
 			if (!remoteUrlMatcher.matches()) {
 				throw new IOException("Unexpected remote url: " + remoteUrl);
 			}
-			this.owner = remoteUrlMatcher.group(1);
-			this.repo = remoteUrlMatcher.group(2);
-			this.branch = Objects.requireNonNull(git.getRepository().getBranch());
+			this.owner = Objects.requireNonNull(remoteUrlMatcher.group(1));
+			this.repo = Objects.requireNonNull(remoteUrlMatcher.group(2));
+			this.branch = Objects.requireNonNull(repository.getBranch());
 
-			LOG.debug("  GitHub owner : {0}", this.owner);
-			LOG.debug("  GitHub repo  : {0}", this.repo);
-			LOG.debug("  GitHub branch: {0}", this.branch);
+			this.logger.debug("  GitHub owner : {}", this.owner);
+			this.logger.debug("  GitHub repo  : {}", this.repo);
+			this.logger.debug("  GitHub branch: {}", this.branch);
 
 			Status gitStatus = git.status().call();
 
@@ -155,7 +156,7 @@ public class GitHubRepo implements AutoCloseable {
 	public GitHubApi.@Nullable ReleaseInfo queryRelease(String name) throws IOException {
 		setupClientIfNeeded();
 
-		LOG.info("Querying release ''{0}/{1}/{2}''...", this.owner, this.repo, name);
+		this.logger.info("Querying release '{}/{}/{}'...", this.owner, this.repo, name);
 
 		GitHubApi.ReleaseInfo result = null;
 
@@ -194,7 +195,7 @@ public class GitHubRepo implements AutoCloseable {
 	public GitHubApi.ReleaseInfo draftRelease(String name, String body) throws IOException {
 		setupClientIfNeeded();
 
-		LOG.info("Drafting new release ''{0}/{1}/{2}@{3}''...", this.owner, this.repo, name, this.branch);
+		this.logger.info("Drafting new release '{}/{}/{}@{}'...", this.owner, this.repo, name, this.branch);
 
 		GitHubApi.ReleaseInfo release;
 
@@ -254,7 +255,7 @@ public class GitHubRepo implements AutoCloseable {
 			@Nullable String label) throws IOException {
 		setupClientIfNeeded();
 
-		LOG.info("Uploading release asset ''{0} -> {1}''...", assetFile, uploadUrl);
+		this.logger.info("Uploading release asset '{} -> {}'...", assetFile, uploadUrl);
 
 		UriBuilder targetUri = UriBuilder.fromUri(uploadUrl).queryParam("name", name);
 
@@ -282,12 +283,12 @@ public class GitHubRepo implements AutoCloseable {
 	public void deleteRelease(String releaseId) throws IOException {
 		setupClientIfNeeded();
 
-		LOG.info("Deleting release ''{0}/{1}/{2}''...", this.owner, this.repo, releaseId);
+		this.logger.info("Deleting release '{}/{}/{}'...", this.owner, this.repo, releaseId);
 
 		try {
 			this.apiHolder.get().deleteRelease(this.owner, this.repo, releaseId);
 		} catch (NotFoundException e) {
-			Exceptions.ignore(e);
+			this.logger.trace("Ignoring exception", e);
 		} catch (ClientErrorException e) {
 			throw new IOException("Failed to delete release '" + releaseId + "'", e);
 		}

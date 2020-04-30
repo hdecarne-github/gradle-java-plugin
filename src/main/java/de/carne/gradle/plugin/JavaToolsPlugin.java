@@ -30,7 +30,7 @@ import de.carne.gradle.plugin.ext.JavaToolsExtension;
 import de.carne.gradle.plugin.task.CheckDependencyVersionsTask;
 import de.carne.gradle.plugin.task.DraftGitHubReleaseTask;
 import de.carne.gradle.plugin.task.GenerateI18NTask;
-import de.carne.util.Late;
+import de.carne.gradle.plugin.util.Late;
 
 /**
  * JavaToolsPlugin providing java related build functions and tasks.

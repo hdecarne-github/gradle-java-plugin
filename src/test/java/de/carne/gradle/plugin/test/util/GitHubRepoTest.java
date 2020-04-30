@@ -43,7 +43,7 @@ class GitHubRepoTest {
 
 	@Test
 	void testReleaseApi() throws IOException {
-		try (GitHubRepo githubRepo = new GitHubRepo(".", TEST_TOKEN)) {
+		try (GitHubRepo githubRepo = new GitHubRepo(new SystemOutLogger(), ".", TEST_TOKEN)) {
 			Assertions.assertEquals(DIRTY_REPO, githubRepo.isDirty());
 
 			if (Strings.notEmpty(TEST_TOKEN)) {

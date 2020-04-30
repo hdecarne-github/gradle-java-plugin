@@ -19,6 +19,7 @@ package de.carne.gradle.plugin.task;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Objects;
 
 import org.gradle.api.DefaultTask;
@@ -31,7 +32,6 @@ import de.carne.gradle.plugin.ext.GitHubRelease;
 import de.carne.gradle.plugin.ext.JavaToolsExtension;
 import de.carne.gradle.plugin.util.GitHubApi;
 import de.carne.gradle.plugin.util.GitHubRepo;
-import de.carne.io.IOUtil;
 
 /**
  * DraftGitHubReleaseTask - Draft new GitHub release.
@@ -78,7 +78,7 @@ public class DraftGitHubReleaseTask extends DefaultTask implements JavaToolsTask
 
 		getLogger().lifecycle("Drafting release {} for repo '{}'...", releaseName, repoDir);
 
-		try (GitHubRepo repo = new GitHubRepo(repoDir, githubRelease.getGithubToken())) {
+		try (GitHubRepo repo = new GitHubRepo(project.getLogger(), repoDir, githubRelease.getGithubToken())) {
 			checkDirty(repo, githubRelease);
 			checkOverwrite(repo, githubRelease);
 
@@ -128,7 +128,7 @@ public class DraftGitHubReleaseTask extends DefaultTask implements JavaToolsTask
 	}
 
 	private String readReleaseNotes(GitHubRelease githubRelease) throws IOException {
-		return new String(IOUtil.readAllBytes(githubRelease.getReleaseNotes()), StandardCharsets.UTF_8);
+		return new String(Files.readAllBytes(githubRelease.getReleaseNotes().toPath()), StandardCharsets.UTF_8);
 	}
 
 }
