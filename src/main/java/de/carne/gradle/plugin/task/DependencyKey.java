@@ -16,7 +16,13 @@
  */
 package de.carne.gradle.plugin.task;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -30,6 +36,7 @@ class DependencyKey implements Comparable<DependencyKey> {
 	private final String dependencyGroup;
 	private final String dependencyName;
 	private final String dependencyVersion;
+	private final List<Object> sortKey = new ArrayList<>();
 
 	DependencyKey(String projectName, String configurationName, String dependencyGroup, String dependencyName,
 			@Nullable String dependencyVersion) {
@@ -38,6 +45,41 @@ class DependencyKey implements Comparable<DependencyKey> {
 		this.dependencyGroup = dependencyGroup;
 		this.dependencyName = dependencyName;
 		this.dependencyVersion = Strings.safe(dependencyVersion);
+		initSortKey();
+	}
+
+	private static final Pattern DEPENDENCY_VERSION_TOKEN_PATTERN = Pattern.compile("(\\d*)(.*)");
+
+	private void initSortKey() {
+		this.sortKey.add(this.projectName);
+		this.sortKey.add(this.configurationName);
+		this.sortKey.add(this.dependencyGroup);
+		this.sortKey.add(this.dependencyName);
+
+		StringTokenizer tokens = new StringTokenizer(this.dependencyVersion, ".", false);
+
+		while (tokens.hasMoreElements()) {
+			String token = tokens.nextToken();
+			Matcher tokenMatcher = DEPENDENCY_VERSION_TOKEN_PATTERN.matcher(token);
+
+			if (tokenMatcher.lookingAt()) {
+				String tokenDigits = Objects.requireNonNull(tokenMatcher.group(1));
+				String tokenSuffix = Objects.requireNonNull(tokenMatcher.group(2));
+
+				try {
+					Integer tokenValue = Integer.parseInt(tokenDigits);
+
+					this.sortKey.add(tokenValue);
+					this.sortKey.add(tokenSuffix);
+				} catch (@SuppressWarnings("unused") NumberFormatException e) {
+					this.sortKey.add(token);
+					this.sortKey.add("");
+				}
+			} else {
+				this.sortKey.add(token);
+				this.sortKey.add("");
+			}
+		}
 	}
 
 	public String getProject() {
@@ -57,17 +99,19 @@ class DependencyKey implements Comparable<DependencyKey> {
 	}
 
 	@Override
-	@SuppressWarnings("squid:S1066")
 	public int compareTo(@NonNull DependencyKey o) {
+		Iterator<Object> thisTokens = this.sortKey.iterator();
+		Iterator<Object> oTokens = o.sortKey.iterator();
 		int comparison = 0;
 
-		if ((comparison = this.projectName.compareTo(o.projectName)) == 0) {
-			if ((comparison = this.configurationName.compareTo(o.configurationName)) == 0) {
-				if ((comparison = this.dependencyGroup.compareTo(o.dependencyGroup)) == 0) {
-					if ((comparison = this.dependencyName.compareTo(o.dependencyName)) == 0) {
-						comparison = this.dependencyVersion.compareTo(o.dependencyVersion);
-					}
-				}
+		while (comparison == 0 && (thisTokens.hasNext() || oTokens.hasNext())) {
+			Object thisToken = (thisTokens.hasNext() ? thisTokens.next() : "");
+			Object oToken = (oTokens.hasNext() ? oTokens.next() : "");
+
+			if (thisToken instanceof Integer && oToken instanceof Integer) {
+				comparison = ((Integer) thisToken).compareTo((Integer) oToken);
+			} else {
+				comparison = thisToken.toString().compareTo(oToken.toString());
 			}
 		}
 		return comparison;
