@@ -18,6 +18,8 @@ def resolveProperty(propertyName, envName, defValue = "<undefined>") {
 }
 
 // Project
+defaultTasks "classes", "testClasses"
+
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
