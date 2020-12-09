@@ -156,7 +156,7 @@ publishing {
 }
 
 artifactory {
-	contextUrl = "https://oss.jfrog.org/artifactory"
+	contextUrl = project.resolveProperty("artifactory_url", "ARTIFACTORY_URL", "https://oss.jfrog.org/artifactory")
 	publish {
 		repository {
 			repoKey = (snapshotBuild ? "oss-snapshot-local" : "oss-release-local")
