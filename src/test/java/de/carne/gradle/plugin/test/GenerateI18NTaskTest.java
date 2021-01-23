@@ -20,18 +20,24 @@ import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.TaskOutcome;
 import org.junit.jupiter.api.Test;
 
-import de.carne.gradle.plugin.task.CheckDependencyVersionsTask;
+import de.carne.gradle.plugin.task.GenerateI18NTask;
 
 /**
- * Test {@linkplain CheckDependencyVersionsTask} class.
+ * Test {@linkplain GenerateI18NTask} class.
  */
-class CheckDependencyVersionsTaskTest1 extends TestProjectRunner {
+class GenerateI18NTaskTest extends TestProjectRunner {
 
 	@Test
-	void testProjectCheckDependencyVersionsTask() {
-		BuildResult checkDependencyVersionsResult = run("-s", "-i", "checkDependencyVersions");
+	void testProjectGenerateI18NTask() {
+		BuildResult cleanAssembleResult = run("-s", "-i", "clean", "assemble");
 
-		assertTaskOutcome(checkDependencyVersionsResult, ":checkDependencyVersions", TaskOutcome.SUCCESS);
+		assertTaskOutcome(cleanAssembleResult, ":generateI18N", TaskOutcome.SUCCESS);
+		assertTaskOutcome(cleanAssembleResult, ":assemble", TaskOutcome.SUCCESS);
+
+		BuildResult assembleResult = run("-s", "-i", "assemble");
+
+		assertTaskOutcome(assembleResult, ":generateI18N", TaskOutcome.UP_TO_DATE);
+		assertTaskOutcome(assembleResult, ":assemble", TaskOutcome.UP_TO_DATE);
 	}
 
 }

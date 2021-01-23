@@ -18,26 +18,26 @@ package de.carne.gradle.plugin.test;
 
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.TaskOutcome;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import de.carne.gradle.plugin.task.GenerateI18NTask;
+import de.carne.gradle.plugin.task.DraftGitHubReleaseTask;
 
 /**
- * Test {@linkplain GenerateI18NTask} class.
+ * Test {@linkplain DraftGitHubReleaseTask} class.
  */
-class GenerateI18NTaskTest1 extends TestProjectRunner {
+class DraftGitHubReleaseTaskTest extends TestProjectRunner {
 
 	@Test
-	void testProjectGenerateI18NTask() {
-		BuildResult cleanAssembleResult = run("-s", "-i", "clean", "assemble");
+	void testDraftGitHubReleaseTask() {
+		String githubToken = System.getenv("GITHUB_TOKEN");
 
-		assertTaskOutcome(cleanAssembleResult, ":generateI18N", TaskOutcome.SUCCESS);
-		assertTaskOutcome(cleanAssembleResult, ":assemble", TaskOutcome.SUCCESS);
+		Assertions.assertNotNull(githubToken, "GITHUB_TOKEN not set");
 
-		BuildResult assembleResult = run("-s", "-i", "assemble");
+		BuildResult draftGitHubReleaseResult = run("-s", "-i", "-PgithubToken=" + githubToken, "clean",
+				"draftGitHubRelease");
 
-		assertTaskOutcome(assembleResult, ":generateI18N", TaskOutcome.UP_TO_DATE);
-		assertTaskOutcome(assembleResult, ":assemble", TaskOutcome.UP_TO_DATE);
+		assertTaskOutcome(draftGitHubReleaseResult, ":draftGitHubRelease", TaskOutcome.SUCCESS);
 	}
 
 }

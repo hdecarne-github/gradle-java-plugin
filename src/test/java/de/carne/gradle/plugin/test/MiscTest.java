@@ -24,7 +24,7 @@ import de.carne.boot.platform.Platform;
 /**
  * Test miscellaneous plugin functions.
  */
-class MiscTest1 extends TestProjectRunner {
+class MiscTest extends TestProjectRunner {
 
 	@Test
 	void testMiscellaneous() {
