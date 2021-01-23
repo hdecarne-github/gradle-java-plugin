@@ -27,20 +27,6 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.ws.rs.ClientErrorException;
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.client.ClientResponseContext;
-import javax.ws.rs.client.ClientResponseFilter;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
@@ -54,6 +40,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.carne.gradle.plugin.util.GitHubApi.ReleaseAssetInfo;
 import de.carne.gradle.plugin.util.GitHubApi.ResponseStatus;
+import jakarta.ws.rs.ClientErrorException;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.ClientRequestContext;
+import jakarta.ws.rs.client.ClientRequestFilter;
+import jakarta.ws.rs.client.ClientResponseContext;
+import jakarta.ws.rs.client.ClientResponseFilter;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriBuilder;
 
 /**
  * GitHub Repository client.
