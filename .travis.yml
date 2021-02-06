@@ -15,7 +15,7 @@ env:
   PRIMARY_OS_NAME="linux"
   GRADLE_INSTALL_CMDLINE="-s --no-daemon --refresh-dependencies clean classes testClasses"
   GRADLE_DEFAULT_CMDLINE="-s --no-daemon clean build javadoc"
-  GRADLE_EXTENDED_CMDLINE="-s --no-daemon clean build javadoc sonarqube checkDependencyVersions"
+  GRADLE_EXTENDED_CMDLINE="-s --no-daemon clean build javadoc sonarqube"
 
 git:
   depth: false  
