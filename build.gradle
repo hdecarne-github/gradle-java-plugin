@@ -3,16 +3,19 @@ plugins {
 	id "java-gradle-plugin"
 	id "jacoco"
 	id "maven-publish"
+	id "signing"
 	id "eclipse"
 	id "org.sonarqube" version "3.1"
 	id "org.owasp.dependencycheck" version "6.0.5"
-	id "com.jfrog.artifactory" version "4.18.3"
-	id "com.jfrog.bintray" version "1.8.5"
 	id "com.gradle.plugin-publish" version "0.12.0"
 }
 
 // Build helpers
 def snapshotBuild = project.version.endsWith("-SNAPSHOT")
+def releaseBuild = !snapshotBuild
+
+def mavenReleaseRepository = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+def mavenSnapshotRepository = "https://oss.sonatype.org/content/repositories/snapshots/"
 
 def resolveProperty(propertyName, envName, defValue = "<undefined>") {
 	return ((project.findProperty(propertyName) ?: System.getenv(envName)) ?: defValue);
@@ -25,12 +28,11 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
-	jcenter()
-	maven { url "https://oss.jfrog.org/libs-release/" }
+	mavenCentral()
 	if(snapshotBuild) {
-		mavenLocal()
-		maven { url "https://oss.jfrog.org/libs-snapshot/" }
+		maven { url mavenSnapshotRepository }
 	}
+	mavenLocal()
 }
 
 dependencies {
@@ -81,7 +83,7 @@ gradlePlugin {
 }
 
 jacoco {
-	toolVersion = "0.8.5"
+	toolVersion = project.jacocoVersion
 }
 
 jacocoTestReport {
@@ -114,22 +116,24 @@ test {
 	systemProperty "de.carne.gradle.plugin.test", "${buildDir}/testProjects"
 }
 
-task sourceJar(type: Jar) {
-	from sourceSets.main.allJava
-	classifier "sources"
-}
-
-task javadocJar(type: Jar) {
-	from javadoc
-	classifier = "javadoc"
+java {
+	withJavadocJar()
+	withSourcesJar()
 }
 
 publishing {
-	publications {
-		Bintray(MavenPublication) {
+	repositories {
+		maven {
+			url = (releaseBuild ? mavenReleaseRepository : mavenSnapshotRepository)
+			credentials {
+				username = project.resolveProperty("ossrhUsername", "OSSRH_USERNAME")
+				password = project.resolveProperty("ossrhPassword", "OSSRH_PASSWORD")
+			}
+		}
+	}
+    publications {
+		javaArtifacts(MavenPublication) {
 			from components.java
-			artifact sourceJar
-			artifact javadocJar
 			pom {
 				name = project.name
 				description = projectDescription
@@ -156,51 +160,12 @@ publishing {
 	}
 }
 
-artifactory {
-	contextUrl = project.resolveProperty("artifactory_url", "ARTIFACTORY_URL", "https://oss.jfrog.org/artifactory")
-	publish {
-		repository {
-			repoKey = (snapshotBuild ? "oss-snapshot-local" : "oss-release-local")
-			username = project.resolveProperty("artifactory_user", "ARTIFACTORY_USER")
-			password = project.resolveProperty("artifactory_password", "ARTIFACTORY_PASSWORD")
-			maven = true
-		}
-		defaults {
-			publications("Bintray")
-		}
-	}
-	resolve {
-		repoKey = (snapshotBuild ? "libs-snapshot" : "libs-release")
-		username = project.resolveProperty("artifactory_user", "ARTIFACTORY_USER")
-		password = project.resolveProperty("artifactory_password", "ARTIFACTORY_PASSWORD")
-		maven = true
-	}
-	clientConfig.setIncludeEnvVars(false)
+signing {
+	sign publishing.publications.javaArtifacts
 }
-	
-bintray {
-	user = project.resolveProperty("bintrayUser", "BINTRAY_USER")
-	key = project.resolveProperty("bintrayKey", "BINTRAY_KEY")
-	publications = [ "Bintray" ]
-	dryRun = (project.findProperty("bintray.dryRun") ?: false);
-	publish = (project.findProperty("bintray.publish") ?: !snapshotBuild);
-	override = (project.findProperty("bintray.override") ?: false);
-	pkg {
-		repo = "maven"
-		name = project.name
-		licenses = [ projectLicenseId ]
-		vcsUrl = projectScmUrl
-		version {
-			gpg {
-				sign = true
-				passphrase = project.resolveProperty("bintrayGpgPassphrase", "BINTRAY_GPG_PASSPHRASE")
-			}
-			mavenCentralSync {
-				user = project.resolveProperty("ossrhUsername", "OSSRH_USERNAME")
-				password = project.resolveProperty("ossrhPassword", "OSSRH_PASSWORD")
-			}
-		}
-	}
+
+tasks.withType(Sign) {
+	onlyIf { releaseBuild }
 }
 
 pluginBundle {
