@@ -63,7 +63,7 @@ public final class JavaOutput {
 		ENCODE_BUNDLE_STRING_MAP.put('>', "&gt;");
 		ENCODE_BUNDLE_STRING_MAP.put('&', "&amp;");
 		ENCODE_BUNDLE_STRING_MAP.put('"', "&quot;");
-		ENCODE_BUNDLE_STRING_MAP.put('\'', "&apos;");
+		ENCODE_BUNDLE_STRING_MAP.put('\'', "&#" + (int) '\'' + ";");
 		ENCODE_BUNDLE_STRING_MAP.put('/', "&frasl;");
 		ENCODE_BUNDLE_STRING_MAP.put('@', "&commat;");
 		ENCODE_BUNDLE_STRING_MAP.put('*', "&#" + (int) '*' + ";");
