@@ -1,5 +1,5 @@
 ### Gradle Java-Tools plugin
-[![Download](https://api.bintray.com/packages/hdecarne/maven/java-gradle-plugins/images/download.svg)](https://bintray.com/hdecarne/maven/java-gradle-plugins/_latestVersion)
+[![Publication](https://img.shields.io/maven-central/v/de.carne/java-gradle-plugins)](https://search.maven.org/artifact/de.carne/java-gradle-plugins)
 [![Build Status](https://travis-ci.com/hdecarne/java-gradle-plugins.svg?branch=master)](https://travis-ci.com/hdecarne/java-gradle-plugins)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=de.carne%3Ajava-gradle-plugins&metric=coverage)](https://sonarcloud.io/dashboard/index/de.carne:java-gradle-plugins)  
 
