@@ -18,8 +18,8 @@ package de.carne.gradle.plugin.test;
 
 import org.gradle.testkit.runner.BuildResult;
 import org.junit.jupiter.api.Test;
-
-import de.carne.boot.platform.Platform;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 /**
  * Test miscellaneous plugin functions.
@@ -27,12 +27,29 @@ import de.carne.boot.platform.Platform;
 class MiscTest extends TestProjectRunner {
 
 	@Test
-	void testMiscellaneous() {
+	@EnabledOnOs(OS.LINUX)
+	void testOsFlagsLinux() {
+		testOsFlags(true, false, false);
+	}
+
+	@Test
+	@EnabledOnOs(OS.MAC)
+	void testOsFlagsMac() {
+		testOsFlags(false, true, false);
+	}
+
+	@Test
+	@EnabledOnOs(OS.WINDOWS)
+	void testOsFlagsWindow() {
+		testOsFlags(false, false, true);
+	}
+
+	private void testOsFlags(boolean isLinux, boolean isMacos, boolean isWindows) {
 		BuildResult cleanAssembleResult = run("-s", "-i", "clean", "assemble");
 
-		assertOutputLine(cleanAssembleResult, "javatools.platform.isLinux: " + Boolean.toString(Platform.IS_LINUX));
-		assertOutputLine(cleanAssembleResult, "javatools.platform.isMacos: " + Boolean.toString(Platform.IS_MACOS));
-		assertOutputLine(cleanAssembleResult, "javatools.platform.isWindows: " + Boolean.toString(Platform.IS_WINDOWS));
+		assertOutputLine(cleanAssembleResult, "javatools.platform.isLinux: " + isLinux);
+		assertOutputLine(cleanAssembleResult, "javatools.platform.isMacos: " + isMacos);
+		assertOutputLine(cleanAssembleResult, "javatools.platform.isWindows: " + isWindows);
 	}
 
 }

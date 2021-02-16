@@ -25,16 +25,16 @@ import org.junit.jupiter.api.Test;
 
 import de.carne.gradle.plugin.util.GitHubApi;
 import de.carne.gradle.plugin.util.GitHubRepo;
-import de.carne.util.Strings;
-import de.carne.util.SystemProperties;
 
 /**
  * Test {@linkplain GitHubRepo} class.
  */
 class GitHubRepoTest {
 
-	private static final String TEST_TOKEN = SystemProperties.value(GitHubRepoTest.class, ".TEST_TOKEN", "");
-	private static final boolean DIRTY_REPO = SystemProperties.booleanValue(GitHubRepoTest.class, ".DIRTY_REPO", false);
+	private static final String TEST_TOKEN = Objects
+			.requireNonNull(System.getProperty(GitHubRepoTest.class.getName() + ".TEST_TOKEN", ""));
+	private static final boolean DIRTY_REPO = Boolean
+			.valueOf(System.getProperty(GitHubRepoTest.class.getName() + ".DIRTY_REPO", "false")).booleanValue();
 
 	private static final String TEST_RELASE_NAME = "v0.0." + System.currentTimeMillis() + "-SNAPSHOT";
 	private static final File TEST_ASSET_FILE = new File("README.md");
@@ -46,7 +46,7 @@ class GitHubRepoTest {
 		try (GitHubRepo githubRepo = new GitHubRepo(new SystemOutLogger(), ".", TEST_TOKEN)) {
 			Assertions.assertEquals(DIRTY_REPO, githubRepo.isDirty());
 
-			if (Strings.notEmpty(TEST_TOKEN)) {
+			if (!"".equals(TEST_TOKEN)) {
 				Assertions.assertNull(githubRepo.queryRelease(TEST_RELASE_NAME));
 
 				GitHubApi.ReleaseInfo releaseInfo1 = githubRepo.draftRelease(TEST_RELASE_NAME,

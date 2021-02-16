@@ -23,7 +23,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import de.carne.gradle.plugin.util.OutputWriter;
-import de.carne.util.Strings;
 
 /**
  * Test {@linkplain OutputWriter} class.
@@ -36,7 +35,7 @@ class OutputWriterTest {
 				OutputWriter outputWriter = new OutputWriter(stringWriter, "\r\n")) {
 			outputWriter.write("\r\n \n \r");
 			outputWriter.flush();
-			Assertions.assertEquals("\\r\\n \\r\\n \\r\\n", Strings.encode(stringWriter.toString()));
+			Assertions.assertEquals("\r\n \r\n \r\n", stringWriter.toString());
 		}
 	}
 
@@ -46,7 +45,7 @@ class OutputWriterTest {
 				OutputWriter outputWriter = new OutputWriter(stringWriter, "\n")) {
 			outputWriter.write("\r\n \n \r");
 			outputWriter.flush();
-			Assertions.assertEquals("\\n \\n \\n", Strings.encode(stringWriter.toString()));
+			Assertions.assertEquals("\n \n \n", stringWriter.toString());
 		}
 	}
 
@@ -56,7 +55,7 @@ class OutputWriterTest {
 				OutputWriter outputWriter = new OutputWriter(stringWriter, "\r")) {
 			outputWriter.write("\r\n \n \r");
 			outputWriter.flush();
-			Assertions.assertEquals("\\r \\r \\r", Strings.encode(stringWriter.toString()));
+			Assertions.assertEquals("\r \r \r", stringWriter.toString());
 		}
 	}
 

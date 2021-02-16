@@ -30,12 +30,7 @@ import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.TaskOutcome;
 import org.junit.jupiter.api.Assertions;
 
-import de.carne.boot.logging.Log;
-import de.carne.util.Strings;
-
 abstract class TestProjectRunner {
-
-	private static final Log LOG = new Log();
 
 	protected GradleRunner runner() {
 		File baseDir = new File("build/testProjects").getAbsoluteFile();
@@ -47,13 +42,7 @@ abstract class TestProjectRunner {
 	protected BuildResult run(@NonNull String... arguments) {
 		List<String> argumentsList = Arrays.asList(arguments);
 
-		LOG.info("Running gradle {0}...", Strings.join(argumentsList, " "));
-
-		BuildResult result = runner().withArguments(Arrays.asList(arguments)).build();
-
-		LOG.info("{0}", result.getOutput());
-
-		return result;
+		return runner().withArguments(argumentsList).build();
 	}
 
 	protected void assertTaskOutcome(BuildResult buildResult, String taskPath, TaskOutcome taskOutcome) {
