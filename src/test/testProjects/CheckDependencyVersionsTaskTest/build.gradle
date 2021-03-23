@@ -4,13 +4,11 @@ plugins {
 }
 
 repositories {
-	jcenter()
-	maven { url "https://oss.jfrog.org/libs-release/" }
-	maven { url "https://oss.jfrog.org/libs-snapshot/" }
+	mavenCentral()
 }
 
 dependencies {
-	compile(group: "org.eclipse.jdt", name: "org.eclipse.jdt.annotation", version: "2.2.100")
-	compile(group: "de.carne.common", name: "java-default", version: "8.6.0")
+	implementation(group: "org.eclipse.jdt", name: "org.eclipse.jdt.annotation", version: "2.2.100")
+	implementation(group: "de.carne.common", name: "java-default", version: "8.6.0")
 	testImplementation(group: "de.carne.common", name: "java-test", version: "1.0.0")
 }
