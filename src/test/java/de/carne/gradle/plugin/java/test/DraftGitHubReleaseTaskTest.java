@@ -32,7 +32,7 @@ class DraftGitHubReleaseTaskTest extends TestProjectRunner {
 
 	private static final String GITHUB_TOKEN_PROPERTY = "GITHUB_TOKEN";
 
-	@EnabledIfSystemProperty(named = GITHUB_TOKEN_PROPERTY, matches = "true")
+	@EnabledIfSystemProperty(named = GITHUB_TOKEN_PROPERTY, matches = ".*")
 	@Test
 	void testDraftGitHubReleaseTask() {
 		String githubToken = Objects.requireNonNull(System.getenv(GITHUB_TOKEN_PROPERTY));
