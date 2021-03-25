@@ -77,7 +77,7 @@ gradlePlugin {
 	plugins {
 		javatoolsPlugin {
 			id = "de.carne.java-tools"
-			implementationClass = "de.carne.gradle.plugin.JavaToolsPlugin"
+			implementationClass = "de.carne.gradle.plugin.java.JavaToolsPlugin"
 		}
 	}
 }
