@@ -21,7 +21,7 @@ import java.util.Objects;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.TaskOutcome;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
 import de.carne.gradle.plugin.java.task.DraftGitHubReleaseTask;
 
@@ -32,7 +32,7 @@ class DraftGitHubReleaseTaskTest extends TestProjectRunner {
 
 	private static final String GITHUB_TOKEN_PROPERTY = "GITHUB_TOKEN";
 
-	@EnabledIfSystemProperty(named = GITHUB_TOKEN_PROPERTY, matches = ".*")
+	@EnabledIfEnvironmentVariable(named = GITHUB_TOKEN_PROPERTY, matches = ".*")
 	@Test
 	void testDraftGitHubReleaseTask() {
 		String githubToken = Objects.requireNonNull(System.getenv(GITHUB_TOKEN_PROPERTY));
