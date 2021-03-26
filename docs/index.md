@@ -1,9 +1,9 @@
 ### Gradle Java-Tools plugin
-[![Download](https://api.bintray.com/packages/hdecarne/maven/gradle-java-plugin/images/download.svg)](https://bintray.com/hdecarne/maven/gradle-java-plugin/_latestVersion)
-[![Build Status](https://travis-ci.org/hdecarne/gradle-java-plugin.svg?branch=master)](https://travis-ci.org/hdecarne/gradle-java-plugin)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=de.carne.common%3Ajava-gradle-plugins&metric=coverage)](https://sonarcloud.io/dashboard?id=de.carne.common%3Ajava-gradle-plugins)  
+[![Publication](https://img.shields.io/maven-central/v/de.carne/gradle-java-plugin)](https://search.maven.org/artifact/de.carne/gradle-java-plugin)
+[![Build Status](https://travis-ci.com/hdecarne/gradle-java-plugin.svg?branch=master)](https://travis-ci.com/hdecarne/gradle-java-plugin)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=de.carne%3Agradle-java-plugin&metric=coverage)](https://sonarcloud.io/dashboard?id=de.carne%3Agradle-java-plugin)  
 
-This project collects custom Gradle plugins used for the development of [my private projects](https://github.com/hdecarne/).
+This project provides a custom made Gradle plugin used for the development of [my private Java based projects](https://github.com/hdecarne/).
 
 #### Plugin de.carne.java-tools
 See [plugins.gradle.org](https://plugins.gradle.org/plugin/de.carne.java-tools) for how enable the plugin in your build script.
