@@ -1,5 +1,5 @@
-title: GradlePlugins
-description: Collection of the Gradle plugins used by my private projects
+title: Gradle Java Plugin
+description: Custom made Gradle plugin for my Java projects
 google_analytics: 
 show_downloads: false
 theme: jekyll-theme-hacker
