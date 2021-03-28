@@ -161,7 +161,7 @@ public class GenerateI18N {
 	 *
 	 * <pre>
 	 * generateI18N {
-	 *  genDir = file(...) // default: file(/src/main/java)
+	 *  genDir = file(...) // default: file("${buildDir}/generated-src/i18n/main/java")
 	 * }
 	 * </pre>
 	 *
