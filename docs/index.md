@@ -1,10 +1,7 @@
 ### Gradle Java-Tools plugin
 This project provides a custom made Gradle plugin used for the development of [my private Java based projects](https://github.com/hdecarne/).
 
-#### Plugin de.carne.java-tools
-See [plugins.gradle.org](https://plugins.gradle.org/plugin/de.carne.java-tools) for how enable the plugin in your build script.
-
-The fastest way is the Gradle plugin mechanism:
+The fastest way to apply this plugin to a project is the Gradle plugin mechanism:
 ```Gradle
 plugins {
 	id 'de.carne.java-tools' version 'latest.version'
@@ -12,18 +9,22 @@ plugins {
 ```
 Check the badge above to determine the latest version of the plugin.
 
-#### Task generateI18N
-This task runs automatically before the __compileJava__ task, scans the source set for existing resource bundles and generates access classes for them. The following default settings are used by this task.
+See [plugins.gradle.org](https://plugins.gradle.org/plugin/de.carne.java-tools) for other ways to enable the plugin in your build script.
+
+### Task generateI18N
+This task runs automatically before the __compileJava__ task, scans the source set for existing resource bundles and generates access classes for them.
 ```Gradle
 javatools {
 	generateI18N {
-		enabled = true
-		keyFilter = "^I18N_.*"
-		genDir = file("${buildDir}/generated-src/i18n/main/java")
+		enabled = true // default: false
+		keyFilter = "^I18N_.*" // default
+		genDir = file("${buildDir}/generated-src/i18n/main/java") // default
 		bundles = fileTree("src/main/resources") {
 			include "**/*I18N.properties"
-		}
-}
+		} // default
+		lineSeparator = "\n" // default: System.getProperty("line.separator")
+		encoding = "ISO-8859-1" // default: System.getProperty("file.encoding","UTF-8")
+	}
 
 sourceSets {
 	main {
@@ -38,6 +39,8 @@ sourceSets {
 * __keyFilter__: Java regular expression pattern identifying the resource keys to be evaluated by the task. Only resource keys matching this pattern are accessible via the generated class.
 * __genDir__: The target directory for the generated files.
 * __bundles__: The file tree object defining the resource bundles to be evaluated by the task.
+* __lineSeparator__: The line separator to use for code generation.
+* __encoding__: The encoding to use for code generation.
 
 The __generateI18N__ task scans the source set for any resource bundle matching the defined file pattern. For every found resource bundle it creates a Java class with same name as the resource bundle which can be used to access and format the resource strings. For example the resource bundle file:
 ```INI
@@ -97,26 +100,25 @@ public final class I18N {
 ```
 Note that not for all keys access code has been created due to the task's __keyFilter__ property.
 
-#### Task checkDependencyVersions
+### Task checkDependencyVersions
 By running this task one can check whether any of the configured dependencies has a newer version available.
 No configuration is needed to run this task. SNAPSHOT-versions are only considered as an update if the current version
 is also a SNAPSOT-version.
 
-#### Task draftGitHubRelease
+### Task draftGitHubRelease
 This tasks prepares a new GitHub release by uploading a configured set of artifacts as well as the accompanying release notes.
-The release is created in draft state and still has to be published afterwards e.g. via the GitHub web site.
 ```Gradle
 javatools {
 	githubRelease {
-		enabled = true
-		releaseName = "v${project.version}"
-		releaseNotes = file("./RELEASE-v${project.version}.md")
+		enabled = true // default: false
+		releaseName = "v${project.version}" // default
+		releaseNotes = file("./RELEASE-v${project.version}.md") // default
 		releaseAssets = fileTree("build/libs") {
 			include("*")
-		}
-		overwrite = true
-		githubToken = project.findProperty('githubToken')
-		ignoreDirty = true
+		} // default: undefined
+		overwrite = true // default: false
+		githubToken = project.findProperty('githubToken') // default: undefined
+		ignoreDirty = true // default: false
 	}
 }
 
@@ -130,3 +132,5 @@ draftGitHubRelease.dependsOn(assemble)
 * __overwrite__: Whether to overwrite an existing release with the same name. If set to false the task will fail if an identically named release already exists.
 * __githubToken__: The GitHub API token to use to access the GitHub API.
 * __ignoreDirty__: Whether to ignore a dirty workspace (contains uncommitted changes). If set to false the task will fail if there are any uncommitted changes in the repository.
+
+The release is created in draft state and still has to be published afterwards e.g. via the GitHub web site.
