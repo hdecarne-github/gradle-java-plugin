@@ -96,7 +96,7 @@ public class CheckDependencyVersionsTask extends DefaultTask implements JavaTool
 			getProject().getLogger().info("Checking latest version for dependency {}...", dependencyArtifactIdString);
 
 			String artifactDependencyString = dependencyArtifactIdString
-					+ (dependencyArtifactVersionId.isSnapshot() ? "latest.integration" : "latest.release");
+					+ (dependencyArtifactVersionId.isSnapshot() ? ":latest.integration" : ":latest.release");
 			Dependency artifactDependency = getProject().getDependencies().create(artifactDependencyString);
 
 			cdvConfiguration.getDependencies().add(artifactDependency);
