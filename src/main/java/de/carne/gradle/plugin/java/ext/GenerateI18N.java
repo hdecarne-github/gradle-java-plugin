@@ -54,8 +54,12 @@ public class GenerateI18N {
 	 */
 	public GenerateI18N(Project project) {
 		this.project = project;
-		this.genDirParam = this.project.file("src/main/java");
+		this.genDirParam = getGenDirDefault(project);
 		this.bundlesParam = getBundlesDefault(this.project, "src/main/resources", "**/*I18N.properties");
+	}
+
+	private static File getGenDirDefault(Project project) {
+		return new File(project.getBuildDir(), "/generated-src/i18n/main/java");
 	}
 
 	private static ConfigurableFileTree getBundlesDefault(Project project, String srcDir, String include) {
@@ -140,7 +144,7 @@ public class GenerateI18N {
 	 *
 	 * <pre>
 	 * generateI18N {
-	 *  genDir = file(...) // default: file("src/main/java")
+	 *  genDir = file(...) // default: file("${buildDir}/generated-src/i18n/main/java")
 	 * }
 	 * </pre>
 	 *

@@ -3,14 +3,6 @@ plugins {
 	id "de.carne.java-tools" version "TEST_PLUGIN_VERSION"
 }
 
-sourceSets {
-	main {
-		resources {
-			srcDir "${project.buildDir}/generated/main/java"
-		}
-	}
-}
-
 javatools {
 	generateI18N {
 		enabled = true
@@ -21,5 +13,13 @@ javatools {
 		}
 		lineSeparator = "\n"
 		encoding = "UTF-8"
+	}
+}
+
+sourceSets {
+	main {
+		resources {
+			srcDir javatools.generateI18N.genDir
+		}
 	}
 }
