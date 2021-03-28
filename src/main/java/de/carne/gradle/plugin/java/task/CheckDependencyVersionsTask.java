@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
@@ -88,15 +87,16 @@ public class CheckDependencyVersionsTask extends DefaultTask implements JavaTool
 
 	private void executeCheckDependencyVersions(DependencyMap dependencyMap, Configuration cdvConfiguration,
 			CheckDependencyVersionsReport report) {
-		Set<ArtifactId> dependencyArtifactIds = dependencyMap.keySet().stream().map(DependencyKey::getArtifactId)
-				.collect(Collectors.toSet());
+		for (Map.Entry<DependencyKey, DependencyHolder> dependencyMapEntry : dependencyMap.entrySet()) {
+			DependencyKey dependencyMapEntryKey = dependencyMapEntry.getKey();
+			ArtifactVersionId dependencyArtifactVersionId = dependencyMapEntryKey.getArtifactVersionId();
 
-		for (ArtifactId dependencyArtifactId : dependencyArtifactIds) {
-			String dependencyArtifactIdString = dependencyArtifactId.toString();
+			String dependencyArtifactIdString = dependencyArtifactVersionId.getArtifactId().toString();
 
 			getProject().getLogger().info("Checking latest version for dependency {}...", dependencyArtifactIdString);
 
-			String artifactDependencyString = dependencyArtifactIdString + ":+";
+			String artifactDependencyString = dependencyArtifactIdString
+					+ (dependencyArtifactVersionId.isSnapshot() ? "latest.integration" : "latest.release");
 			Dependency artifactDependency = getProject().getDependencies().create(artifactDependencyString);
 
 			cdvConfiguration.getDependencies().add(artifactDependency);
