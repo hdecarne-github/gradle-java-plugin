@@ -73,10 +73,18 @@ test {
 	}
 }
 
+pluginBundle {
+    website = projectUrl
+    vcsUrl = projectScmUrl
+    tags = ['I18N', 'Dependency management', 'Release management', 'GitHub']
+}
+
 gradlePlugin {
 	plugins {
 		javatoolsPlugin {
 			id = "de.carne.java-tools"
+			displayName = "de.carne.java-tools"
+			description = projectDescription
 			implementationClass = "de.carne.gradle.plugin.java.JavaToolsPlugin"
 		}
 	}
