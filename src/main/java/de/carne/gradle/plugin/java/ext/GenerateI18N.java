@@ -43,12 +43,12 @@ public class GenerateI18N {
 	private File genDirParam;
 	private ConfigurableFileTree bundlesParam;
 	@SuppressWarnings("null")
-	private String lineSeparator = System.getProperty("line.separator", "\n");
+	private String lineSeparatorParam = System.getProperty("line.separator", "\n");
 	@SuppressWarnings("null")
-	private String encoding = System.getProperty("file.encoding", "UTF-8");
+	private String encodingParam = System.getProperty("file.encoding", "UTF-8");
 
 	/**
-	 * Constructs {@linkplain GenerateI18N}.
+	 * Constructs a new {@linkplain GenerateI18N} instance.
 	 *
 	 * @param project the owning {@linkplain Project}.
 	 */
@@ -219,7 +219,7 @@ public class GenerateI18N {
 	 * @return the line separator to use during generation.
 	 */
 	public String getLineSeparator() {
-		return this.lineSeparator;
+		return this.lineSeparatorParam;
 	}
 
 	/**
@@ -236,7 +236,7 @@ public class GenerateI18N {
 	 * @param lineSeparator the line separator to use during generation.
 	 */
 	public void setLineSeparator(String lineSeparator) {
-		this.lineSeparator = lineSeparator;
+		this.lineSeparatorParam = lineSeparator;
 	}
 
 	/**
@@ -253,7 +253,7 @@ public class GenerateI18N {
 	 * @return the encoding to use during generation.
 	 */
 	public String getEncoding() {
-		return this.encoding;
+		return this.encodingParam;
 	}
 
 	/**
@@ -270,7 +270,7 @@ public class GenerateI18N {
 	 * @param encoding the encoding to use during generation.
 	 */
 	public void setEncoding(String encoding) {
-		this.encoding = encoding;
+		this.encodingParam = encoding;
 	}
 
 }

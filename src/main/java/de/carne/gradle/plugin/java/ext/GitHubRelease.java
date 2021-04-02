@@ -42,18 +42,18 @@ public class GitHubRelease {
 
 	private boolean enabledParam = false;
 	@Nullable
-	private String releaseName;
+	private String releaseNameParam;
 	@Nullable
-	private File releaseNotes;
+	private File releaseNotesParam;
 	@Nullable
-	private ConfigurableFileTree releaseAssets;
-	private boolean overwrite = false;
+	private ConfigurableFileTree releaseAssetsParam;
+	private boolean overwriteParam = false;
 	@Nullable
-	private String githubToken;
-	private boolean ignoreDirty = false;
+	private String githubTokenParam;
+	private boolean ignoreDirtyParam = false;
 
 	/**
-	 * Constructs {@linkplain GitHubRelease}.
+	 * Constructs a new {@linkplain GitHubRelease} instance.
 	 *
 	 * @param project the owning {@linkplain Project}.
 	 */
@@ -63,8 +63,8 @@ public class GitHubRelease {
 		Object versionProperty = this.project.getProperties().get("version");
 
 		if (versionProperty != null) {
-			this.releaseName = "v" + versionProperty;
-			this.releaseNotes = this.project.file("RELEASE-" + this.releaseName + ".md");
+			this.releaseNameParam = "v" + versionProperty;
+			this.releaseNotesParam = this.project.file("RELEASE-" + this.releaseNameParam + ".md");
 		}
 	}
 
@@ -116,7 +116,7 @@ public class GitHubRelease {
 	 * @return the GitHub release name.
 	 */
 	public String getReleaseName() {
-		String checkedReleaseName = this.releaseName;
+		String checkedReleaseName = this.releaseNameParam;
 
 		if (checkedReleaseName == null) {
 			throw new GradleException("Property releaseName not set");
@@ -138,7 +138,7 @@ public class GitHubRelease {
 	 * @param releaseName the release name to set.
 	 */
 	public void setReleaseName(String releaseName) {
-		this.releaseName = releaseName;
+		this.releaseNameParam = releaseName;
 	}
 
 	/**
@@ -155,7 +155,7 @@ public class GitHubRelease {
 	 * @return the release notes file.
 	 */
 	public File getReleaseNotes() {
-		File checkedReleaseNotes = this.releaseNotes;
+		File checkedReleaseNotes = this.releaseNotesParam;
 
 		if (checkedReleaseNotes == null) {
 			throw new GradleException("Property releaseNotes not set");
@@ -177,7 +177,7 @@ public class GitHubRelease {
 	 * @param releaseNotes the release notes file to set.
 	 */
 	public void setReleaseNotes(File releaseNotes) {
-		this.releaseNotes = releaseNotes;
+		this.releaseNotesParam = releaseNotes;
 	}
 
 	/**
@@ -194,7 +194,7 @@ public class GitHubRelease {
 	 * @return the release assets to upload.
 	 */
 	public ConfigurableFileTree getReleaseAssets() {
-		ConfigurableFileTree checkedReleaseAssets = this.releaseAssets;
+		ConfigurableFileTree checkedReleaseAssets = this.releaseAssetsParam;
 
 		if (checkedReleaseAssets == null) {
 			throw new GradleException("Property releaseAssets not set");
@@ -216,7 +216,7 @@ public class GitHubRelease {
 	 * @param releaseAssets the release assets to set.
 	 */
 	public void setReleaseAssets(ConfigurableFileTree releaseAssets) {
-		this.releaseAssets = releaseAssets;
+		this.releaseAssetsParam = releaseAssets;
 	}
 
 	/**
@@ -233,7 +233,7 @@ public class GitHubRelease {
 	 * @return {@code true} if release overwriting is enabled.
 	 */
 	public boolean isOverwrite() {
-		return this.overwrite;
+		return this.overwriteParam;
 	}
 
 	/**
@@ -250,7 +250,7 @@ public class GitHubRelease {
 	 * @param overwrite whether to overwrite an already existing release.
 	 */
 	public void setOverwrite(boolean overwrite) {
-		this.overwrite = overwrite;
+		this.overwriteParam = overwrite;
 	}
 
 	/**
@@ -267,7 +267,7 @@ public class GitHubRelease {
 	 * @return the GitHub access token.
 	 */
 	public String getGithubToken() {
-		String checkedGithubtoken = this.githubToken;
+		String checkedGithubtoken = this.githubTokenParam;
 
 		if (checkedGithubtoken == null) {
 			throw new GradleException("Property githubToken not set");
@@ -289,7 +289,7 @@ public class GitHubRelease {
 	 * @param githubToken the GitHub access token to use.
 	 */
 	public void setGithubToken(String githubToken) {
-		this.githubToken = githubToken;
+		this.githubTokenParam = githubToken;
 	}
 
 	/**
@@ -306,7 +306,7 @@ public class GitHubRelease {
 	 * @return {@code true} if a dirty state of the local repository is ignored.
 	 */
 	public boolean isIgnoreDirty() {
-		return this.ignoreDirty;
+		return this.ignoreDirtyParam;
 	}
 
 	/**
@@ -323,7 +323,7 @@ public class GitHubRelease {
 	 * @param ignoreDirty whether to ignore a dirty state of the local repository.
 	 */
 	public void setIgnoreDirty(boolean ignoreDirty) {
-		this.ignoreDirty = ignoreDirty;
+		this.ignoreDirtyParam = ignoreDirty;
 	}
 
 }

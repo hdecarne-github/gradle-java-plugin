@@ -40,7 +40,7 @@ public class JavaToolsPlugin implements Plugin<Project> {
 	/**
 	 * The plugin name.
 	 */
-	public static final String JAVA_TOOLS_PLUGIN_NAME = JavaToolsPlugin.class.getPackage().getName() + "java-tools";
+	public static final String JAVA_TOOLS_PLUGIN_NAME = "de.carne.java-tools";
 
 	private final Late<GenerateI18NTask> generateI18NTaskHolder = new Late<>();
 	private final Late<CheckDependencyVersionsTask> checkDependencyVersionsTaskHolder = new Late<>();
