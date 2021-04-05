@@ -49,6 +49,7 @@ public class JavaToolsExtension {
 	private final PlatformInfo platformInfo = new PlatformInfo();
 	private final GenerateI18N generateI18NConfig;
 	private final GitHubRelease githubRelease;
+	private final Node node;
 
 	/**
 	 * Constructs {@linkplain JavaToolsExtension}.
@@ -59,6 +60,7 @@ public class JavaToolsExtension {
 		this.project = project;
 		this.generateI18NConfig = new GenerateI18N(this.project);
 		this.githubRelease = new GitHubRelease(this.project);
+		this.node = new Node(this.project);
 	}
 
 	/**
@@ -118,6 +120,25 @@ public class JavaToolsExtension {
 	}
 
 	/**
+	 * Gets the node configuration object.
+	 * <p>
+	 * build.gradle:
+	 *
+	 * <pre>
+	 * javatools {
+	 *  node {
+	 *   ...
+	 *  }
+	 * }
+	 * </pre>
+	 *
+	 * @return the node configuration object.
+	 */
+	public Node getNode() {
+		return this.node;
+	}
+
+	/**
 	 * Executes a {@linkplain #generateI18N} configuration action.
 	 *
 	 * @param configuration the configuration action to execute.
@@ -135,6 +156,16 @@ public class JavaToolsExtension {
 	public void githubRelease(Action<? super GitHubRelease> configuration) {
 		this.githubRelease.setEnabled(false);
 		configuration.execute(this.githubRelease);
+	}
+
+	/**
+	 * Executes a {@linkplain #node} configuration action.
+	 *
+	 * @param configuration the configuration action to execute.
+	 */
+	public void node(Action<? super Node> configuration) {
+		this.node.setEnabled(false);
+		configuration.execute(this.node);
 	}
 
 }
