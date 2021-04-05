@@ -31,7 +31,7 @@ import de.carne.gradle.plugin.java.util.ProjectLogger;
 class ProjectLoggerTest {
 
 	@Test
-	void testErrorLog() {
+	void testLogger() {
 		PrintStream savedOut = System.out;
 		PrintStreamFilter testOut = new PrintStreamFilter(savedOut);
 
@@ -45,7 +45,6 @@ class ProjectLoggerTest {
 		ProjectLogger.warn("warnMessage: {}", getClass().getName());
 		ProjectLogger.warn("warnException", new Exception());
 		ProjectLogger.error("errorMessage: {}", getClass().getName());
-		ProjectLogger.error("errorException", new Exception());
 		ProjectLogger.error("errorException", new Exception());
 		System.setOut(savedOut);
 

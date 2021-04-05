@@ -17,6 +17,7 @@
 package de.carne.gradle.plugin.java.test;
 
 import org.gradle.testkit.runner.BuildResult;
+import org.gradle.testkit.runner.TaskOutcome;
 import org.junit.jupiter.api.Test;
 
 import de.carne.gradle.plugin.java.task.NodeTask;
@@ -30,9 +31,15 @@ class NodeTest extends TestProjectRunner {
 	void testBuildAndTestNode() {
 		BuildResult cleanBuildResult = run("-s", "-i", "clean", "build");
 
-		assertOutputLine(cleanBuildResult, ":npmInstall");
-		assertOutputLine(cleanBuildResult, ":npmBuild");
-		assertOutputLine(cleanBuildResult, ":npmTest");
+		assertTaskOutcome(cleanBuildResult, ":npmInstall", TaskOutcome.SUCCESS);
+		assertTaskOutcome(cleanBuildResult, ":npmBuild", TaskOutcome.SUCCESS);
+		assertTaskOutcome(cleanBuildResult, ":npmTest", TaskOutcome.SUCCESS);
+
+		BuildResult buildResult = run("-s", "-i", "build");
+
+		assertTaskOutcome(buildResult, ":npmInstall", TaskOutcome.SUCCESS);
+		assertTaskOutcome(buildResult, ":npmBuild", TaskOutcome.SUCCESS);
+		assertTaskOutcome(buildResult, ":npmTest", TaskOutcome.SUCCESS);
 	}
 
 }
