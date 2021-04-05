@@ -85,7 +85,7 @@ public class NpmInstallTask extends NodeTask {
 			NpmWrapper npmWrapper = npmWrapperInstance();
 			File logFile = taskOutFile();
 
-			npmWrapper.executeNpm(logFile, "install");
+			npmWrapper.executeNpm(logFile, "--verbose", "install");
 		} catch (IOException e) {
 			throw new TaskExecutionException(this, e);
 		} catch (InterruptedException e) {

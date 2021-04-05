@@ -87,7 +87,7 @@ public class NpmTestTask extends NodeTask {
 				NpmWrapper npmWrapper = npmWrapperInstance();
 				File logFile = taskOutFile();
 
-				npmWrapper.executeNpm(logFile, "run", testScript);
+				npmWrapper.executeNpm(logFile, "--verbose", "run", testScript);
 			}
 		} catch (IOException e) {
 			throw new TaskExecutionException(this, e);
