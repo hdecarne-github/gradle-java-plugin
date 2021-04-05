@@ -44,6 +44,9 @@ abstract class ExecWrapper {
 		processCommand.add(this.command);
 		processCommand.addAll(Arrays.asList(args));
 
+		ProjectLogger.info("Executing command: {}", String.join(" ", processCommand));
+		ProjectLogger.info("Working directory: {}", this.directory);
+
 		Process process = new ProcessBuilder(processCommand).directory(this.directory).start();
 
 		try (BufferedReader processReader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
