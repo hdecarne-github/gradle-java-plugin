@@ -30,7 +30,9 @@ class NodeTest extends TestProjectRunner {
 	void testBuildAndTestNode() {
 		BuildResult cleanBuildResult = run("-s", "-i", "clean", "build");
 
-		assertOutputLine(cleanBuildResult, "");
+		assertOutputLine(cleanBuildResult, ":npmInstall");
+		assertOutputLine(cleanBuildResult, ":npmBuild");
+		assertOutputLine(cleanBuildResult, ":npmTest");
 	}
 
 }
