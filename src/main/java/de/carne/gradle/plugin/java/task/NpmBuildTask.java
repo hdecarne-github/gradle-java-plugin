@@ -20,9 +20,9 @@ import java.io.File;
 import java.io.IOException;
 
 import org.gradle.api.Project;
+import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.TaskExecutionException;
-import org.gradle.jvm.tasks.Jar;
 import org.gradle.language.base.plugins.LifecycleBasePlugin;
 
 import de.carne.gradle.plugin.java.ext.JavaToolsExtension;
@@ -69,7 +69,7 @@ public class NpmBuildTask extends NodeTask {
 			getInputs().dir(node.getNodeProjectDir());
 			getOutputs().file(taskOutFile());
 			getOutputs().dir(node.getNodeDistDir());
-			Plugins.setTasksDependsOn(project, Jar.class, this);
+			Plugins.setTaskDependsOn(project, JavaPlugin.PROCESS_RESOURCES_TASK_NAME, this);
 		}
 	}
 
