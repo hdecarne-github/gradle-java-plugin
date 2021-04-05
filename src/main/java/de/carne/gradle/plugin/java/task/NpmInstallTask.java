@@ -69,6 +69,7 @@ public class NpmInstallTask extends NodeTask {
 			getOutputs().file(taskOutFile());
 			getOutputs().dir(nodeProjectFile(NODE_MODULES_NAME));
 			Plugins.setTasksDependsOn(project, NpmBuildTask.class, this);
+			Plugins.setTasksDependsOn(project, NpmTestTask.class, this);
 		}
 	}
 
