@@ -36,11 +36,15 @@ import org.gradle.api.Project;
 import org.gradle.api.file.ConfigurableFileTree;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.TaskExecutionException;
+import org.gradle.api.tasks.compile.JavaCompile;
+import org.gradle.language.base.plugins.LifecycleBasePlugin;
 
 import de.carne.gradle.plugin.java.ext.GenerateI18N;
 import de.carne.gradle.plugin.java.ext.JavaToolsExtension;
 import de.carne.gradle.plugin.java.util.JavaOutput;
 import de.carne.gradle.plugin.java.util.OutputWriter;
+import de.carne.gradle.plugin.java.util.Plugins;
+import de.carne.gradle.plugin.java.util.ProjectLogger;
 import de.carne.gradle.plugin.java.util.Strings;
 
 /**
@@ -50,7 +54,7 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 
 	private static final ResourceBundle TEMPLATES = ResourceBundle.getBundle(GenerateI18NTask.class.getName());
 
-	private static final String GENERATE_I18N_TASK_GROUP = "build";
+	private static final String GENERATE_I18N_TASK_GROUP = LifecycleBasePlugin.BUILD_GROUP;
 	private static final String GENERATE_I18N_TASK_NAME = "generateI18N";
 	private static final String GENERATE_I18N_TASK_DESCRIPTION = "Create/update I18N helper classes.";
 
@@ -74,16 +78,21 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 	@Override
 	public void afterEvaluate(Project project) {
 		GenerateI18N generateI18N = project.getExtensions().getByType(JavaToolsExtension.class).getGenerateI18N();
+		boolean enabled = generateI18N.isEnabled();
 
-		setEnabled(generateI18N.isEnabled());
-		getInputs().files(generateI18N.getBundles());
-		getOutputs().dir(generateI18N.getGenDir());
-		processBundleFiles(generateI18N.getBundles(), (srcDir, bundleFile) -> {
-			File javaFile = getAbsoluteFile(generateI18N.getGenDir(), getJavaFile(bundleFile));
+		setEnabled(enabled);
+		if (enabled) {
+			Plugins.checkJavaApplied(project);
+			getInputs().files(generateI18N.getBundles());
+			getOutputs().dir(generateI18N.getGenDir());
+			processBundleFiles(generateI18N.getBundles(), (srcDir, bundleFile) -> {
+				File javaFile = getAbsoluteFile(generateI18N.getGenDir(), getJavaFile(bundleFile));
 
-			project.getLogger().info("{} output file {}", GENERATE_I18N_TASK_NAME, javaFile);
-			getOutputs().file(javaFile);
-		});
+				project.getLogger().info("{} output file {}", GENERATE_I18N_TASK_NAME, javaFile);
+				getOutputs().file(javaFile);
+			});
+			Plugins.setTasksDependsOn(project, JavaCompile.class, this);
+		}
 	}
 
 	/**
@@ -92,17 +101,23 @@ public class GenerateI18NTask extends DefaultTask implements JavaToolsTask {
 	@TaskAction
 	public void executeGenerateI18N() {
 		Project project = getProject();
-		GenerateI18N generateI18N = project.getExtensions().getByType(JavaToolsExtension.class).getGenerateI18N();
-		Pattern keyFilter = Pattern.compile(generateI18N.getKeyFilter());
 
-		processBundleFiles(generateI18N.getBundles(), (srcDir, bundleFile) -> {
-			try {
-				generateJavaFile(srcDir, bundleFile, generateI18N.getGenDir(), keyFilter, generateI18N.getEncoding(),
-						generateI18N.getLineSeparator());
-			} catch (IOException e) {
-				throw new TaskExecutionException(this, e);
-			}
-		});
+		ProjectLogger.enterProject(project);
+		try {
+			GenerateI18N generateI18N = project.getExtensions().getByType(JavaToolsExtension.class).getGenerateI18N();
+			Pattern keyFilter = Pattern.compile(generateI18N.getKeyFilter());
+
+			processBundleFiles(generateI18N.getBundles(), (srcDir, bundleFile) -> {
+				try {
+					generateJavaFile(srcDir, bundleFile, generateI18N.getGenDir(), keyFilter,
+							generateI18N.getEncoding(), generateI18N.getLineSeparator());
+				} catch (IOException e) {
+					throw new TaskExecutionException(this, e);
+				}
+			});
+		} finally {
+			ProjectLogger.leaveProject();
+		}
 	}
 
 	private void processBundleFiles(ConfigurableFileTree fileTree, BiConsumer<File, File> consumer) {

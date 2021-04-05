@@ -28,7 +28,7 @@ import de.carne.gradle.plugin.java.task.GenerateI18NTask;
 class GenerateI18NTaskTest extends TestProjectRunner {
 
 	@Test
-	void testProjectGenerateI18NTask() {
+	void testGenerateI18NTask() {
 		BuildResult cleanAssembleResult = run("-s", "-i", "clean", "assemble");
 
 		assertTaskOutcome(cleanAssembleResult, ":generateI18N", TaskOutcome.SUCCESS);

@@ -34,7 +34,6 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
 import org.glassfish.jersey.jackson.JacksonFeature;
-import org.gradle.api.logging.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -64,7 +63,6 @@ public class GitHubRepo implements AutoCloseable {
 
 	private static final String GITHUB_API_BASE_URI = "https://api.github.com";
 
-	private final Logger logger;
 	private final File dir;
 	private final String owner;
 	private final String repo;
@@ -77,33 +75,30 @@ public class GitHubRepo implements AutoCloseable {
 	/**
 	 * Constructs a new {@linkplain GitHubRepo} instance.
 	 *
-	 * @param logger the {@linkplain Logger} to use.
 	 * @param dir the local GitHub repository directory.
 	 * @param token the GitHub access token.
 	 * @throws IOException if an I/O error occurs while accessing the repository.
 	 */
-	public GitHubRepo(Logger logger, String dir, String token) throws IOException {
-		this(logger, new File(dir), token);
+	public GitHubRepo(String dir, String token) throws IOException {
+		this(new File(dir), token);
 	}
 
 	/**
 	 * Constructs a new {@linkplain GitHubRepo} instance.
 	 *
-	 * @param logger the {@linkplain Logger} to use.
 	 * @param dir the local GitHub repository directory.
 	 * @param token the GitHub access token.
 	 * @throws IOException if an I/O error occurs while accessing the repository.
 	 */
-	public GitHubRepo(Logger logger, File dir, String token) throws IOException {
-		this.logger = logger;
+	public GitHubRepo(File dir, String token) throws IOException {
 		this.dir = dir.getAbsoluteFile();
 
-		this.logger.info("Accessing GitHub repository at '{}'...", this.dir);
+		ProjectLogger.info("Accessing GitHub repository at '{}'...", this.dir);
 
 		try (Git git = Git.open(dir); Repository repository = git.getRepository()) {
 			String remoteUrl = repository.getConfig().getString("remote", "origin", "url");
 
-			this.logger.debug("  Remote URL: {}", remoteUrl);
+			ProjectLogger.debug("  Remote URL: {}", remoteUrl);
 
 			Matcher remoteUrlMatcher = GITHUB_REMOTE_URL_PATTERN.matcher(remoteUrl);
 
@@ -114,9 +109,9 @@ public class GitHubRepo implements AutoCloseable {
 			this.repo = Objects.requireNonNull(remoteUrlMatcher.group(2));
 			this.branch = Objects.requireNonNull(repository.getBranch());
 
-			this.logger.debug("  GitHub owner : {}", this.owner);
-			this.logger.debug("  GitHub repo  : {}", this.repo);
-			this.logger.debug("  GitHub branch: {}", this.branch);
+			ProjectLogger.debug("  GitHub owner : {}", this.owner);
+			ProjectLogger.debug("  GitHub repo  : {}", this.repo);
+			ProjectLogger.debug("  GitHub branch: {}", this.branch);
 
 			Status gitStatus = git.status().call();
 
@@ -155,7 +150,7 @@ public class GitHubRepo implements AutoCloseable {
 	public GitHubApi.@Nullable ReleaseInfo queryRelease(String name) throws IOException {
 		setupClientIfNeeded();
 
-		this.logger.info("Querying release '{}/{}/{}'...", this.owner, this.repo, name);
+		ProjectLogger.info("Querying release '{}/{}/{}'...", this.owner, this.repo, name);
 
 		GitHubApi.ReleaseInfo result = null;
 
@@ -194,7 +189,7 @@ public class GitHubRepo implements AutoCloseable {
 	public GitHubApi.ReleaseInfo draftRelease(String name, String body) throws IOException {
 		setupClientIfNeeded();
 
-		this.logger.info("Drafting new release '{}/{}/{}@{}'...", this.owner, this.repo, name, this.branch);
+		ProjectLogger.info("Drafting new release '{}/{}/{}@{}'...", this.owner, this.repo, name, this.branch);
 
 		GitHubApi.ReleaseInfo release;
 
@@ -254,7 +249,7 @@ public class GitHubRepo implements AutoCloseable {
 			@Nullable String label) throws IOException {
 		setupClientIfNeeded();
 
-		this.logger.info("Uploading release asset '{} -> {}'...", assetFile, uploadUrl);
+		ProjectLogger.info("Uploading release asset '{} -> {}'...", assetFile, uploadUrl);
 
 		UriBuilder targetUri = UriBuilder.fromUri(uploadUrl).queryParam("name", name);
 
@@ -282,12 +277,12 @@ public class GitHubRepo implements AutoCloseable {
 	public void deleteRelease(String releaseId) throws IOException {
 		setupClientIfNeeded();
 
-		this.logger.info("Deleting release '{}/{}/{}'...", this.owner, this.repo, releaseId);
+		ProjectLogger.info("Deleting release '{}/{}/{}'...", this.owner, this.repo, releaseId);
 
 		try {
 			this.apiHolder.get().deleteRelease(this.owner, this.repo, releaseId);
 		} catch (NotFoundException e) {
-			this.logger.trace("Ignoring exception", e);
+			ProjectLogger.trace("Ignoring exception", e);
 		} catch (ClientErrorException e) {
 			throw new IOException("Failed to delete release '" + releaseId + "'", e);
 		}

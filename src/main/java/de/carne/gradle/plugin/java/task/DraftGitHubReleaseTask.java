@@ -32,6 +32,7 @@ import de.carne.gradle.plugin.java.ext.GitHubRelease;
 import de.carne.gradle.plugin.java.ext.JavaToolsExtension;
 import de.carne.gradle.plugin.java.util.GitHubApi;
 import de.carne.gradle.plugin.java.util.GitHubRepo;
+import de.carne.gradle.plugin.java.util.ProjectLogger;
 
 /**
  * DraftGitHubReleaseTask - Draft new GitHub release.
@@ -72,28 +73,35 @@ public class DraftGitHubReleaseTask extends DefaultTask implements JavaToolsTask
 	@TaskAction
 	public void executeDraftGitHubRelease() {
 		Project project = getProject();
-		File repoDir = getRepoDir(project.getProjectDir());
-		GitHubRelease githubRelease = project.getExtensions().getByType(JavaToolsExtension.class).getGithubRelease();
-		String releaseName = githubRelease.getReleaseName();
 
-		getLogger().lifecycle("Drafting release {} for repo '{}'...", releaseName, repoDir);
+		ProjectLogger.enterProject(project);
+		try {
+			File repoDir = getRepoDir(project.getProjectDir());
+			GitHubRelease githubRelease = project.getExtensions().getByType(JavaToolsExtension.class)
+					.getGithubRelease();
+			String releaseName = githubRelease.getReleaseName();
 
-		try (GitHubRepo repo = new GitHubRepo(project.getLogger(), repoDir, githubRelease.getGithubToken())) {
-			checkDirty(repo, githubRelease);
-			checkOverwrite(repo, githubRelease);
+			getLogger().lifecycle("Drafting release {} for repo '{}'...", releaseName, repoDir);
 
-			String releaseNotes = readReleaseNotes(githubRelease);
+			try (GitHubRepo repo = new GitHubRepo(repoDir, githubRelease.getGithubToken())) {
+				checkDirty(repo, githubRelease);
+				checkOverwrite(repo, githubRelease);
 
-			GitHubApi.ReleaseInfo draft = repo.draftRelease(githubRelease.getReleaseName(), releaseNotes);
-			ConfigurableFileTree releaseAssets = githubRelease.getReleaseAssets();
+				String releaseNotes = readReleaseNotes(githubRelease);
 
-			for (File releaseAsset : releaseAssets.getFiles()) {
-				getLogger().lifecycle("Uploading release asset '{}'...", releaseAsset);
+				GitHubApi.ReleaseInfo draft = repo.draftRelease(githubRelease.getReleaseName(), releaseNotes);
+				ConfigurableFileTree releaseAssets = githubRelease.getReleaseAssets();
 
-				repo.uploadReleaseAsset(Objects.requireNonNull(draft.uploadUrl), releaseAsset);
+				for (File releaseAsset : releaseAssets.getFiles()) {
+					getLogger().lifecycle("Uploading release asset '{}'...", releaseAsset);
+
+					repo.uploadReleaseAsset(Objects.requireNonNull(draft.uploadUrl), releaseAsset);
+				}
+			} catch (IOException e) {
+				throw new TaskExecutionException(this, e);
 			}
-		} catch (IOException e) {
-			throw new TaskExecutionException(this, e);
+		} finally {
+			ProjectLogger.leaveProject();
 		}
 	}
 

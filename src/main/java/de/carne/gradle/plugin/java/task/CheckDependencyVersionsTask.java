@@ -32,6 +32,8 @@ import org.gradle.api.artifacts.ResolvedArtifact;
 import org.gradle.api.artifacts.component.ModuleComponentIdentifier;
 import org.gradle.api.tasks.TaskAction;
 
+import de.carne.gradle.plugin.java.util.ProjectLogger;
+
 /**
  * CheckDependencyVersionsTask - Check for dependency version updates.
  */
@@ -75,14 +77,19 @@ public class CheckDependencyVersionsTask extends DefaultTask implements JavaTool
 	public void executeCheckDependencyVersions() {
 		Project project = getProject();
 
-		executeCheckDependencyVersions(DependencyMap.fromBuildscript(project),
-				Objects.requireNonNull(project.getBuildscript().getConfigurations()
-						.findByName(CHECK_BUILDSCRIPT_DEPENDENCY_VERSIONS_CONFIGURATION_NAME)),
-				new CheckDependencyVersionsReport(project, CHECK_BUILDSCRIPT_DEPENDENCY_VERSIONS_REPORT_TITLE));
-		executeCheckDependencyVersions(DependencyMap.fromProject(project),
-				Objects.requireNonNull(
-						project.getConfigurations().findByName(CHECK_PROJECT_DEPENDENCY_VERSIONS_CONFIGURATION_NAME)),
-				new CheckDependencyVersionsReport(project, CHECK_PROJECT_DEPENDENCY_VERSIONS_REPORT_TITLE));
+		ProjectLogger.enterProject(project);
+		try {
+			executeCheckDependencyVersions(DependencyMap.fromBuildscript(project),
+					Objects.requireNonNull(project.getBuildscript().getConfigurations()
+							.findByName(CHECK_BUILDSCRIPT_DEPENDENCY_VERSIONS_CONFIGURATION_NAME)),
+					new CheckDependencyVersionsReport(project, CHECK_BUILDSCRIPT_DEPENDENCY_VERSIONS_REPORT_TITLE));
+			executeCheckDependencyVersions(DependencyMap.fromProject(project),
+					Objects.requireNonNull(project.getConfigurations()
+							.findByName(CHECK_PROJECT_DEPENDENCY_VERSIONS_CONFIGURATION_NAME)),
+					new CheckDependencyVersionsReport(project, CHECK_PROJECT_DEPENDENCY_VERSIONS_REPORT_TITLE));
+		} finally {
+			ProjectLogger.leaveProject();
+		}
 	}
 
 	private void executeCheckDependencyVersions(DependencyMap dependencyMap, Configuration cdvConfiguration,
