@@ -29,6 +29,7 @@ import de.carne.gradle.plugin.java.ext.Node;
 import de.carne.gradle.plugin.java.util.NpmWrapper;
 import de.carne.gradle.plugin.java.util.Plugins;
 import de.carne.gradle.plugin.java.util.ProjectLogger;
+import de.carne.gradle.plugin.java.util.Strings;
 
 /**
  * NpmTestTask - Run npm test script.
@@ -36,7 +37,7 @@ import de.carne.gradle.plugin.java.util.ProjectLogger;
 public class NpmTestTask extends NodeTask {
 
 	private static final String NPM_TEST_TASK_GROUP = LifecycleBasePlugin.VERIFICATION_GROUP;
-	private static final String NPM_TEST_TASK_NAME = "testNode";
+	private static final String NPM_TEST_TASK_NAME = "npmTest";
 	private static final String NPM_TEST_TASK_DESCRIPTION = "Execute npm test script.";
 
 	/**
@@ -80,10 +81,14 @@ public class NpmTestTask extends NodeTask {
 		ProjectLogger.enterProject(project);
 		try {
 			Node node = project.getExtensions().getByType(JavaToolsExtension.class).getNode();
-			NpmWrapper npmWrapper = npmWrapperInstance();
-			File logFile = taskOutFile();
+			String testScript = node.getTestScript();
 
-			npmWrapper.executeNpm(logFile, "run", node.getTestScript());
+			if (Strings.notEmpty(testScript)) {
+				NpmWrapper npmWrapper = npmWrapperInstance();
+				File logFile = taskOutFile();
+
+				npmWrapper.executeNpm(logFile, "run", testScript);
+			}
 		} catch (IOException e) {
 			throw new TaskExecutionException(this, e);
 		} catch (InterruptedException e) {

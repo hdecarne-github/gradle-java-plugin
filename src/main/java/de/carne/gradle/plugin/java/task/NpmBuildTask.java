@@ -30,6 +30,7 @@ import de.carne.gradle.plugin.java.ext.Node;
 import de.carne.gradle.plugin.java.util.NpmWrapper;
 import de.carne.gradle.plugin.java.util.Plugins;
 import de.carne.gradle.plugin.java.util.ProjectLogger;
+import de.carne.gradle.plugin.java.util.Strings;
 
 /**
  * NpmBuildTask - Run npm build script.
@@ -82,10 +83,14 @@ public class NpmBuildTask extends NodeTask {
 		ProjectLogger.enterProject(project);
 		try {
 			Node node = project.getExtensions().getByType(JavaToolsExtension.class).getNode();
-			NpmWrapper npmWrapper = npmWrapperInstance();
-			File logFile = taskOutFile();
+			String buildScript = node.getBuildScript();
 
-			npmWrapper.executeNpm(logFile, "run", node.getBuildScript());
+			if (Strings.notEmpty(buildScript)) {
+				NpmWrapper npmWrapper = npmWrapperInstance();
+				File logFile = taskOutFile();
+
+				npmWrapper.executeNpm(logFile, "run", buildScript);
+			}
 		} catch (IOException e) {
 			throw new TaskExecutionException(this, e);
 		} catch (InterruptedException e) {
