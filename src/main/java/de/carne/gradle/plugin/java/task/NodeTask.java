@@ -21,7 +21,6 @@ import java.io.IOException;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
-import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.TaskExecutionException;
 
 import de.carne.gradle.plugin.java.ext.JavaToolsExtension;
@@ -49,8 +48,7 @@ public abstract class NodeTask extends DefaultTask implements JavaToolsTask {
 		}
 	}
 
-	@Internal
-	protected NpmWrapper getNpmWrapperInstance() throws IOException, InterruptedException {
+	protected NpmWrapper npmWrapperInstance() throws IOException, InterruptedException {
 		Node node = getProject().getExtensions().getByType(JavaToolsExtension.class).getNode();
 		NpmWrapper npmWrapper = NpmWrapper.getInstance(node.getNodeProjectDir(), node.getNpmCommand());
 		String npmVersion = npmWrapper.npmVersion();
@@ -63,14 +61,12 @@ public abstract class NodeTask extends DefaultTask implements JavaToolsTask {
 		return npmWrapper;
 	}
 
-	@Internal
-	protected File getNodeProjectFile(String name) {
+	protected File nodeProjectFile(String name) {
 		return new File(getProject().getExtensions().getByType(JavaToolsExtension.class).getNode().getNodeProjectDir(),
 				name);
 	}
 
-	@Internal
-	protected File getTaskOutFile() {
+	protected File taskOutFile() {
 		return new File(getProject().getBuildDir(), getName() + ".out");
 	}
 

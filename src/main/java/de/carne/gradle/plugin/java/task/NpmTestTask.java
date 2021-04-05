@@ -65,7 +65,7 @@ public class NpmTestTask extends NodeTask {
 
 		if (enabled) {
 			getInputs().dir(node.getNodeProjectDir());
-			getOutputs().file(getTaskOutFile());
+			getOutputs().file(taskOutFile());
 			Plugins.setTaskDependsOn(project, LifecycleBasePlugin.CHECK_TASK_NAME, this);
 		}
 	}
@@ -80,8 +80,8 @@ public class NpmTestTask extends NodeTask {
 		ProjectLogger.enterProject(project);
 		try {
 			Node node = project.getExtensions().getByType(JavaToolsExtension.class).getNode();
-			NpmWrapper npmWrapper = getNpmWrapperInstance();
-			File logFile = getTaskOutFile();
+			NpmWrapper npmWrapper = npmWrapperInstance();
+			File logFile = taskOutFile();
 
 			npmWrapper.executeNpm(logFile, "run", node.getTestScript());
 		} catch (IOException e) {

@@ -66,7 +66,7 @@ public class NpmBuildTask extends NodeTask {
 
 		if (enabled) {
 			getInputs().dir(node.getNodeProjectDir());
-			getOutputs().file(getTaskOutFile());
+			getOutputs().file(taskOutFile());
 			getOutputs().dir(node.getNodeDistDir());
 			Plugins.setTasksDependsOn(project, Jar.class, this);
 		}
@@ -82,8 +82,8 @@ public class NpmBuildTask extends NodeTask {
 		ProjectLogger.enterProject(project);
 		try {
 			Node node = project.getExtensions().getByType(JavaToolsExtension.class).getNode();
-			NpmWrapper npmWrapper = getNpmWrapperInstance();
-			File logFile = getTaskOutFile();
+			NpmWrapper npmWrapper = npmWrapperInstance();
+			File logFile = taskOutFile();
 
 			npmWrapper.executeNpm(logFile, "run", node.getBuildScript());
 		} catch (IOException e) {

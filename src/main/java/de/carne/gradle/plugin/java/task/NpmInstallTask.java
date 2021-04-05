@@ -64,10 +64,10 @@ public class NpmInstallTask extends NodeTask {
 		boolean enabled = node.isEnabled();
 
 		if (enabled) {
-			getInputs().file(getNodeProjectFile(PACKAGE_JSON_NAME));
-			getInputs().file(getNodeProjectFile(PACKAGE_LOCK_JSON_NAME));
-			getOutputs().file(getTaskOutFile());
-			getOutputs().dir(getNodeProjectFile(NODE_MODULES_NAME));
+			getInputs().file(nodeProjectFile(PACKAGE_JSON_NAME));
+			getInputs().file(nodeProjectFile(PACKAGE_LOCK_JSON_NAME));
+			getOutputs().file(taskOutFile());
+			getOutputs().dir(nodeProjectFile(NODE_MODULES_NAME));
 			Plugins.setTasksDependsOn(project, NpmBuildTask.class, this);
 		}
 	}
@@ -81,8 +81,8 @@ public class NpmInstallTask extends NodeTask {
 
 		ProjectLogger.enterProject(project);
 		try {
-			NpmWrapper npmWrapper = getNpmWrapperInstance();
-			File logFile = getTaskOutFile();
+			NpmWrapper npmWrapper = npmWrapperInstance();
+			File logFile = taskOutFile();
 
 			npmWrapper.executeNpm(logFile, "install");
 		} catch (IOException e) {
