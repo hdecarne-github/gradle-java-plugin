@@ -18,6 +18,8 @@ package de.carne.gradle.plugin.java.task;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.StringTokenizer;
 
 import org.gradle.api.Project;
 import org.gradle.api.plugins.JavaPlugin;
@@ -82,14 +84,20 @@ public class NpmBuildTask extends NodeTask {
 
 		ProjectLogger.enterProject(project);
 		try {
+			File logFile = taskOutFile();
+
+			Files.deleteIfExists(logFile.toPath());
+
 			Node node = project.getExtensions().getByType(JavaToolsExtension.class).getNode();
-			String buildScript = node.getBuildScript();
+			StringTokenizer buildScripts = new StringTokenizer(node.getBuildScripts(), ",");
+			NpmWrapper npmWrapper = npmWrapperInstance();
 
-			if (Strings.notEmpty(buildScript)) {
-				NpmWrapper npmWrapper = npmWrapperInstance();
-				File logFile = taskOutFile();
+			while (buildScripts.hasMoreElements()) {
+				String buildScript = buildScripts.nextToken().trim();
 
-				npmWrapper.executeNpm(logFile, "--verbose", "run", buildScript);
+				if (Strings.notEmpty(buildScript)) {
+					npmWrapper.executeNpm(logFile, "--verbose", "run", buildScript);
+				}
 			}
 		} catch (IOException e) {
 			throw new TaskExecutionException(this, e);

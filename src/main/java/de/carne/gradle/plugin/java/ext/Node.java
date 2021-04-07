@@ -44,8 +44,8 @@ public class Node {
 	private String npmVersionParam = ".*";
 	private File nodeProjectDirParam;
 	private File nodeDistDirParam;
-	private String buildScriptParam = "build";
-	private String testScriptParam = "test";
+	private String buildScriptsParam = "build";
+	private String testScriptsParam = "test";
 
 	/**
 	 * Constructs {@linkplain Node}.
@@ -235,71 +235,71 @@ public class Node {
 	}
 
 	/**
-	 * Sets the build script to execute.
+	 * Sets the build scripts to execute.
 	 * <p>
 	 * build.gradle:
 	 *
 	 * <pre>
 	 * node {
-	 *  buildScript = "build" // default: "build"
+	 *  buildScripts = "build" // default: "build"
 	 * }
 	 * </pre>
 	 *
-	 * @param buildScript the build script to execute.
+	 * @param buildScripts the comma separated list of build scripts to execute.
 	 */
-	public void setBuildScript(String buildScript) {
-		this.buildScriptParam = buildScript;
+	public void setBuildScripts(String buildScripts) {
+		this.buildScriptsParam = buildScripts;
 	}
 
 	/**
-	 * Gets the build script to execute.
+	 * Gets the build scripts to execute.
 	 * <p>
 	 * build.gradle:
 	 *
 	 * <pre>
 	 * node {
-	 *  buildScript = "build" // default: "build"
+	 *  buildScripts = "build" // default: "build"
 	 * }
 	 * </pre>
 	 *
-	 * @return the build script to execute.
+	 * @return the comma separated list of build scripts to execute.
 	 */
-	public String getBuildScript() {
-		return this.buildScriptParam;
+	public String getBuildScripts() {
+		return this.buildScriptsParam;
 	}
 
 	/**
-	 * Sets the test script to execute.
+	 * Sets the test scripts to execute.
 	 * <p>
 	 * build.gradle:
 	 *
 	 * <pre>
 	 * node {
-	 *  testScript = "test" // default: "test"
+	 *  testScripts = "test" // default: "test"
 	 * }
 	 * </pre>
 	 *
-	 * @param testScript the test script to execute.
+	 * @param testScripts the comma separated list of test scripts to execute.
 	 */
-	public void setTestScript(String testScript) {
-		this.testScriptParam = testScript;
+	public void setTestScripts(String testScripts) {
+		this.testScriptsParam = testScripts;
 	}
 
 	/**
-	 * Gets the test script to execute.
+	 * Gets the test scripts to execute.
 	 * <p>
 	 * build.gradle:
 	 *
 	 * <pre>
 	 * node {
-	 *  testScript = "test" // default: "test"
+	 *  testScripts = "test" // default: "test"
 	 * }
 	 * </pre>
 	 *
-	 * @return the test script to execute.
+	 * @return the comma separated list of test scripts to execute.
 	 */
-	public String getTestScript() {
-		return this.testScriptParam;
+	public String getTestScripts() {
+		return this.testScriptsParam;
 	}
 
 }

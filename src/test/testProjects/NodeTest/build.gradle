@@ -10,7 +10,7 @@ javatools {
 		npmVersion = ".*"
 		nodeProjectDir = file("${projectDir}/node")
 		nodeDistDir = file("${buildDir}/nodeDist")
-		buildScript = "build"
-		testScript = "lint"
+		buildScripts = "build, lint"
+		testScripts = "build, lint"
 	}
 }
