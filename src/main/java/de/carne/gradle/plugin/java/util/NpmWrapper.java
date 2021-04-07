@@ -74,6 +74,7 @@ public final class NpmWrapper extends ExecWrapper {
 
 		try (NpmLog npmLog = new NpmLog(logFile)) {
 			status = executeCommand(npmLog, arguments);
+			npmLog.accept(">> status: " + status);
 		}
 		return status;
 	}
