@@ -16,12 +16,10 @@
  */
 package de.carne.gradle.plugin.java.util;
 
-import java.util.Objects;
-
 import org.eclipse.jdt.annotation.Nullable;
 import org.gradle.api.Project;
 import org.gradle.api.logging.LogLevel;
-import org.gradle.api.logging.Logger;
+import org.slf4j.Logger;
 import org.slf4j.Marker;
 import org.slf4j.helpers.MessageFormatter;
 
@@ -35,7 +33,6 @@ public final class ProjectLogger {
 	private static final Logger DEFAULT_LOGGER = new Logger() {
 
 		private static final String TRACE_NAME = "TRACE";
-		private static final String LIFECYCLE_NAME = "LIFECYCLE";
 
 		@Override
 		public String getName() {
@@ -338,73 +335,13 @@ public final class ProjectLogger {
 		}
 
 		@Override
-		public boolean isLifecycleEnabled() {
-			return true;
-		}
-
-		@Override
 		public void debug(@Nullable String message, Object @Nullable... objects) {
 			log(LogLevel.DEBUG.name(), message, objects);
 		}
 
 		@Override
-		public void lifecycle(@Nullable String message) {
-			log(LIFECYCLE_NAME, message);
-		}
-
-		@Override
-		public void lifecycle(@Nullable String message, Object @Nullable... objects) {
-			log(LIFECYCLE_NAME, message, objects);
-		}
-
-		@Override
-		public void lifecycle(@Nullable String message, @Nullable Throwable throwable) {
-			log(LIFECYCLE_NAME, message, throwable);
-		}
-
-		@Override
-		public boolean isQuietEnabled() {
-			return true;
-		}
-
-		@Override
-		public void quiet(@Nullable String message) {
-			log(LogLevel.QUIET.name(), message);
-		}
-
-		@Override
-		public void quiet(@Nullable String message, Object @Nullable... objects) {
-			log(LogLevel.QUIET.name(), message, objects);
-		}
-
-		@Override
 		public void info(@Nullable String message, Object @Nullable... objects) {
 			log(LogLevel.INFO.name(), message, objects);
-		}
-
-		@Override
-		public void quiet(@Nullable String message, @Nullable Throwable throwable) {
-			log(LogLevel.QUIET.name(), message, throwable);
-		}
-
-		@Override
-		public boolean isEnabled(@Nullable LogLevel level) {
-			return true;
-		}
-
-		@Override
-		public void log(@Nullable LogLevel level, @Nullable String message) {
-			log(Objects.toString(level), message);
-		}
-
-		@Override
-		public void log(@Nullable LogLevel level, @Nullable String message, Object @Nullable... objects) {
-			log(Objects.toString(level), MessageFormatter.arrayFormat(message, objects).getMessage());
-		}
-
-		@Override
-		public void log(@Nullable LogLevel level, @Nullable String message, @Nullable Throwable throwable) {
-			log(Objects.toString(level), message, throwable);
 		}
 
 		@SuppressWarnings("java:S106")
