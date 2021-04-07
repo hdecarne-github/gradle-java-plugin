@@ -30,7 +30,7 @@ import de.carne.gradle.plugin.java.JavaToolsPlugin;
 public final class Plugins {
 
 	private Plugins() {
-		// prevent instantiation
+		// Prevent instantiation
 	}
 
 	/**

@@ -25,7 +25,7 @@ import java.util.Map;
 public final class JavaOutput {
 
 	private JavaOutput() {
-		// prevent instantiation
+		// Prevent instantiation
 	}
 
 	/**

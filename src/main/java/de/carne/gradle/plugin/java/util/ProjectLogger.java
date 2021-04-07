@@ -363,7 +363,7 @@ public final class ProjectLogger {
 	};
 
 	private ProjectLogger() {
-		// prevent instantiation
+		// Prevent instantiation
 	}
 
 	/**
