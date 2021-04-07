@@ -85,8 +85,8 @@ public final class NpmWrapper extends ExecWrapper {
 		private final PrintStream log;
 
 		NpmLog(File logFile) throws IOException {
-			this.log = new PrintStream(Files.newOutputStream(logFile.toPath(), StandardOpenOption.WRITE,
-					StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING));
+			this.log = new PrintStream(Files.newOutputStream(logFile.toPath(), StandardOpenOption.CREATE,
+					StandardOpenOption.WRITE, StandardOpenOption.APPEND));
 		}
 
 		@Override
