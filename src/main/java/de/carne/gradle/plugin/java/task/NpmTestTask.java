@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.gradle.api.Project;
+import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.TaskExecutionException;
 import org.gradle.language.base.plugins.LifecycleBasePlugin;
@@ -67,7 +68,7 @@ public class NpmTestTask extends NodeTask {
 		if (enabled) {
 			getInputs().dir(node.getNodeProjectDir());
 			getOutputs().file(taskOutFile());
-			Plugins.setTaskDependsOn(project, LifecycleBasePlugin.CHECK_TASK_NAME, this);
+			Plugins.setTaskDependsOn(project, JavaPlugin.TEST_TASK_NAME, this);
 		}
 	}
 
