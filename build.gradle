@@ -95,8 +95,9 @@ jacoco {
 }
 
 jacocoTestReport {
+	dependsOn test
 	reports {
-		xml.required
+		xml.required = true
 		xml.destination file("${buildDir}/reports/jacoco/coverage.xml")
 	}
 }
