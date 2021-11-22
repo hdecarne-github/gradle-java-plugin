@@ -59,7 +59,7 @@ import jakarta.ws.rs.core.UriBuilder;
 public class GitHubRepo implements AutoCloseable {
 
 	private static final Pattern GITHUB_REMOTE_URL_PATTERN = Pattern
-			.compile("https://github.com/([a-zA-Z_0-9\\-]+)/([a-zA-Z_0-9\\-]+).git");
+			.compile("^https://github.com/([a-zA-Z_0-9\\-]+)/([a-zA-Z_0-9\\-]+)(\\.git)?");
 
 	private static final String GITHUB_API_BASE_URI = "https://api.github.com";
 
