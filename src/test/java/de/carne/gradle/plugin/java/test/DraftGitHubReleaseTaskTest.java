@@ -30,7 +30,7 @@ import de.carne.gradle.plugin.java.task.DraftGitHubReleaseTask;
  */
 class DraftGitHubReleaseTaskTest extends TestProjectRunner {
 
-	private static final String GITHUB_TOKEN_PROPERTY = "GITHUB_TOKEN";
+	private static final String GITHUB_TOKEN_PROPERTY = "TEST_GITHUB_TOKEN";
 
 	@EnabledIfEnvironmentVariable(named = GITHUB_TOKEN_PROPERTY, matches = ".*")
 	@Test

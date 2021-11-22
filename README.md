@@ -1,6 +1,6 @@
 ### Gradle Java-Tools plugin
 [![Publication](https://img.shields.io/maven-central/v/de.carne/gradle-java-plugin)](https://search.maven.org/artifact/de.carne/gradle-java-plugin)
-![Build](https://github.com/hdecarne/gradle-java-plugin/actions/workflows/build-on-linux.yml/badge.svg)
+[![Build](https://github.com/hdecarne/gradle-java-plugin/actions/workflows/build-on-linux.yml/badge.svg)](https://github.com/hdecarne/gradle-java-plugin/actions)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=de.carne%3Agradle-java-plugin&metric=coverage)](https://sonarcloud.io/dashboard?id=de.carne%3Agradle-java-plugin)  
 
 This project provides a custom made Gradle plugin used for the development of [my private Java based projects](https://github.com/hdecarne/).
