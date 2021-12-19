@@ -1,5 +1,5 @@
 ### Gradle Java-Tools plugin
-This project provides a custom made Gradle plugin used for the development of [my private Java based projects](https://github.com/hdecarne/).
+This project provides a custom made Gradle plugin used for the development of [my private Java based projects](https://github.com/hdecarne-github/).
 
 The fastest way to apply this plugin to a project is the Gradle plugin mechanism:
 ```Gradle
