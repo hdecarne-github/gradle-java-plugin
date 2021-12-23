@@ -35,12 +35,6 @@ class NodeTest extends TestProjectRunner {
 		assertTaskOutcome(cleanBuildResult, ":npmBuild", TaskOutcome.SUCCESS);
 		assertTaskOutcome(cleanBuildResult, ":npmTest", TaskOutcome.SUCCESS);
 
-		BuildResult buildResult = run("-s", "-i", "build");
-
-		assertTaskOutcome(buildResult, ":npmInstall", TaskOutcome.SUCCESS);
-		assertTaskOutcome(buildResult, ":npmBuild", TaskOutcome.SUCCESS);
-		assertTaskOutcome(buildResult, ":npmTest", TaskOutcome.SUCCESS);
-
 		BuildResult rebuildResult = run("-s", "-i", "build");
 
 		assertTaskOutcome(rebuildResult, ":npmInstall", TaskOutcome.UP_TO_DATE);
